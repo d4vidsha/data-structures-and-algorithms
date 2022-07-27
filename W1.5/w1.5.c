@@ -20,6 +20,9 @@ w1.5.c:
 #define MAX_LINE_LEN 512
 #define MAX_STUDENTS 5000
 
+#define STR2(x) #x			// see https://stackoverflow.com/a/25410835
+#define STR(X) STR2(X)		//
+
 struct student {
 	int id;
 	char name[MAX_NAME_LEN + 1];
@@ -83,7 +86,8 @@ int buildStudentArray(student_t A[]) {
 	char line[MAX_LINE_LEN + 1];
 	
 	// gets rid of the header line
-	scanf("%[^\n] ", line);
+	scanf("%" STR(MAX_LINE_LEN) "[^\n] ", line);	// see https://stackoverflow.com/a/25410835 
+													// and https://stackoverflow.com/a/40039758
 	// we can also use: while (getchar()!='\n');
 
 	// reads and stores students in array students
