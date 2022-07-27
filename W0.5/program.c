@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <assert.h>
 
 #define MAX_STRS 1000
 #define MAX_STR_LEN 99
@@ -20,25 +21,43 @@
 int read_strings(char ss[][MAX_STR_LEN + 1]);
 int is_anagram(char *s1, char *s2);
 int filter_to_alnums(char src[], char *dest);
+int remove_char(char c, char *s);
 
 int main(int argc, char *argv[]) {
     char ss[MAX_STRS][MAX_STR_LEN + 1];
     int n = read_strings(ss);
 
-    // temporarily print to stdout the inputs
+    // fss will contain the filtered set of strings in a normalised format
+    // that only contains alphanumerics and are all lowercases (this allows
+    // for the matching to be case insensitive).
+    char fss[n][MAX_STR_LEN + 1];
     for (int i = 0; i < n; i++) {
-        printf("%s\n", ss[i]);
+        filter_to_alnums(ss[i], fss[i]);
     }
 
+    // now we compare all strings to each other
+    char anagrams[n][n][MAX_STR_LEN + 1];
+    int set = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (is_anagram(fss[i], fss[j])) {
+                strcpy(anagrams[set][0], ss[i]);
+                strcpy(anagrams[set][1], ss[j]);
+                
+            }
+        }
+        set++;
+    }
 
-
-
-    char alnums_only[MAX_STR_LEN + 1];
-    n = filter_to_alnums("d^& 4v/^id(sh&a$", alnums_only);
-    printf("Filtered input to length of %d: %s\n", n, alnums_only);
-
-
-
+    int n_sets = set;
+    for (int i = 0; i < n_sets; i++) {
+        printf("#set %d:\n", i + 1);
+        int len = sizeof(anagrams[i]) / sizeof(n * (MAX_STR_LEN + 1));
+        printf("size: %d\n", len);
+        for (int j = 0; j < 2; j++) {
+            printf("%s\n", anagrams[i][j]);
+        }
+    }
 
 
 	return 0;
@@ -58,17 +77,58 @@ int read_strings(char ss[][MAX_STR_LEN + 1]) {
     in addition, ignoring any non-alphanumeric characters,
 */
 int is_anagram(char *s1, char *s2) {
-    int condition = TRUE;
-   
-    // int is1, ns1 = strlen(s1);
-    // int is2, ns2 = strlen(s2);
+    int ns1 = strlen(s1), ns2 = strlen(s2);
+    
+    // if both strings are of different length, then they are not anagrams
+    if (ns1 != ns2) {
+        return FALSE;
+    }
 
-    // char alnums_only[MAX_STR_LEN + 1];
+    // sort strings
+    int n = ns1;
+    char temp;
+    for (int i = 0; i < n-1; i++) {
+        for (int j = i+1; j < n; j++) {
+            if (s1[i] > s1[j]) {
+                temp  = s1[i];
+                s1[i] = s1[j];
+                s1[j] = temp;
+            }
+            if (s2[i] > s2[j]) {
+                temp  = s2[i];
+                s2[i] = s2[j];
+                s2[j] = temp;
+            }
+        }
+    }
 
+    // check character by character
+    for (int i = 0; i < n; i++) {
+        if (s1[i] != s2[i]) {
+            return FALSE;
+        }
+    }
 
+    return TRUE;
+}
 
-
-    return condition;
+/* Remove character from a string (array of characters)
+*/
+int remove_char(char c, char *s) {
+    int is_done = FALSE;
+    int i, n = strlen(s);
+    for (i = 0; i < n; i++) {
+        if (c == s[i]) {
+            while (s[i] != '\0') {
+                s[i - 1] = s[i];
+                i++;
+            }
+            s[i] = '\0';
+            is_done = TRUE;
+            break;
+        }
+    }
+    return is_done;
 }
 
 /*  Given a string, filter out the characters of that string to only include
@@ -83,7 +143,7 @@ int filter_to_alnums(char src[], char *dest) {
         // printf("isalnum: %d\n", isalnum(src[i]));
         if (isalnum(src[i])) {
             // printf("%c\n", src[i]);
-            *(dest + num_alnums) = src[i];
+            *(dest + num_alnums) = tolower(src[i]);
             // dest[num_alnums] = src[i];
             num_alnums++;
         }
@@ -92,7 +152,6 @@ int filter_to_alnums(char src[], char *dest) {
     dest[num_alnums] = '\0';
     return num_alnums;
 }
-
 
 /* =====================================================================
    This skeleton/program is compiled by the comp20003 teaching team,
