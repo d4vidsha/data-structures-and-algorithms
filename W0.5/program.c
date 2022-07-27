@@ -22,6 +22,7 @@ int read_strings(char ss[][MAX_STR_LEN + 1]);
 int is_anagram(char *s1, char *s2);
 int filter_to_alnums(char src[], char *dest);
 int remove_char(char c, char *s);
+int in_array(int srch, int *A, int bud);
 
 int main(int argc, char *argv[]) {
     char ss[MAX_STRS][MAX_STR_LEN + 1];
@@ -38,29 +39,79 @@ int main(int argc, char *argv[]) {
     // now we compare all strings to each other
     char anagrams[n][n][MAX_STR_LEN + 1];
     int set = 0;
+    int counts[n];
+    int processed[n];
+    int processed_buddy = 0;
     for (int i = 0; i < n; i++) {
+        if (in_array(i, processed, processed_buddy)) {
+            continue;
+        }
+        int count = 0;
         for (int j = i + 1; j < n; j++) {
-            if (is_anagram(fss[i], fss[j])) {
-                strcpy(anagrams[set][0], ss[i]);
-                strcpy(anagrams[set][1], ss[j]);
-                
+            if (is_anagram(fss[i], fss[j]) 
+                && *fss[i] != '\0' 
+                && *fss[j] != '\0') {
+                if (count == 0) {
+                    strcpy(anagrams[set][count], ss[i]);
+                    processed[processed_buddy] = i;
+                    processed_buddy++;
+                    count++;
+                }
+                strcpy(anagrams[set][count], ss[j]);
+                processed[processed_buddy] = j;
+                processed_buddy++;
+                count++;
             }
         }
-        set++;
+        if (count) {
+            strcpy(anagrams[set][count], ss[i]);
+            counts[set] = count;
+            set++;
+        }
     }
 
-    int n_sets = set;
-    for (int i = 0; i < n_sets; i++) {
+    for (int i = 0; i < set; i++) {
         printf("#set %d:\n", i + 1);
-        int len = sizeof(anagrams[i]) / sizeof(n * (MAX_STR_LEN + 1));
-        printf("size: %d\n", len);
-        for (int j = 0; j < 2; j++) {
+        for (int j = 0; j < counts[i]; j++) {
             printf("%s\n", anagrams[i][j]);
         }
     }
 
+    // // now we compare all strings to each other
+    // char anagrams[n][n][MAX_STR_LEN + 1];
+    // int set = 0;
+    // for (int i = 0; i < n; i++) {
+    //     for (int j = i + 1; j < n; j++) {
+    //         if (is_anagram(fss[i], fss[j])) {
+    //             strcpy(anagrams[set][0], ss[i]);
+    //             strcpy(anagrams[set][1], ss[j]);
+                
+    //         }
+    //     }
+    //     set++;
+    // }
+
+    // int n_sets = set;
+    // for (int i = 0; i < n_sets; i++) {
+    //     printf("#set %d:\n", i + 1);
+    //     int len = sizeof(anagrams[i]) / sizeof(n * (MAX_STR_LEN + 1));
+    //     printf("size: %d\n", len);
+    //     for (int j = 0; j < 2; j++) {
+    //         printf("%s\n", anagrams[i][j]);
+    //     }
+    // }
+
 
 	return 0;
+}
+
+int in_array(int srch, int *A, int bud) {
+    for (int i = 0; i < bud; i++) {
+        if (srch == A[i]) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 int read_strings(char ss[][MAX_STR_LEN + 1]) {
@@ -75,6 +126,7 @@ int read_strings(char ss[][MAX_STR_LEN + 1]) {
     possibly in a different order, and 0 otherwise, 
     ignoring whitespace characters, and ignoring case
     in addition, ignoring any non-alphanumeric characters,
+    see inspiration: https://www.tutorialspoint.com/learn_c_by_examples/string_anagram_program_in_c.htm
 */
 int is_anagram(char *s1, char *s2) {
     int ns1 = strlen(s1), ns2 = strlen(s2);
