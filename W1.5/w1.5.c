@@ -95,7 +95,7 @@ int buildStudentArray(student_t A[]) {
 	if (n == MAX_STUDENTS) {
 		while (getchar() != EOF);
 	}
-	return n;
+	return n - 1;
 }
 
 // prints the array of students
