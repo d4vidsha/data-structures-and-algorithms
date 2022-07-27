@@ -138,4 +138,3 @@ student_t *bestStudent(struct student A[], int n) {
    the university of Melbourne.
    Last Updated: 22/07/2022
    ================================================================== */
-
