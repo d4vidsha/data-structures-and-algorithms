@@ -149,7 +149,8 @@ void print_city_array(city_t A[], int n) {
     }
 }
 
-/* Organise cities in alphabetical order.
+/*  Organise cities in alphabetical order. Inspired by
+    https://www.tutorialspoint.com/c-program-to-sort-names-in-alphabetical-order#:~:text=User%20has%20to%20enter%20number,characters%20is%20called%20a%20string.
 */
 void organise_alphabetically(city_t A[], int n) {
     for (int i = 0; i < n; i++) {
