@@ -16,7 +16,7 @@
 #define FALSE 0
 
 #define MAX_CITIES 1000
-#define MAX_CITY_NAME_LEN 30
+#define MAX_CITY_NAME_LEN 100
 #define MAX_HEADER_LINE_LEN 200
 
 struct city {
@@ -34,6 +34,8 @@ void organise_alphabetically(city_t A[], int n);
 city_t *highest_population(city_t A[], int n);
 int cmp(char *ct1, city_t *ct2);
 int binary_search(city_t A[], int lo, int hi, char *key, int *locn);
+void overtake(int *overtaking, int *overtaken, city_t A[], int n);
+int is_overtaken(city_t *ct1, city_t *ct2);
 
 int main(int argc, char **argv){
 
@@ -79,7 +81,9 @@ int main(int argc, char **argv){
 
     // cities that overtake some other in 2020
     printf("CITIES THAT OVERTAKE SOME OTHER IN 2020\n");
-    
+    int overtaking = 0, overtaken = 0;
+    overtake(&overtaking, &overtaken, cities, n);
+    printf("*** The list includes %d overtaking and %d overtaken cities\n", overtaking, overtaken);
 
     return EXIT_SUCCESS;
 }
@@ -147,23 +151,12 @@ void print_city_array(city_t A[], int n) {
 */
 void organise_alphabetically(city_t A[], int n) {
     for (int i = 0; i < n; i++) {
-        city_t *ct1 = &A[i];
-        char *name1 = ct1->name;
         for (int j = i + 1; j < n; j++) {
-            city_t *ct2 = &A[j];
-            char *name2 = ct2->name;
-            // printf("A[%d]->name: %s\n", i, name1);
-            // printf("A[%d]->name: %s\n", i, name2);
-            if (strcmp(name1, name2) > 0) {
-                city_t temp = *ct1;
-                ct1 = ct2;
-                ct2 = &temp;
-                A[i] = *ct1;
-                A[j] = *ct2;
-                // printf("A[%d]->name: %s\n", i, ct1->name);
-                // printf("A[%d]->name: %s\n", i, ct2->name);
+            if (strcmp(A[i].name, A[j].name) > 0) {
+                city_t temp = A[i];
+                A[i] = A[j];
+                A[j] = temp;
             }
-            // printf("\n");
         }
     }
 }
@@ -207,4 +200,29 @@ int binary_search(city_t A[], int lo, int hi, char *key, int *locn) {
         *locn = mid;
         return BS_FOUND;
     }
+}
+
+void overtake(int *overtaking, int *overtaken, city_t A[], int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (is_overtaken(&A[i], &A[j])) {
+                (*overtaking)++;
+                (*overtaken)++;
+            } else if (is_overtaken(&A[j], &A[i])) {
+                (*overtaking)++;
+                (*overtaken)++;
+            }
+        }
+    }
+    return;
+}
+
+int is_overtaken(city_t *ct1, city_t *ct2) {
+    float ct1_npp = ct1->national_population_percent;
+    float ct2_npp = ct2->national_population_percent;
+    if (ct1->population > ct2->population && ct1_npp < ct2_npp) {
+        printf("%s overtakes %s in 2020 in population.\n", ct1->name, ct2->name);
+        return TRUE;
+    }
+    return FALSE;
 }
