@@ -32,8 +32,8 @@ void print_city(city_t *ct);
 void print_city_array(city_t A[], int n);
 void organise_alphabetically(city_t A[], int n);
 city_t *highest_population(city_t A[], int n);
-int cmp(city_t *ct1, city_t *ct2);
-int binary_search(city_t A[], int lo, int hi, city_t *key, int *locn);
+int cmp(char *ct1, city_t *ct2);
+int binary_search(city_t A[], int lo, int hi, char *key, int *locn);
 
 int main(int argc, char **argv){
 
@@ -67,7 +67,19 @@ int main(int argc, char **argv){
             max->population);
 
     // search for given city with binary search
-    binary_search(given_city, cities, n);
+    int locn;
+    if (binary_search(cities, 0, n, given_city, &locn) == BS_NOT_FOUND) {
+        printf("City %s: NOTFOUND\n", given_city);
+    } else {
+        printf("City: %s, Population: %d\n", 
+                cities[locn].name, 
+                cities[locn].population);
+    }
+    printf("\n");
+
+    // cities that overtake some other in 2020
+    printf("CITIES THAT OVERTAKE SOME OTHER IN 2020\n");
+    
 
     return EXIT_SUCCESS;
 }
@@ -172,13 +184,13 @@ city_t *highest_population(city_t A[], int n) {
 
 /* Compare the names of two cities
 */
-int cmp(city_t *ct1, city_t *ct2) {
-    return strcmp(ct1->name, ct2->name);
+int cmp(char *ct_name, city_t *ct2) {
+    return strcmp(ct_name, ct2->name);
 }
 
 /* Recursive binary search for the city from the city name.
 */
-int binary_search(city_t A[], int lo, int hi, city_t *key, int *locn) {
+int binary_search(city_t A[], int lo, int hi, char *key, int *locn) {
     int mid, outcome;
     
     // if key is in A, it is between A[lo] and A[hi - 1]
