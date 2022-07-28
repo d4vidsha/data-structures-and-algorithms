@@ -78,12 +78,14 @@ int main(int argc, char **argv){
                 cities[locn].population);
     }
     printf("\n");
-
+    
     // cities that overtake some other in 2020
     printf("CITIES THAT OVERTAKE SOME OTHER IN 2020\n");
     int overtaking = 0, overtaken = 0;
     overtake(&overtaking, &overtaken, cities, n);
-    printf("*** The list includes %d overtaking and %d overtaken cities\n", overtaking, overtaken);
+    printf("*** The list includes %d overtaking and %d overtaken cities\n", 
+            overtaking, 
+            overtaken);
 
     return EXIT_SUCCESS;
 }
@@ -204,14 +206,17 @@ int binary_search(city_t A[], int lo, int hi, char *key, int *locn) {
 
 void overtake(int *overtaking, int *overtaken, city_t A[], int n) {
     for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            if (is_overtaken(&A[i], &A[j])) {
-                (*overtaking)++;
+        int is_overtake = 0;
+        for (int j = 0; j < n; j++) {
+            if (i != j && is_overtaken(&A[i], &A[j])) {
                 (*overtaken)++;
-            } else if (is_overtaken(&A[j], &A[i])) {
-                (*overtaking)++;
-                (*overtaken)++;
+                if (!is_overtake) {
+                    is_overtake = TRUE;
+                }
             }
+        }
+        if (is_overtake) {
+            (*overtaking)++;
         }
     }
     return;
