@@ -58,7 +58,8 @@ int main(int argc, char **argv){
     organise_alphabetically(cities, n);
 
     // print to stdout list of cities in alphabetical order
-    printf("LIST OF CITIES IN ALPHABETICAL ORDER\nCity, Population June 2020, %% of national population June 2019\n");
+    printf("LIST OF CITIES IN ALPHABETICAL ORDER\n");
+    printf("City, Population June 2020, %% of national population June 2019\n");
     print_city_array(cities, n);
     printf("\n");
 
@@ -227,7 +228,9 @@ int is_overtaken(city_t *ct1, city_t *ct2) {
     float ct1_npp = ct1->national_population_percent;
     float ct2_npp = ct2->national_population_percent;
     if (ct1->population > ct2->population && ct1_npp < ct2_npp) {
-        printf("%s overtakes %s in 2020 in population.\n", ct1->name, ct2->name);
+        printf("%s overtakes %s in 2020 in population.\n", 
+                ct1->name, 
+                ct2->name);
         return TRUE;
     }
     return FALSE;
