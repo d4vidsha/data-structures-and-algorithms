@@ -9,6 +9,9 @@
 #define STR2(x) #x			// see https://stackoverflow.com/a/25410835
 #define STR(X) STR2(X)		//
 
+#define BS_NOT_FOUND (-1)
+#define BS_FOUND 0
+
 #define TRUE 1
 #define FALSE 0
 
@@ -28,7 +31,9 @@ int build_city_array(city_t A[]);
 void print_city(city_t *ct);
 void print_city_array(city_t A[], int n);
 void organise_alphabetically(city_t A[], int n);
-void highest_population(city_t A[], int n);
+city_t *highest_population(city_t A[], int n);
+int cmp(city_t *ct1, city_t *ct2);
+int binary_search(city_t A[], int lo, int hi, city_t *key, int *locn);
 
 int main(int argc, char **argv){
 
@@ -43,7 +48,7 @@ int main(int argc, char **argv){
     }
 
     // there can only be 1 input argument from here on
-    printf("argv[1]: %s\n", argv[1]);
+    char *given_city = argv[1];
     city_t cities[MAX_CITIES];
     int n = build_city_array(cities);
 
@@ -53,9 +58,16 @@ int main(int argc, char **argv){
     // print to stdout list of cities in alphabetical order
     printf("LIST OF CITIES IN ALPHABETICAL ORDER\nCity, Population June 2020, %% of national population June 2019\n");
     print_city_array(cities, n);
+    printf("\n");
 
     // highest population city
-    highest_population(cities, n);
+    city_t *max = highest_population(cities, n);
+    printf("City with highest population: %s, population: %d\n", 
+            max->name, 
+            max->population);
+
+    // search for given city with binary search
+    binary_search(given_city, cities, n);
 
     return EXIT_SUCCESS;
 }
@@ -147,7 +159,7 @@ void organise_alphabetically(city_t A[], int n) {
 /*  Given an array of cities, find the city with the highest population and
     print to stdout.
 */
-void highest_population(city_t A[], int n) {
+city_t *highest_population(city_t A[], int n) {
     city_t *max = A + 0;    // A + 0 == A == &A[0]
 
     for (int i = 0; i < n; i++) {
@@ -156,4 +168,31 @@ void highest_population(city_t A[], int n) {
         }
     }
     return max;
+}
+
+/* Compare the names of two cities
+*/
+int cmp(city_t *ct1, city_t *ct2) {
+    return strcmp(ct1->name, ct2->name);
+}
+
+/* Recursive binary search for the city from the city name.
+*/
+int binary_search(city_t A[], int lo, int hi, city_t *key, int *locn) {
+    int mid, outcome;
+    
+    // if key is in A, it is between A[lo] and A[hi - 1]
+    if (lo >= hi) {
+        return BS_NOT_FOUND;
+    }
+
+    mid = (lo + hi) / 2;
+    if ((outcome = cmp(key, A + mid)) < 0) {
+        return binary_search(A, lo, mid, key, locn);
+    } else if (outcome > 0) {
+        return binary_search(A, mid + 1, hi, key, locn);
+    } else {
+        *locn = mid;
+        return BS_FOUND;
+    }
 }
