@@ -95,7 +95,7 @@ int buildStudentArray(student_t A[]) {
 	if (n == MAX_STUDENTS) {
 		while (getchar() != EOF);
 	}
-	return n - 1;
+	return n;
 }
 
 // prints the array of students
@@ -110,7 +110,7 @@ void printStudentArray(student_t A[], int n) {
 
 	
 	// prints all students
-	for (i = 0; i <= n; i++) {
+	for (i = 0; i < n; i++) {
 		printStudent(&A[i]);
 	}
 
@@ -124,7 +124,7 @@ void printStudentArray(student_t A[], int n) {
 // on tie, returns the one with lowest index
 student_t *bestStudent(struct student A[], int n) {
 	student_t *max = A + 0;    // A+0 is A is &A[0]
-	for (int i = 0; i <= n; i++) {
+	for (int i = 0; i < n; i++) {
 		if (A[i].totalScore > max->totalScore)
 			max = A + i;            // A+i is same as &A[i]
 	}
