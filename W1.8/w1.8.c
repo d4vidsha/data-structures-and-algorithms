@@ -11,23 +11,34 @@ int main(int argc, char **argv){
     char *line = NULL;
     size_t lineBufferLength = 0;
     
-    getline(line, &lineBufferLength, stdin);
+    // no need for the following two lines as getline() deals with this
+    // line = (char *)malloc(lineBufferLength * sizeof(char));
+    // assert(line);
 
-    while(/* Still input to get from stdin. */){
-        /* Read the line. */
-
-        printf("line %d: %s\n", lineNumber, line);
+    /* Read the line. */
+    while(getline(&line, &lineBufferLength, stdin) != -1){
+        // process the line
+        printf("line %d: %s", lineNumber, line);
+        lineNumber++;
         
         /* 
             Empty the stdout buffer, not strictly necessary, 
             but might make it easier to see where something's
             going wrong if it is.
         */
-        fflush(stdout);
+        // fflush(stdout);
     }
     
     printf("Program complete!\n");
     fflush(stdout);
+
+    // free after finished with getline() as it will not free itself. However, 
+    // it does free itself in the getline function if it were to reallocate.
+    free(line);
     
     return 0;
 }
+
+// references used:
+// https://c-for-dummies.com/blog/?p=1112
+// https://man7.org/linux/man-pages/man3/getline.3.html
