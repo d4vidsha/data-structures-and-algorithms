@@ -17,7 +17,7 @@ int main(int argc, char **argv){
     scanf("%d ", &numStrings);
 
     /* Allocate space for the array of strings. */
-    strings = (char **) malloc(sizeof(char*) * numStrings);
+    strings = (char **)malloc(sizeof(char*) * numStrings);
     assert(strings);
 
     /* For each string, get its length, allocate space for it
@@ -25,7 +25,7 @@ int main(int argc, char **argv){
         Note: Remember, these are standard strings. */
     for (j = 0; j < numStrings; j++) {
         scanf("%d ", &nextStringLength);
-        strings[j] = (char *) malloc(sizeof(char) * (nextStringLength + 1));
+        strings[j] = (char *)malloc(sizeof(char) * (nextStringLength + 1));
         assert(strings[j]);
         scanf("%s ", strings[j]);
     }    

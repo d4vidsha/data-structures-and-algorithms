@@ -80,7 +80,7 @@ int getBytesUsed(struct student A[], int n) {
 char *strDuplicate(const char *s) {
 	// char duplicate[strlen(s) + 1];  // use just as many as needed bytes!
 	char *duplicate; 
-	duplicate = (char *) malloc(sizeof(char) * (strlen(s) + 1));
+	duplicate = (char *)malloc(sizeof(char) * (strlen(s) + 1));
 	assert(duplicate);
 	char *p;
 

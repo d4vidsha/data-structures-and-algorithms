@@ -11,6 +11,8 @@ int main(int argc, char **argv){
     char *line = NULL;
     size_t lineBufferLength = 0;
     
+    getline(line, &lineBufferLength, stdin);
+
     while(/* Still input to get from stdin. */){
         /* Read the line. */
 
