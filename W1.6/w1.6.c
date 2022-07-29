@@ -81,6 +81,7 @@ char *strDuplicate(const char *s) {
 	// char duplicate[strlen(s) + 1];  // use just as many as needed bytes!
 	char *duplicate; 
 	duplicate = (char *) malloc(sizeof(char) * (strlen(s) + 1));
+	assert(duplicate);
 	char *p;
 
 	for (p = duplicate; *s; *(p++) = *(s++));
