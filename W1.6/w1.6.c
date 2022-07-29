@@ -35,7 +35,8 @@ void printStudent(struct student *s);
 int buildStudentArray(struct student A[]);
 void printStudentArray(struct student A[], int n); 
 struct student *bestStudent(struct student A[], int n);
-size_t getBytesUsed(struct student A[], int n);   /* CHANGED */
+int getBytesUsed(struct student A[], int n);   /* CHANGED */
+void freeStudentArray(struct student A[], int n);
 
 int main(int argc, char *argv[]) {
 	struct student students[MAX_STUDENTS];
@@ -49,19 +50,27 @@ int main(int argc, char *argv[]) {
 	printStudent(bestStudent(students, n));
 
 	/* CHANGED */
-	printf("\nMemory used: %ld KB\n\n", getBytesUsed(students, n) >> 10);
+	printf("\nMemory used: %d KB\n\n", getBytesUsed(students, n) >> 10);
+
+	freeStudentArray(students, n);
 
 	return EXIT_SUCCESS;
 }
 
+void freeStudentArray(struct student A[], int n) {
+	for (int i = 0; i < n; i++) {
+		free(A[i].name);
+	}
+}
 
 /* CHANGED: NEW FUNCTION HERE */
 // returns bytes used by array A
-size_t getBytesUsed(struct student A[], int n) {
+int getBytesUsed(struct student A[], int n) {
 	int bytesUsed = MAX_STUDENTS * sizeof(struct student);
 	for (int i = 0; i < n; i++) {
 		// adding the space used by each student's name
 		// CHANGED, FILL IN: need to add bytes used by A[i].name to bytesUsed
+		bytesUsed += (strlen(A[i].name) + 1);
 	}
 	return bytesUsed;
 }
@@ -69,7 +78,9 @@ size_t getBytesUsed(struct student A[], int n) {
 /* CHANGED: NEW FUNCTION HERE */
 // returns a duplicate of a string, just similar to strdup
 char *strDuplicate(const char *s) {
-	char duplicate[strlen(s) + 1];  // use just as many as needed bytes!
+	// char duplicate[strlen(s) + 1];  // use just as many as needed bytes!
+	char *duplicate; 
+	duplicate = (char *) malloc(sizeof(char) * (strlen(s) + 1));
 	char *p;
 
 	for (p = duplicate; *s; *(p++) = *(s++));
