@@ -11,8 +11,17 @@
 #include <string.h>
 // ADD: needed .h
 #include "array.h"
+#include "data.h"
 
 // FILL IN THE CONTENT, MOSTLY BY COPYING FROM students.c
+
+struct student {
+	int id;
+	char *name;       
+	double score1;
+	double score2;
+	double totalScore;
+};
 
 // Free the memory which was dynamically allocated for array A 
 void freeMemory(student_t *A[], int n) {

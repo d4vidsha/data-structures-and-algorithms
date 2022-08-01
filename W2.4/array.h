@@ -8,6 +8,8 @@
 
 #ifndef _ARRAY_H_
 #define _ARRAY_H_
+struct student;
+typedef struct student student_t;
 
 // FILL IN THE CONTENT
 void freeMemory(student_t *A[], int n);
