@@ -10,8 +10,11 @@
 #define _ARRAY_H_
 
 // FILL IN THE CONTENT
-
-
+void freeMemory(student_t *A[], int n);
+size_t bytesUsedByArray(student_t *A[], int n);
+int buildStudentArray(student_t *A[]);
+void printStudentArray(student_t *A[], int n); 
+student_t *bestStudent(student_t *A[], int n);
 
 
 
