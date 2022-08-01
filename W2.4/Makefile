@@ -1,30 +1,12 @@
-# Define C compiler & flags
-CC = gcc
-CFLAGS = -Wall -g
-# Define libraries to be linked (for example -lm)
-LDLIBS = 
+driver: data.o array.o
+	gcc -o driver data.o array.o
 
-# Define sets of source files and object files
-SRC = driver.c factorial.c combination.c 
-# OBJ is the same as SRC, just replace .c with .o
-OBJ = $(SRC:.c=.o)
- 
-# Define the executable name(s)
-EXE = combination
 
-# The first target:
-combination: driver.o factorial.o combination.o
-	gcc -o combination driver.o factorial.o combination.o
+data.o: data.c data.h 
+	gcc -c data.c
 
-# Other targets specify how to get the .o files
-driver.o: driver.c 
-	gcc -c driver.c 
-
-factorial.o: factorial.c factorial.h 
-	gcc -c factorial.c 
-
-combination.o: combination.c combination.h  
-	gcc -c combination.c 
+array.o: array.c array.h  
+	gcc -c array.c 
 
 clean:
 	rm -f *.o combination 
