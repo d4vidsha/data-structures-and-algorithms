@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "data.h"
 #include "array.h"
 
@@ -25,7 +26,9 @@ int main(int argc, char *argv[]) {
 	// printf("%s\n%s\n", argv[1], argv[2]);
 
 	char *inFilename = (char *)malloc((strlen(argv[1]) + 1) * sizeof(char));
+	assert(inFilename);
 	char *outFilename = (char *)malloc((strlen(argv[2]) + 1) * sizeof(char));
+	assert(outFilename);
 	strcpy(inFilename, argv[1]);
 	strcpy(outFilename, argv[2]);
 	FILE *inFile = fopen(inFilename, "r");

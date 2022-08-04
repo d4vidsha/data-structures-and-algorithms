@@ -57,7 +57,15 @@ void arrayShrink(array_t *arr) {
 
 // inserts/appends data "s" to the end of array "arr" 
 void arrayAppend(array_t *arr, student_t *s) {
-  // FILL IN THIS FUNCTION
+
+	arr->used += 1;
+
+	// double the array size
+	if (arr->used > arr->size) {
+		arr->size *= 2;
+		array_t *res = realloc(arr->data, arr->size * sizeof(array_t));
+	}
+
 
 }
 
