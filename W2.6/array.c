@@ -58,15 +58,18 @@ void arrayShrink(array_t *arr) {
 // inserts/appends data "s" to the end of array "arr" 
 void arrayAppend(array_t *arr, student_t *s) {
 
-	arr->used += 1;
+	arr->n++;
 
-	// double the array size
-	if (arr->used > arr->size) {
+	// double the array size if out of space
+	if (arr->n > arr->size) {
 		arr->size *= 2;
-		array_t *res = realloc(arr->data, arr->size * sizeof(array_t));
+		student_t **res = realloc(arr->A, arr->size * sizeof(student_t *));
+		assert(res);
+		arr->A = res;
 	}
 
-
+	// append to array
+	arr->A[arr->n - 1] = s;
 }
 
 
