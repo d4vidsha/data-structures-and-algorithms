@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	printf("%s\n%s\n", argv[1], argv[2]);
+	// printf("%s\n%s\n", argv[1], argv[2]);
 
 	char *inFilename = (char *)malloc((strlen(argv[1]) + 1) * sizeof(char));
 	char *outFilename = (char *)malloc((strlen(argv[2]) + 1) * sizeof(char));
