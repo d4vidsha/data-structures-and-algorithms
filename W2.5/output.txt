@@ -1,0 +1,17 @@
+STUDENT LIST
+ID    Name                 score1 score2  total
+15811 Sean Pham              29.0   31.0   60.0
+21491 Audrey Barclay         35.0   22.0   57.0
+15029 Jacky Pearson          44.0   42.0   86.0
+11229 Carl Bowen             22.0   40.0   62.0
+17432 Stefan Page            31.0   44.0   75.0
+24334 Kathryn Vincent        43.0   24.0   67.0
+29978 Dominique Mathews      47.0   23.0   70.0
+11345 Damon Burton           37.0   32.0   69.0
+===============================================
+
+A student with highest score:
+15029 Jacky Pearson          44.0   42.0   86.0
+
+Memory used: 19 KB
+
