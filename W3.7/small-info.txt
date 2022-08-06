@@ -1,0 +1,10 @@
+#1: SUCCESSFUL   	4 	comparisons
+#2: UNSUCCESSFUL 	8 	comparisons
+#3: SUCCESSFUL   	1 	comparisons
+#4: UNSUCCESSFUL 	8 	comparisons
+#5: SUCCESSFUL   	5 	comparisons
+
+Summary of searching in an array of 8 elements:
+Total       : 	5 searches 	26 	comparisons 	5 	comps/search
+Successful  : 	3 searches 	10 	comparisons 	3 	comps/search
+Unsuccessful: 	2 searches 	16 	comparisons 	8 	comps/search
