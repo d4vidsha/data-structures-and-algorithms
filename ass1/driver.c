@@ -1,16 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <assert.h>
+#include "readin.h"
 
 #define MAX_STR_LEN 128
 #define NUM_ARGS 3
-#define NULLBYTE 1
 #define STAGE_ARG_POS 1
 #define DATA_FILENAME_ARG_POS 2
 #define OUT_FILENAME_ARG_POS 3
-
-char *filenamecpy(char *arg);
 
 int main(int argc, char *argv[]) {
 
@@ -26,33 +22,25 @@ int main(int argc, char *argv[]) {
 
     // store arguments
     int stage;
-    char *data_filen;
-	char *out_filen;
+    char *data_file;
+	char *out_file;
 
     stage = atoi(argv[STAGE_ARG_POS]);
-    data_filen = filenamecpy(argv[DATA_FILENAME_ARG_POS]);
-    out_filen = filenamecpy(argv[OUT_FILENAME_ARG_POS]);
+    data_file = filenamecpy(argv[DATA_FILENAME_ARG_POS]);
+    out_file = filenamecpy(argv[OUT_FILENAME_ARG_POS]);
 
-    printf("%d %s %s\n", stage, data_filen, out_filen);
+    printf("%d %s %s\n", stage, data_file, out_file);
 
-    // FILE *data_file = fopen(data_filen, "r");
-	// FILE *out_file = fopen(out_filen, "w");
+    // FILE *data = fopen(data_file, "r");
+	// FILE *out = fopen(out_file, "w");
+
+
+
+
 
     // free everything
-	free(data_filen);
-	free(out_filen);
+	free(data_file);
+	free(out_file);
 
     return EXIT_SUCCESS;
-}
-
-/*  Copies specified argument to `filename` string. This includes a malloc.
-    Ideally, every time this function is run, an associated `free(filename)`
-    must be included.
-*/
-char *filenamecpy(char *arg) {
-    int filename_len = strlen(arg) + NULLBYTE;
-    char *filename = (char *)malloc(sizeof(char) * filename_len);
-    assert(filename);
-    strcpy(filename, arg);
-    return filename;
 }
