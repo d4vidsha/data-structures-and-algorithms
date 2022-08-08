@@ -14,7 +14,7 @@
     Ideally, every time this function is run, an associated `free(filename)`
     is to be included.
 */
-char *filenamecpy(char *arg) {
+char *filename_strcpy(char *arg) {
     int filename_len = strlen(arg) + NULLBYTE;
     char *filename = (char *)malloc(sizeof(char) * filename_len);
     assert(filename);

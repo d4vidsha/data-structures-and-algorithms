@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
 	char *out_file;
 
     stage = atoi(argv[STAGE_ARG_POS]);
-    data_file = filenamecpy(argv[DATA_FILENAME_ARG_POS]);
-    out_file = filenamecpy(argv[OUT_FILENAME_ARG_POS]);
+    data_file = filename_strcpy(argv[DATA_FILENAME_ARG_POS]);
+    out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
 
     printf("%d %s %s\n", stage, data_file, out_file);
 

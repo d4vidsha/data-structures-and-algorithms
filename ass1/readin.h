@@ -13,7 +13,7 @@
     Ideally, every time this function is run, an associated `free(filename)`
     is to be included.
 */
-char *filenamecpy(char *arg);
+char *filename_strcpy(char *arg);
 
 #endif
 
