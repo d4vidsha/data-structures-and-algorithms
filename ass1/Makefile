@@ -10,7 +10,7 @@ SRC = driver.c dictionary.c
 OBJ = $(SRC:.c=.o)
  
 # Define the executable name(s)
-EXE = dict1
+EXE = dict1 dict2
 
 # the first target:
 $(EXE): $(OBJ) 
