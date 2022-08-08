@@ -16,6 +16,7 @@ typedef struct footpath_segment footpath_segment_t;
 
 
 void skip_header_line(FILE *f);
+footpath_segment_t *footpath_read_line(FILE *f);
 
 #endif
 

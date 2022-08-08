@@ -40,7 +40,7 @@ void skip_header_line(FILE *f) {
 /*  Given a filename `f`, read a row into `fp` of type `footpath_segment_t`.
     Returns the pointer to `fp` or if unsuccessful returns `NULL`.
 */
-footpath_segment_t *fp_read_line(FILE *f) {
+footpath_segment_t *footpath_read_line(FILE *f) {
     footpath_segment_t *fp = NULL;
     
     int fp_id;
