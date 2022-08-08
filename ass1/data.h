@@ -1,12 +1,16 @@
 /* =============================================================================
    Project: dict1
-   dictionary.c :
-            = all related to dictionaries
+   data.h :
+            = all related to the data
 ============================================================================= */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "dictionary.h"
+#ifndef _DATA_H_
+#define _DATA_H_
+
+
+
+
+#endif
 
 
 
