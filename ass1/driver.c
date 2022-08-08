@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "readin.h"
 
 #define MAX_STR_LEN 128
@@ -29,13 +30,12 @@ int main(int argc, char *argv[]) {
     data_file = filename_strcpy(argv[DATA_FILENAME_ARG_POS]);
     out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
 
-    printf("%d %s %s\n", stage, data_file, out_file);
+    // access files
+    FILE *data = fopen(data_file, "r"),
+         *out = fopen(out_file, "w");
+    assert(data, out);
 
-    // FILE *data = fopen(data_file, "r");
-	// FILE *out = fopen(out_file, "w");
-
-
-
+    // 
 
 
     // free everything
