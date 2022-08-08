@@ -10,6 +10,7 @@
 #define MAX_STR_LEN 128
 #define NULLBYTE 1      // size of nullbyte
 #define NEWLINE '\n'
+#define NUM_FIELDS 19
 
 typedef struct footpath_segment footpath_segment_t;
 
