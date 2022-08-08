@@ -40,10 +40,10 @@ int main(int argc, char *argv[]) {
 	strcpy(data_filen, argv[DATA_FILENAME_ARG_POS]);
 	strcpy(out_filen, argv[OUT_FILENAME_ARG_POS]);
 	
-    // FILE *inFile = fopen(inFilename, "r");
-	// FILE *outFile = fopen(outFilename, "w");
-	// free(inFilename);
-	// free(outFilename);
+    FILE *data_file = fopen(data_filen, "r");
+	FILE *out_file = fopen(out_filen, "w");
+	free(data_filen);
+	free(out_filen);
 
     return EXIT_SUCCESS;
 }
