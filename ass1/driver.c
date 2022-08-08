@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "readin.h"
+#include "data.h"
 
-#define MAX_STR_LEN 128
 #define NUM_ARGS 3
 #define STAGE_ARG_POS 1
 #define DATA_FILENAME_ARG_POS 2
@@ -31,12 +31,14 @@ int main(int argc, char *argv[]) {
     out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
 
     // access files
-    FILE *data = fopen(data_file, "r"),
-         *out = fopen(out_file, "w");
-    assert(data, out);
+    FILE *data = fopen(data_file, "r");
+    assert(data);
+    FILE *out = fopen(out_file, "w");
+    assert(out);
 
-    // 
-
+    // add footpath segments to linked list
+    skip_header_line(data);
+    
 
     // free everything
 	free(data_file);
