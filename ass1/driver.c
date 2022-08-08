@@ -10,6 +10,8 @@
 #define DATA_FILENAME_ARG_POS 2
 #define OUT_FILENAME_ARG_POS 3
 
+char *filenamecpy(char *arg);
+
 int main(int argc, char *argv[]) {
 
     // ensure exactly `NUM_ARGS` arguments
@@ -27,21 +29,14 @@ int main(int argc, char *argv[]) {
     char *data_filen;
 	char *out_filen;
 
-    stage = argv[STAGE_ARG_POS];
+    stage = atoi(argv[STAGE_ARG_POS]);
+    data_filen = filenamecpy(argv[DATA_FILENAME_ARG_POS]);
+    out_filen = filenamecpy(argv[OUT_FILENAME_ARG_POS]);
 
-    int data_filen_len = strlen(argv[DATA_FILENAME_ARG_POS]) + NULLBYTE;
-    int out_filen_len = strlen(argv[OUT_FILENAME_ARG_POS]) + NULLBYTE;
+    printf("%d %s %s\n", stage, data_filen, out_filen);
 
-    data_filen = (char *)malloc(sizeof(char) * data_filen_len);
-	assert(data_filen);
-    out_filen = (char *)malloc(sizeof(char) * out_filen_len);
-	assert(out_filen);
-
-	strcpy(data_filen, argv[DATA_FILENAME_ARG_POS]);
-	strcpy(out_filen, argv[OUT_FILENAME_ARG_POS]);
-	
-    FILE *data_file = fopen(data_filen, "r");
-	FILE *out_file = fopen(out_filen, "w");
+    // FILE *data_file = fopen(data_filen, "r");
+	// FILE *out_file = fopen(out_filen, "w");
 
     // free everything
 	free(data_filen);
@@ -50,13 +45,14 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-/*  Copies specified argument to the filename string. This includes a malloc.
+/*  Copies specified argument to `filename` string. This includes a malloc.
     Ideally, every time this function is run, an associated `free(filename)`
     must be included.
 */
-void filenamecpy(char *filename, char *argv, int arg_pos) {
-    int filename_len = strlen(argv[arg_pos]) + NULLBYTE;
-    filename = (char *)malloc(sizeof(char) * filename_len);
+char *filenamecpy(char *arg) {
+    int filename_len = strlen(arg) + NULLBYTE;
+    char *filename = (char *)malloc(sizeof(char) * filename_len);
     assert(filename);
-    strcpy(filename, argv[arg_pos]);
+    strcpy(filename, arg);
+    return filename;
 }
