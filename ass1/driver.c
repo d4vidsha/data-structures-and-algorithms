@@ -42,8 +42,21 @@ int main(int argc, char *argv[]) {
 	
     FILE *data_file = fopen(data_filen, "r");
 	FILE *out_file = fopen(out_filen, "w");
+
+    // free everything
 	free(data_filen);
 	free(out_filen);
 
     return EXIT_SUCCESS;
+}
+
+/*  Copies specified argument to the filename string. This includes a malloc.
+    Ideally, every time this function is run, an associated `free(filename)`
+    must be included.
+*/
+void filenamecpy(char *filename, char *argv, int arg_pos) {
+    int filename_len = strlen(argv[arg_pos]) + NULLBYTE;
+    filename = (char *)malloc(sizeof(char) * filename_len);
+    assert(filename);
+    strcpy(filename, argv[arg_pos]);
 }
