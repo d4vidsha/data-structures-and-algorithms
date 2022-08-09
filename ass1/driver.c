@@ -22,13 +22,9 @@ int main(int argc, char *argv[]) {
     }
 
     // store arguments
-    int stage;
-    char *data_file;
-	char *out_file;
-
-    stage = atoi(argv[STAGE_ARG_POS]);
-    data_file = filename_strcpy(argv[DATA_FILENAME_ARG_POS]);
-    out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
+    int stage = atoi(argv[STAGE_ARG_POS]);
+    char *data_file = filename_strcpy(argv[DATA_FILENAME_ARG_POS]);
+    char *out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
 
     // access files
     FILE *data = fopen(data_file, "r");
