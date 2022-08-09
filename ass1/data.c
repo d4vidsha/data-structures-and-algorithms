@@ -80,6 +80,16 @@ footpath_segment_t *footpath_read_line(FILE *f) {
         fp->grade1in = grade1in;
         fp->mcc_id = mcc_id;
         fp->mccid_int = mccid_int;
+        fp->rlmax = rlmax;
+        fp->rlmin = rlmin;
+        strcpy(fp->segside, segside);
+        fp->statusid = statusid;
+        fp->streetid = streetid;
+        fp->street_group = street_group;
+        fp->start_lat = start_lat;
+        fp->start_lon = start_lon;
+        fp->end_lat = end_lat;
+        fp->end_lon = end_lon;
     }
     return fp;
 }
