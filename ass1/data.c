@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "data.h"
 #include "linkedlist.h"
 
@@ -32,6 +33,16 @@ struct footpath_segment {
     double end_lon;
 };
 
+struct node {
+    footpath_segment_t *fp;
+    node_t *next;
+};
+
+struct list {
+    node_t *head;
+    node_t *foot;
+};
+
 /*  Skip header line from a .csv file `f`.
 */
 void skip_header_line(FILE *f) {
@@ -39,7 +50,7 @@ void skip_header_line(FILE *f) {
 }
 
 /*  Given a filename `f`, read a row into `fp` of type `footpath_segment_t`.
-    Returns the pointer to `fp` or if unsuccessful returns `NULL`.
+    Returns the pointer to malloc'd `fp` or if unsuccessful returns `NULL`.
 */
 footpath_segment_t *footpath_read_line(FILE *f) {
     footpath_segment_t *fp = NULL;
@@ -64,13 +75,20 @@ footpath_segment_t *footpath_read_line(FILE *f) {
     double end_lat;
     double end_lon;
 
-    if (fscanf(f, "%d, %s, %s, %s, %lf, %lf, %lf, %d, %d, %lf, %lf, %s, %d, %d, %d, %lf, %lf, %lf, %lf", 
-                   &footpath_id, address, clue_sa, asset_type,
-                   &deltaz, &distance, &grade1in, &mcc_id,
-                   &mccid_int, &rlmax, &rlmin, segside,
-                   &statusid, &streetid, &street_group, &start_lat,
-                   &start_lon, &end_lat, &end_lon) == NUM_FIELDS) {
-        
+    int read_fields;
+
+    // read_fields = fscanf(f, "%d,%[^,],%[^,],%[^,],%lf,%lf,%lf,%d.0,%d.0,%lf,%lf,%[^,],%d.0,%d.0,%d.0,%lf,%lf,%lf,%lf\n", 
+    //                &footpath_id, address, clue_sa, asset_type,
+    //                &deltaz, &distance, &grade1in, &mcc_id,
+    //                &mccid_int, &rlmax, &rlmin, segside,
+    //                &statusid, &streetid, &street_group, &start_lat,
+    //                &start_lon, &end_lat, &end_lon);
+
+    // implement a way to read in fields
+
+    if (read_fields == NUM_FIELDS) {
+        fp = (footpath_segment_t *)malloc(sizeof(*fp));
+        assert(fp);
         fp->footpath_id = footpath_id;
         strcpy(fp->address, address);
         strcpy(fp->clue_sa, clue_sa);
@@ -90,6 +108,8 @@ footpath_segment_t *footpath_read_line(FILE *f) {
         fp->start_lon = start_lon;
         fp->end_lat = end_lat;
         fp->end_lon = end_lon;
+    } else {
+        fprintf(stderr, "ERROR: failed to scan all required fields\n");
     }
     return fp;
 }
@@ -97,7 +117,17 @@ footpath_segment_t *footpath_read_line(FILE *f) {
 void build_list(FILE *f, list_t *list) {
     footpath_segment_t *fp;
     while ((fp = footpath_read_line(f)) != NULL) {
+        printf("Read in footpath_id: %d\n", fp->footpath_id);
         list = append(list, fp);
+    }
+}
+
+void print_list(FILE *f, list_t *list) {
+    node_t *node;
+    node = list->head;
+    while (node) {
+        fprintf(f, "%d\n", node->fp->footpath_id);
+        node = node->next;
     }
 }
 

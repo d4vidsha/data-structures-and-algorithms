@@ -10,6 +10,28 @@
 #include "linkedlist.h"
 #include "data.h"
 
+struct footpath_segment {
+    int footpath_id;
+    char address[MAX_STR_LEN + NULLBYTE];
+    char clue_sa[MAX_STR_LEN + NULLBYTE];
+    char asset_type[MAX_STR_LEN + NULLBYTE];
+    double deltaz;
+    double distance;
+    double grade1in;
+    int mcc_id;
+    int mccid_int;
+    double rlmax;
+    double rlmin;
+    char segside[MAX_STR_LEN + NULLBYTE];
+    int statusid;
+    int streetid;
+    int street_group;
+    double start_lat;
+    double start_lon;
+    double end_lat;
+    double end_lon;
+};
+
 struct node {
     footpath_segment_t *fp;
     node_t *next;
@@ -40,12 +62,13 @@ void free_list(list_t *list) {
     while (curr) {
         prev = curr;
         curr = curr->next;
+        free(prev->fp);
         free(prev);
     }
     free(list);
 }
 
-list_t *prepend(list_t *list, footpath_segment_t fp) {
+list_t *prepend(list_t *list, footpath_segment_t *fp) {
     node_t *new;
     assert(list);
     new = (node_t *)malloc(sizeof(*new));
@@ -60,7 +83,7 @@ list_t *prepend(list_t *list, footpath_segment_t fp) {
     return list;
 }
 
-list_t *append(list_t *list, footpath_segment_t fp) {
+list_t *append(list_t *list, footpath_segment_t *fp) {
     node_t *new;
     assert(list);
     new = (node_t *)malloc(sizeof(*new));

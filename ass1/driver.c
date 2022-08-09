@@ -37,10 +37,15 @@ int main(int argc, char *argv[]) {
     list_t *list = create_empty_list();
     skip_header_line(data);
     build_list(data, list);
+    print_list(out, list);
 
     // free everything
+    fclose(data);
+    fclose(out);
 	free(data_file);
 	free(out_file);
+    free_list(list);
+    
 
     return EXIT_SUCCESS;
 }
