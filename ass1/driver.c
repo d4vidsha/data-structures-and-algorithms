@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "readin.h"
 #include "data.h"
+#include "linkedlist.h"
 
 #define NUM_ARGS 3
 #define STAGE_ARG_POS 1
@@ -32,9 +33,10 @@ int main(int argc, char *argv[]) {
     FILE *out = fopen(out_file, "w");
     assert(out);
 
-    // add footpath segments to linked list
+    // add footpath segments to a linked list
+    list_t *list = create_empty_list();
     skip_header_line(data);
-    
+    build_list(data, list);
 
     // free everything
 	free(data_file);

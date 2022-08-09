@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "linkedlist.h"
 #include "data.h"
 
@@ -14,15 +15,75 @@ struct node {
     node_t *next;
 };
 
-struct linkedlist {
+struct list {
     node_t *head;
-    node_t *tail;
+    node_t *foot;
 };
+
+list_t *create_empty_list(void) {
+    list_t *list;
+    list = (list_t *)malloc(sizeof(*list));
+    assert(list);
+    list->head = list->foot = NULL;
+    return list;
+}
+
+int is_empty_list(list_t *list) {
+    assert(list);
+    return list->head == NULL;
+}
+
+void free_list(list_t *list) {
+    node_t *curr, *prev;
+    assert(list);
+    curr = list->head;
+    while (curr) {
+        prev = curr;
+        curr = curr->next;
+        free(prev);
+    }
+    free(list);
+}
+
+list_t *prepend(list_t *list, footpath_segment_t fp) {
+    node_t *new;
+    assert(list);
+    new = (node_t *)malloc(sizeof(*new));
+    assert(new);
+    new->fp = fp;
+    new->next = list->head;
+    list->head = new;
+    if (list->foot == NULL) {
+        /* this is the first insert into list */
+        list->foot = new;
+    }
+    return list;
+}
+
+list_t *append(list_t *list, footpath_segment_t fp) {
+    node_t *new;
+    assert(list);
+    new = (node_t *)malloc(sizeof(*new));
+    assert(new);
+    new->fp = fp;
+    new->next = NULL;
+    if (list->foot == NULL) {
+        /* this is the first insert into list */
+        list->head = list->foot = new;
+    } else {
+        list->foot->next = new;
+        list->foot = new;
+    }
+    return list;
+}
+
 
 
 
 /* =============================================================================
    Written by David Sha.
-   - Implementation of a linked list inspired by Artem Polyvyanyy from
+   - Implementation of linked list structs inspired by Artem Polyvyanyy from
      ass2-soln-2020.c.
+   - Implementation of linked list functions inspired by Alistair Moffat
+     from "Programming, Problem Solving, and Abstraction with C".
 ============================================================================= */

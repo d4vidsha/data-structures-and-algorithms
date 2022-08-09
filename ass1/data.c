@@ -94,6 +94,13 @@ footpath_segment_t *footpath_read_line(FILE *f) {
     return fp;
 }
 
+void build_list(FILE *f, list_t *list) {
+    footpath_segment_t *fp;
+    while ((fp = footpath_read_line(f)) != NULL) {
+        list = append(list, fp);
+    }
+}
+
 /* =============================================================================
    Written by David Sha.
    - Implementation inspired by W2.6 workshop content.
