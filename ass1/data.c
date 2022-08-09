@@ -77,12 +77,12 @@ footpath_segment_t *footpath_read_line(FILE *f) {
 
     int read_fields;
 
-    // read_fields = fscanf(f, "%d,%[^,],%[^,],%[^,],%lf,%lf,%lf,%d.0,%d.0,%lf,%lf,%[^,],%d.0,%d.0,%d.0,%lf,%lf,%lf,%lf\n", 
-    //                &footpath_id, address, clue_sa, asset_type,
-    //                &deltaz, &distance, &grade1in, &mcc_id,
-    //                &mccid_int, &rlmax, &rlmin, segside,
-    //                &statusid, &streetid, &street_group, &start_lat,
-    //                &start_lon, &end_lat, &end_lon);
+    read_fields = fscanf(f, "%d,%[^,],%[^,],%[^,],%lf,%lf,%lf,%d.0,%d.0,%lf,%lf,%[^,],%d.0,%d.0,%d.0,%lf,%lf,%lf,%lf\n", 
+                   &footpath_id, address, clue_sa, asset_type,
+                   &deltaz, &distance, &grade1in, &mcc_id,
+                   &mccid_int, &rlmax, &rlmin, segside,
+                   &statusid, &streetid, &street_group, &start_lat,
+                   &start_lon, &end_lat, &end_lon);
 
     // implement a way to read in fields
 
