@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "data.h"
 #include "linkedlist.h"
 
@@ -43,18 +44,44 @@ void skip_header_line(FILE *f) {
 footpath_segment_t *footpath_read_line(FILE *f) {
     footpath_segment_t *fp = NULL;
     
-    int fp_id;
-    char addr[MAX_STR_LEN + NULLBYTE];
+    int footpath_id;
+    char address[MAX_STR_LEN + NULLBYTE];
+    char clue_sa[MAX_STR_LEN + NULLBYTE];
+    char asset_type[MAX_STR_LEN + NULLBYTE];
+    double deltaz;
+    double distance;
+    double grade1in;
+    int mcc_id;
+    int mccid_int;
+    double rlmax;
+    double rlmin;
+    char segside[MAX_STR_LEN + NULLBYTE];
+    int statusid;
+    int streetid;
+    int street_group;
+    double start_lat;
+    double start_lon;
+    double end_lat;
+    double end_lon;
 
-
-    if (fscanf(f, "%d, %s, %s, %s, 
-                   %lf, %lf, %lf, %d, 
-                   %d, %lf, %lf, %s, 
-                   %d, %d, %d, %lf, 
-                   %lf, %lf, %lf", fp_id, ) == NUM_FIELDS) {
+    if (fscanf(f, "%d, %s, %s, %s, %lf, %lf, %lf, %d, %d, %lf, %lf, %s, %d, %d, %d, %lf, %lf, %lf, %lf", 
+                   &footpath_id, address, clue_sa, asset_type,
+                   &deltaz, &distance, &grade1in, &mcc_id,
+                   &mccid_int, &rlmax, &rlmin, segside,
+                   &statusid, &streetid, &street_group, &start_lat,
+                   &start_lon, &end_lat, &end_lon) == NUM_FIELDS) {
         
-        fp->footpath_id = fp_id;
+        fp->footpath_id = footpath_id;
+        strcpy(fp->address, address);
+        strcpy(fp->clue_sa, clue_sa);
+        strcpy(fp->asset_type, asset_type);
+        fp->deltaz = deltaz;
+        fp->distance = distance;
+        fp->grade1in = grade1in;
+        fp->mcc_id = mcc_id;
+        fp->mccid_int = mccid_int;
     }
+    return fp;
 }
 
 /* =============================================================================
