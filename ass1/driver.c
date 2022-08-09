@@ -4,6 +4,7 @@
 #include "readin.h"
 #include "data.h"
 #include "linkedlist.h"
+#include "readcsv.h"
 
 #define NUM_ARGS 3
 #define STAGE_ARG_POS 1
