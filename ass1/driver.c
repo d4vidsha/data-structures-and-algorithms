@@ -9,7 +9,6 @@
 #include <assert.h>
 #include <string.h>
 #include "readin.h"
-#include "data.h"
 #include "linkedlist.h"
 #include "readcsv.h"
 #include "stage.h"
