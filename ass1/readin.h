@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: dict1
    readin.h :
-            = related all to reading from input
+            = related all to reading from input arguments
 ============================================================================= */
 
 #ifndef _READIN_H_

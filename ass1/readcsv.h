@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: dict1
    readcsv.h :
-            = related all to reading from input
+            = related all to reading from .csv file
 ============================================================================= */
 
 #ifndef _READCSV_H_
@@ -16,10 +16,6 @@
 #define NULLBYTE '\0'
 #define TRUE 1
 #define FALSE 0
-
-/* #includes ================================================================ */
-
-/* typedefs ================================================================= */
 
 /* function prototypes ====================================================== */
 int is_in_cell_length(int curr, int max);

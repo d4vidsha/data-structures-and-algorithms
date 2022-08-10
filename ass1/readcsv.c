@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: dict1
    readcsv.c :
-            = related all to reading from input
+            = related all to reading from .csv file
 ============================================================================= */
 
 #include <stdio.h>

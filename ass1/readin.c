@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: dict1
    readin.c :
-            = related all to reading from input
+            = related all to reading from input arguments
 ============================================================================= */
 
 #include <stdio.h>
