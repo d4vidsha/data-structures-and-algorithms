@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE];
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;      // removes "\n" from line
+
         list_t *result_list = find_addresses(line, list);
         fprintf(out, "%s\n", line);
         print_footpath_segments(out, result_list);

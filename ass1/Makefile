@@ -10,11 +10,16 @@ SRC = driver.c dictionary.c readin.c linkedlist.c data.c readcsv.c
 OBJ = $(SRC:.c=.o)
  
 # Define the executable name(s)
-EXE = dict1
+EXE1 = dict1
+EXE2 = dict2
 
 # the first target:
-$(EXE): $(OBJ) 
-	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) $(LDLIBS)
+$(EXE1): $(OBJ) 
+	$(CC) $(CFLAGS) -o $(EXE1) $(OBJ) $(LDLIBS)
+
+$(EXE2): $(OBJ) 
+	$(CC) $(CFLAGS) -o $(EXE2) $(OBJ) $(LDLIBS)
 
 clean:
-	rm -f $(OBJ) $(EXE)
+	rm -f $(OBJ) $(EXE1)
+	rm -f $(OBJ) $(EXE2)
