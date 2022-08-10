@@ -12,6 +12,7 @@
 #define IN_FILENAME_ARG_POS 2
 #define OUT_FILENAME_ARG_POS 3
 #define NEWLINE_LEN 1
+#define NOTFOUND "NOTFOUND"
 
 int main(int argc, char *argv[]) {
 
@@ -48,6 +49,12 @@ int main(int argc, char *argv[]) {
         list_t *result_list = find_addresses(line, list);
         fprintf(out, "%s\n", line);
         print_footpath_segments(out, result_list);
+        int list_length = list_len(result_list);
+        if (list_length) {
+            printf("%s --> %d\n", line, list_length);
+        } else {
+            printf("%s --> %s\n", line, NOTFOUND);
+        }
         free_list(result_list);
     }
 

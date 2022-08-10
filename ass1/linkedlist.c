@@ -100,7 +100,17 @@ list_t *append(list_t *list, footpath_segment_t *fp) {
     return list;
 }
 
-
+int list_len(list_t *list) {
+    assert(list);
+    int len = 0;
+    node_t *curr;
+    curr = list->head;
+    while (curr) {
+        len++;
+        curr = curr->next;
+    }
+    return len;
+}
 
 
 /* =============================================================================

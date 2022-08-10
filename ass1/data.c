@@ -102,6 +102,7 @@ list_t *find_addresses(char *address, list_t *list) {
             // addresses are exactly the same
             footpath_segment_t *fp;
             fp = (footpath_segment_t *)malloc(sizeof(*fp));
+            assert(fp);
             memcpy(fp, curr->fp, sizeof(*fp));
             // fp = curr->fp;   is insufficient as only assigns pointer
             new = append(new, fp);
