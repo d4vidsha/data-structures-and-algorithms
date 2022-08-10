@@ -5,7 +5,7 @@ CFLAGS = -Wall -g
 LDLIBS = 
 
 # Define sets of source files and object files
-SRC = driver.c readin.c linkedlist.c data.c readcsv.c
+SRC = driver.c readin.c data.c linkedlist.c readcsv.c stage.c
 # OBJ is the same as SRC, just replace .c with .o
 OBJ = $(SRC:.c=.o)
  

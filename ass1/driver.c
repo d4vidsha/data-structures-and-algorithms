@@ -12,13 +12,13 @@
 #include "data.h"
 #include "linkedlist.h"
 #include "readcsv.h"
+#include "stage.h"
 
 #define NUM_ARGS 3
 #define STAGE_ARG_POS 1
 #define IN_FILENAME_ARG_POS 2
 #define OUT_FILENAME_ARG_POS 3
-#define NEWLINE_LEN 1
-#define NOTFOUND "NOTFOUND"
+
 
 int main(int argc, char *argv[]) {
 
@@ -37,47 +37,27 @@ int main(int argc, char *argv[]) {
     char *in_file = filename_strcpy(argv[IN_FILENAME_ARG_POS]);
     char *out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
 
-    // only continue if stage is 1
-    if (stage != 1) {
-        fprintf(stderr, "ERROR: Specified stage is %d. Expected 1.\n", stage);
-        exit(EXIT_FAILURE);
-    }
-
     // access files
     FILE *in = fopen(in_file, "r");
     assert(in);
     FILE *out = fopen(out_file, "w");
     assert(out);
 
-    // read footpath segments to a linked list
-    list_t *list = create_empty_list();
-    skip_header_line(in);
-    build_list(in, list);
-
-    // process queries on the fly
-    char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
-    while (fgets(line, sizeof(line), stdin)) {
-        line[strcspn(line, "\n")] = 0;      // removes "\n" from line
-
-        list_t *result_list = find_addresses(line, list);
-        fprintf(out, "%s\n", line);
-        print_footpath_segments(out, result_list);
-        int list_length = list_len(result_list);
-        if (list_length) {
-            printf("%s --> %d\n", line, list_length);
-        } else {
-            printf("%s --> %s\n", line, NOTFOUND);
-        }
-        free_list(result_list);
+    // choose which stage to run
+    if (stage == 1) {
+        stage1(in, out);
+    } else if (stage == 2) {
+        
+    } else {
+        fprintf(stderr, "ERROR: invalid stage");
+        exit(EXIT_FAILURE);
     }
-
-    // free everything
+    
+    // free and close everything
     fclose(in);
     fclose(out);
-	free(in_file);
+    free(in_file);
 	free(out_file);
-    free_list(list);
-    
 
     return EXIT_SUCCESS;
 }
