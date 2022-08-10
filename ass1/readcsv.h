@@ -22,7 +22,8 @@ int is_in_cell_length(int curr, int max);
 void get_str(FILE *f, char *string);
 int get_int(FILE *f);
 double get_double(FILE *f);
-
+void skip_header_line(FILE *f);
+footpath_segment_t *footpath_read_line(FILE *f);
 
 #endif
 

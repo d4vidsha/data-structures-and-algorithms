@@ -9,6 +9,8 @@
 
 #define NEWLINE '\n'
 #define NUM_FIELDS 19
+#define MAX_STR_LEN 128
+#define NULLBYTE_LEN 1      // size of nullbyte
 
 typedef struct footpath_segment footpath_segment_t;
 struct footpath_segment {
@@ -32,9 +34,6 @@ struct footpath_segment {
     double end_lat;
     double end_lon;
 };
-
-void skip_header_line(FILE *f);
-footpath_segment_t *footpath_read_line(FILE *f);
 
 #endif
 

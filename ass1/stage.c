@@ -10,6 +10,7 @@
 #include <assert.h>
 #include "stage.h"
 #include "linkedlist.h"
+#include "readcsv.h"
 
 void stage1(FILE *in, FILE *out) {
     // read footpath segments to a linked list
