@@ -8,7 +8,7 @@ LDLIBS =
 SRC = driver.c readin.c linkedlist.c readcsv.c stage.c
 # OBJ is the same as SRC, just replace .c with .o
 OBJ = $(SRC:.c=.o)
- 
+
 # Define the executable name(s)
 EXE1 = dict1
 EXE2 = dict2
