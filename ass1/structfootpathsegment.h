@@ -1,14 +1,14 @@
 /* =============================================================================
    Project: dict1
-   data.h :
-            = all related to the data
+   structfootpathsegment.h :
+            = contains only the struct of the footpath_segment
 ============================================================================= */
 
-#ifndef _DATA_H_
-#define _DATA_H_
+#ifndef _STRUCTFOOTPATHSEGMENT_H_
+#define _STRUCTFOOTPATHSEGMENT_H_
 
-#define NEWLINE '\n'
-#define NUM_FIELDS 19
+#define MAX_STR_LEN 128
+#define NULLBYTE_LEN 1      // size of nullbyte
 
 typedef struct footpath_segment footpath_segment_t;
 struct footpath_segment {
@@ -33,12 +33,7 @@ struct footpath_segment {
     double end_lon;
 };
 
-void skip_header_line(FILE *f);
-footpath_segment_t *footpath_read_line(FILE *f);
-
 #endif
-
-
 
 /* =============================================================================
    Written by David Sha.
