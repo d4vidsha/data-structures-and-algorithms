@@ -6,41 +6,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include "linkedlist.h"
 #include "data.h"
-
-struct footpath_segment {
-    int footpath_id;
-    char address[MAX_STR_LEN + NULLBYTE_LEN];
-    char clue_sa[MAX_STR_LEN + NULLBYTE_LEN];
-    char asset_type[MAX_STR_LEN + NULLBYTE_LEN];
-    double deltaz;
-    double distance;
-    double grade1in;
-    int mcc_id;
-    int mccid_int;
-    double rlmax;
-    double rlmin;
-    char segside[MAX_STR_LEN + NULLBYTE_LEN];
-    int statusid;
-    int streetid;
-    int street_group;
-    double start_lat;
-    double start_lon;
-    double end_lat;
-    double end_lon;
-};
-
-struct node {
-    footpath_segment_t *fp;
-    node_t *next;
-};
-
-struct list {
-    node_t *head;
-    node_t *foot;
-};
 
 list_t *create_empty_list(void) {
     list_t *list;
@@ -112,6 +81,70 @@ int list_len(list_t *list) {
     return len;
 }
 
+/*  Given a .csv file `f`, read all data into provided `list`.
+*/
+void build_list(FILE *f, list_t *list) {
+    footpath_segment_t *fp;
+    int c;
+    while ((c = fgetc(f)) != EOF) {
+        ungetc(c, f);
+        fp = footpath_read_line(f);
+        list = append(list, fp);
+    }
+}
+
+list_t *find_addresses(char *address, list_t *list) {
+    assert(list);
+    list_t *new = create_empty_list();
+    node_t *curr;
+    curr = list->head;
+    while (curr) {
+        int result = strcmp(address, curr->fp->address);
+        if (result == 0) {
+            // addresses are exactly the same
+            footpath_segment_t *fp;
+            fp = (footpath_segment_t *)malloc(sizeof(*fp));
+            assert(fp);
+            memcpy(fp, curr->fp, sizeof(*fp));
+            // fp = curr->fp;   is insufficient as only assigns pointer
+            new = append(new, fp);
+        }
+        curr = curr->next;
+    }
+    return new;
+}
+
+/* Provided a file output `f`, print the list in the specified format.
+*/
+void print_footpath_segments(FILE *f, list_t *list) {
+    assert(list);
+    node_t *curr;
+    curr = list->head;
+    while (curr) {
+        fprintf(f, "--> ");
+        fprintf(f, "footpath_id: %d || ", curr->fp->footpath_id);
+        fprintf(f, "address: %s || ", curr->fp->address);
+        fprintf(f, "clue_sa: %s || ", curr->fp->clue_sa);
+        fprintf(f, "asset_type: %s || ", curr->fp->asset_type);
+        fprintf(f, "deltaz: %lf || ", curr->fp->deltaz);
+        fprintf(f, "distance: %lf || ", curr->fp->distance);
+        fprintf(f, "grade1in: %lf || ", curr->fp->grade1in);
+        fprintf(f, "mcc_id: %d || ", curr->fp->mcc_id);
+        fprintf(f, "mccid_int: %d || ", curr->fp->mccid_int);
+        fprintf(f, "rlmax: %lf || ", curr->fp->rlmax);
+        fprintf(f, "rlmin: %lf || ", curr->fp->rlmin);
+        fprintf(f, "segside: %s || ", curr->fp->segside);
+        fprintf(f, "statusid: %d || ", curr->fp->statusid);
+        fprintf(f, "streetid: %d || ", curr->fp->streetid);
+        fprintf(f, "street_group: %d || ", curr->fp->street_group);
+        fprintf(f, "start_lat: %lf || ", curr->fp->start_lat);
+        fprintf(f, "start_lon: %lf || ", curr->fp->start_lon);
+        fprintf(f, "end_lat: %lf || ", curr->fp->end_lat);
+        fprintf(f, "end_lon: %lf || ", curr->fp->end_lon);
+        fprintf(f, "\n");
+        curr = curr->next;
+    }
+}
 
 /* =============================================================================
    Written by David Sha.
