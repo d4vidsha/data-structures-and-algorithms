@@ -9,7 +9,6 @@
 #include <string.h>
 #include <assert.h>
 #include "readcsv.h"
-// #include "data.h"
 
 int is_in_cell_length(int curr, int max) {
     if (curr >= max) {
