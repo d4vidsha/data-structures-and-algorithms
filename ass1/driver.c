@@ -40,15 +40,15 @@ int main(int argc, char *argv[]) {
     list_t *list = create_empty_list();
     skip_header_line(data);
     build_list(data, list);
-    print_list(out, list);
 
     // process queries on the fly
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE];
     while (fgets(line, sizeof(line), stdin)) {
-        // removes "\n" from line
-        line[strcspn(line, "\n")] = 0;
-
-        printf("%s\n", line);
+        line[strcspn(line, "\n")] = 0;      // removes "\n" from line
+        list_t *result_list = find_addresses(line, list);
+        fprintf(out, "%s\n", line);
+        print_footpath_segments(out, result_list);
+        free_list(result_list);
     }
 
     // free everything

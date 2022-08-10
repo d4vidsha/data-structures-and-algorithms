@@ -87,19 +87,59 @@ void build_list(FILE *f, list_t *list) {
     while ((c = fgetc(f)) != EOF) {
         ungetc(c, f);
         fp = footpath_read_line(f);
-        printf("Read in %d\n", fp->footpath_id);
         list = append(list, fp);
     }
 }
 
+list_t *find_addresses(char *address, list_t *list) {
+    assert(list);
+    list_t *new = create_empty_list();
+    node_t *curr;
+    curr = list->head;
+    while (curr) {
+        int result = strcmp(address, curr->fp->address);
+        if (result == 0) {
+            // addresses are exactly the same
+            footpath_segment_t *fp;
+            fp = (footpath_segment_t *)malloc(sizeof(*fp));
+            memcpy(fp, curr->fp, sizeof(*fp));
+            // fp = curr->fp;   is insufficient as only assigns pointer
+            new = append(new, fp);
+        }
+        curr = curr->next;
+    }
+    return new;
+}
+
 /* Provided a file output `f`, print the list in the specified format.
 */
-void print_list(FILE *f, list_t *list) {
-    node_t *node;
-    node = list->head;
-    while (node) {
-        fprintf(f, "%d\n", node->fp->footpath_id);
-        node = node->next;
+void print_footpath_segments(FILE *f, list_t *list) {
+    assert(list);
+    node_t *curr;
+    curr = list->head;
+    while (curr) {
+        fprintf(f, "--> ");
+        fprintf(f, "footpath_id: %d || ", curr->fp->footpath_id);
+        fprintf(f, "address: %s || ", curr->fp->address);
+        fprintf(f, "clue_sa: %s || ", curr->fp->clue_sa);
+        fprintf(f, "asset_type: %s || ", curr->fp->asset_type);
+        fprintf(f, "deltaz: %lf || ", curr->fp->deltaz);
+        fprintf(f, "distance: %lf || ", curr->fp->distance);
+        fprintf(f, "grade1in: %lf || ", curr->fp->grade1in);
+        fprintf(f, "mcc_id: %d || ", curr->fp->mcc_id);
+        fprintf(f, "mccid_int: %d || ", curr->fp->mccid_int);
+        fprintf(f, "rlmax: %lf || ", curr->fp->rlmax);
+        fprintf(f, "rlmin: %lf || ", curr->fp->rlmin);
+        fprintf(f, "segside: %s || ", curr->fp->segside);
+        fprintf(f, "statusid: %d || ", curr->fp->statusid);
+        fprintf(f, "streetid: %d || ", curr->fp->streetid);
+        fprintf(f, "street_group: %d || ", curr->fp->street_group);
+        fprintf(f, "start_lat: %lf || ", curr->fp->start_lat);
+        fprintf(f, "start_lon: %lf || ", curr->fp->start_lon);
+        fprintf(f, "end_lat: %lf || ", curr->fp->end_lat);
+        fprintf(f, "end_lon: %lf || ", curr->fp->end_lon);
+        fprintf(f, "\n");
+        curr = curr->next;
     }
 }
 

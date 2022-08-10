@@ -21,7 +21,8 @@ typedef struct list list_t;
 void skip_header_line(FILE *f);
 footpath_segment_t *footpath_read_line(FILE *f);
 void build_list(FILE *f, list_t *list);
-void print_list(FILE *f, list_t *list);
+list_t *find_addresses(char *address, list_t *list);
+void print_footpath_segments(FILE *f, list_t *list);
 
 #endif
 
