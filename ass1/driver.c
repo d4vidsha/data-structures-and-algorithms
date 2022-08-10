@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "readin.h"
 #include "data.h"
 #include "linkedlist.h"
@@ -10,6 +11,7 @@
 #define STAGE_ARG_POS 1
 #define DATA_FILENAME_ARG_POS 2
 #define OUT_FILENAME_ARG_POS 3
+#define NEWLINE_LEN 1
 
 int main(int argc, char *argv[]) {
 
@@ -34,11 +36,20 @@ int main(int argc, char *argv[]) {
     FILE *out = fopen(out_file, "w");
     assert(out);
 
-    // add footpath segments to a linked list
+    // read footpath segments to a linked list
     list_t *list = create_empty_list();
     skip_header_line(data);
     build_list(data, list);
     print_list(out, list);
+
+    // process queries on the fly
+    char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE];
+    while (fgets(line, sizeof(line), stdin)) {
+        // removes "\n" from line
+        line[strcspn(line, "\n")] = 0;
+
+        printf("%s\n", line);
+    }
 
     // free everything
     fclose(data);
@@ -50,3 +61,9 @@ int main(int argc, char *argv[]) {
 
     return EXIT_SUCCESS;
 }
+
+/* =============================================================================
+   Written by David Sha.
+   - Read line-by-line from stdin: https://stackoverflow.com/a/9206332/15444163
+   - Remove newline from fgets: https://stackoverflow.com/a/28462221/15444163
+============================================================================= */
