@@ -7,10 +7,8 @@
 #ifndef _LINKEDLIST_H_
 #define _LINKEDLIST_H_
 #include "data.h"
-
-typedef struct footpath_segment footpath_segment_t;
-typedef struct node node_t;
-typedef struct list list_t;
+#include "structfootpathsegment.h"
+#include "structlinkedlist.h"
 
 list_t *create_empty_list(void);
 int is_empty_list(list_t *list);
