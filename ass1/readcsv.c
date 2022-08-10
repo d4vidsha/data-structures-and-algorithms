@@ -53,18 +53,18 @@ void get_str(FILE *f, char *string) {
             }
         }
     }
-    string[i] = '\0';
+    string[i] = NULLBYTE;
 }
 
 int get_int(FILE *f) {
-    char temp[MAX_STR_LEN + NULLBYTE];
+    char temp[MAX_STR_LEN + NULLBYTE_LEN];
     get_str(f, temp);
     int value = atoi(temp);
     return value;
 }
 
 double get_double(FILE *f) {
-    char temp[MAX_STR_LEN + NULLBYTE];
+    char temp[MAX_STR_LEN + NULLBYTE_LEN];
     char *ptr;
     get_str(f, temp);
     double value = strtod(temp, &ptr);

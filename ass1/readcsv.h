@@ -13,6 +13,7 @@
 /* #defines ================================================================= */
 #define COMMA ','
 #define DOUBLEQUOTE '"'
+#define NULLBYTE '\0'
 #define TRUE 1
 #define FALSE 0
 

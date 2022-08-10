@@ -9,7 +9,7 @@
 #include "linkedlist.h"
 
 #define MAX_STR_LEN 128
-#define NULLBYTE 1      // size of nullbyte
+#define NULLBYTE_LEN 1      // size of nullbyte
 #define NEWLINE '\n'
 #define NUM_FIELDS 19
 

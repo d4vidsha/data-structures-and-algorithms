@@ -12,9 +12,9 @@
 
 struct footpath_segment {
     int footpath_id;
-    char address[MAX_STR_LEN + NULLBYTE];
-    char clue_sa[MAX_STR_LEN + NULLBYTE];
-    char asset_type[MAX_STR_LEN + NULLBYTE];
+    char address[MAX_STR_LEN + NULLBYTE_LEN];
+    char clue_sa[MAX_STR_LEN + NULLBYTE_LEN];
+    char asset_type[MAX_STR_LEN + NULLBYTE_LEN];
     double deltaz;
     double distance;
     double grade1in;
@@ -22,7 +22,7 @@ struct footpath_segment {
     int mccid_int;
     double rlmax;
     double rlmin;
-    char segside[MAX_STR_LEN + NULLBYTE];
+    char segside[MAX_STR_LEN + NULLBYTE_LEN];
     int statusid;
     int streetid;
     int street_group;

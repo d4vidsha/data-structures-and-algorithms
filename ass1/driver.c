@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     build_list(in, list);
 
     // process queries on the fly
-    char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE];
+    char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;      // removes "\n" from line
 
