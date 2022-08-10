@@ -51,85 +51,49 @@ void skip_header_line(FILE *f) {
 }
 
 /*  Given a filename `f`, read a row into `fp` of type `footpath_segment_t`.
-    Returns the pointer to malloc'd `fp` or if unsuccessful returns `NULL`.
+    Returns the pointer to malloc'd `fp`.
 */
 footpath_segment_t *footpath_read_line(FILE *f) {
     footpath_segment_t *fp = NULL;
-    
-    int footpath_id;
-    char address[MAX_STR_LEN + NULLBYTE];
-    char clue_sa[MAX_STR_LEN + NULLBYTE];
-    char asset_type[MAX_STR_LEN + NULLBYTE];
-    double deltaz;
-    // double distance;
-    // double grade1in;
-    // int mcc_id;
-    // int mccid_int;
-    // double rlmax;
-    // double rlmin;
-    // char segside[MAX_STR_LEN + NULLBYTE];
-    // int statusid;
-    // int streetid;
-    // int street_group;
-    // double start_lat;
-    // double start_lon;
-    // double end_lat;
-    // double end_lon;
-
-    int read_fields = 0;
-
-    // read_fields = fscanf(f, "%d,%[^,],%[^,],%[^,],%lf,%lf,%lf,%d.0,%d.0,%lf,%lf,%[^,],%d.0,%d.0,%d.0,%lf,%lf,%lf,%lf\n", 
-    //                &footpath_id, address, clue_sa, asset_type,
-    //                &deltaz, &distance, &grade1in, &mcc_id,
-    //                &mccid_int, &rlmax, &rlmin, segside,
-    //                &statusid, &streetid, &street_group, &start_lat,
-    //                &start_lon, &end_lat, &end_lon);
-
-    // implement a way to read in fields
-    footpath_id = get_int(f);
-    get_str(f, address);
-    get_str(f, clue_sa);
-    get_str(f, asset_type);
-    deltaz = get_double(f);
-
-    printf("%d || %s || %s || %s || %lf ||\n", footpath_id, address, clue_sa, asset_type, deltaz);
-
-    if (read_fields == NUM_FIELDS) {
-        fp = (footpath_segment_t *)malloc(sizeof(*fp));
-        assert(fp);
-        // fp->footpath_id = footpath_id;
-        // strcpy(fp->address, address);
-        // strcpy(fp->clue_sa, clue_sa);
-        // strcpy(fp->asset_type, asset_type);
-        // fp->deltaz = deltaz;
-        // fp->distance = distance;
-        // fp->grade1in = grade1in;
-        // fp->mcc_id = mcc_id;
-        // fp->mccid_int = mccid_int;
-        // fp->rlmax = rlmax;
-        // fp->rlmin = rlmin;
-        // strcpy(fp->segside, segside);
-        // fp->statusid = statusid;
-        // fp->streetid = streetid;
-        // fp->street_group = street_group;
-        // fp->start_lat = start_lat;
-        // fp->start_lon = start_lon;
-        // fp->end_lat = end_lat;
-        // fp->end_lon = end_lon;
-    } else {
-        fprintf(stderr, "ERROR: failed to scan all required fields\n");
-    }
+    fp = (footpath_segment_t *)malloc(sizeof(*fp));
+    assert(fp);
+    fp->footpath_id = get_int(f);
+    get_str(f, fp->address);
+    get_str(f, fp->clue_sa);
+    get_str(f, fp->asset_type);
+    fp->deltaz = get_double(f);
+    fp->distance = get_double(f);
+    fp->grade1in = get_double(f);
+    fp->mcc_id = get_int(f);
+    fp->mccid_int = get_int(f);
+    fp->rlmax = get_double(f);
+    fp->rlmin = get_double(f);
+    get_str(f, fp->segside);
+    fp->statusid = get_int(f);
+    fp->streetid = get_int(f);
+    fp->street_group = get_int(f);
+    fp->start_lat = get_double(f);
+    fp->start_lon = get_double(f);
+    fp->end_lat = get_double(f);
+    fp->end_lon = get_double(f);
     return fp;
 }
 
+/*  Given a .csv file `f`, read all data into provided `list`.
+*/
 void build_list(FILE *f, list_t *list) {
     footpath_segment_t *fp;
-    while ((fp = footpath_read_line(f)) != NULL) {
-        printf("Read in footpath_id: %d\n", fp->footpath_id);
+    int c;
+    while ((c = fgetc(f)) != EOF) {
+        ungetc(c, f);
+        fp = footpath_read_line(f);
+        printf("Read in %d\n", fp->footpath_id);
         list = append(list, fp);
     }
 }
 
+/* Provided a file output `f`, print the list in the specified format.
+*/
 void print_list(FILE *f, list_t *list) {
     node_t *node;
     node = list->head;

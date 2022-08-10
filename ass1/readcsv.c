@@ -32,20 +32,19 @@ void get_str(FILE *f, char *string) {
                 break;
             }
         }
-        // expect the next character to be a comma
-        if ((c = fgetc(f)) != COMMA) {
-            fprintf(stderr, "ERROR: csv is poorly formatted. ");
-            fprintf(stderr, "Expected '\",' but got '\"%c'\n", c);
+        // expect the next character to be a comma or newline or EOF
+        if ((c = fgetc(f)) != COMMA  && c != NEWLINE && c != EOF) {
+            fprintf(stderr, "ERROR: csv is poorly formatted (\"\"%c)\n", c);
             exit(EXIT_FAILURE);
         }
-    } else if (c == COMMA) {
+    } else if (c == COMMA || c == NEWLINE || c == EOF) {
         // is an empty string
     } else {
         // is a normal string
         string[i] = c;
         i++;
         if (is_in_cell_length(i, MAX_STR_LEN)) {
-            while ((c = fgetc(f)) != COMMA && c != NEWLINE) {
+            while ((c = fgetc(f)) != COMMA && c != NEWLINE && c != EOF) {
                 string[i] = c;
                 i++;
                 if (!is_in_cell_length(i, MAX_STR_LEN)) {
