@@ -1,3 +1,9 @@
+/* =============================================================================
+   Project: dict1
+   driver.c :
+            = the main program of the project
+============================================================================= */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -23,13 +29,19 @@ int main(int argc, char *argv[]) {
         } else if (argc < NUM_ARGS + 1) {
             fprintf(stderr, "ERROR: too few arguments\n");
         }
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
 
     // store arguments
     int stage = atoi(argv[STAGE_ARG_POS]);
     char *in_file = filename_strcpy(argv[IN_FILENAME_ARG_POS]);
     char *out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
+
+    // only continue if stage is 1
+    if (stage != 1) {
+        fprintf(stderr, "ERROR: Specified stage is %d. Expected 1.\n", stage);
+        exit(EXIT_FAILURE);
+    }
 
     // access files
     FILE *in = fopen(in_file, "r");
