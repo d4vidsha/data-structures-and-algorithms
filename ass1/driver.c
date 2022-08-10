@@ -9,7 +9,7 @@
 
 #define NUM_ARGS 3
 #define STAGE_ARG_POS 1
-#define DATA_FILENAME_ARG_POS 2
+#define IN_FILENAME_ARG_POS 2
 #define OUT_FILENAME_ARG_POS 3
 #define NEWLINE_LEN 1
 
@@ -27,19 +27,19 @@ int main(int argc, char *argv[]) {
 
     // store arguments
     int stage = atoi(argv[STAGE_ARG_POS]);
-    char *data_file = filename_strcpy(argv[DATA_FILENAME_ARG_POS]);
+    char *in_file = filename_strcpy(argv[IN_FILENAME_ARG_POS]);
     char *out_file = filename_strcpy(argv[OUT_FILENAME_ARG_POS]);
 
     // access files
-    FILE *data = fopen(data_file, "r");
-    assert(data);
+    FILE *in = fopen(in_file, "r");
+    assert(in);
     FILE *out = fopen(out_file, "w");
     assert(out);
 
     // read footpath segments to a linked list
     list_t *list = create_empty_list();
-    skip_header_line(data);
-    build_list(data, list);
+    skip_header_line(in);
+    build_list(in, list);
 
     // process queries on the fly
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE];
@@ -52,9 +52,9 @@ int main(int argc, char *argv[]) {
     }
 
     // free everything
-    fclose(data);
+    fclose(in);
     fclose(out);
-	free(data_file);
+	free(in_file);
 	free(out_file);
     free_list(list);
     
