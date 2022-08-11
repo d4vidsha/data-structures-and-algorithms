@@ -39,8 +39,8 @@ int is_empty_list(list_t *list) {
 /*  Free the list by freeing all nodes and its contents.
 */
 void free_list(list_t *list) {
-    node_t *curr, *prev;
     assert(list);
+    node_t *curr, *prev;
     curr = list->head;
     while (curr) {
         prev = curr;
@@ -54,8 +54,8 @@ void free_list(list_t *list) {
 /*  Prepend to the list i.e. add to head of linked list.
 */
 list_t *prepend(list_t *list, footpath_segment_t *fp) {
-    node_t *new;
     assert(list);
+    node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
     new->fp = fp;
@@ -71,8 +71,8 @@ list_t *prepend(list_t *list, footpath_segment_t *fp) {
 /*  Append to the list i.e. add to foot of linked list.
 */
 list_t *append(list_t *list, footpath_segment_t *fp) {
-    node_t *new;
     assert(list);
+    node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
     new->fp = fp;
@@ -104,6 +104,7 @@ int list_len(list_t *list) {
 /*  Given a .csv file `f`, read all data into provided `list`.
 */
 void build_list(FILE *f, list_t *list) {
+    assert(list);
     footpath_segment_t *fp;
     int c;
     while ((c = fgetc(f)) != EOF) {

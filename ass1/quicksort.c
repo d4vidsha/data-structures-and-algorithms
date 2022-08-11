@@ -47,29 +47,22 @@ void quicksort(list_t *list, int col) {
 
 /*  Partition the linked list. The pivot is automatically set to be
     the highest value in the linked list. Compare by `col`.
+    `i` is the index of smaller element, and `j` is the traversing index.
 */
 node_t *partition(node_t *low, node_t *high, int col) {
     node_t *pivot = high;
     node_t *i = low;
     node_t *j = low;
-    double cmp;
 
     while (j != NULL && j != high) {
-        // choose what to compare
-        if (col == COLUMN_INDEX_GRADE1IN) {
-            cmp = cmp_grade1in(j->fp->grade1in, pivot->fp->grade1in);
-        } else if (col == COLUMN_INDEX_ADDRESS) {
-            cmp = cmp_address(j->fp->address, pivot->fp->address);
-        } else {
-            fprintf(stderr, "ERROR: no compare available for index %d\n", col);
-            exit(EXIT_FAILURE);
-        }
+        double cmp = cmp_column(col, j->fp, pivot->fp);
 
         if (cmp < 0) {
             // j is less than pivot
             swap(i, j);
             i = i->next;
         }
+
         j = j->next;
     }
     swap(i, pivot);
@@ -105,7 +98,28 @@ node_t *get_prev_node(node_t *start, node_t *node) {
     return prev;
 }
 
-/*  Compare grade1in.
+/*  Compare two footpath segments by the specified column index.
+    Order of footpath segments matter.
+    Return values are:
+    - [ < 0] `n` is smaller than `m`
+    - [== 0] `n` is equal to `m`
+    - [ > 0] `n` is larger than `m`
+*/
+double cmp_column(int col, footpath_segment_t *n, footpath_segment_t *m) {
+    double cmp;
+    // choose what to compare
+    if (col == COLUMN_INDEX_GRADE1IN) {
+        cmp = cmp_grade1in(n->grade1in, m->grade1in);
+    } else if (col == COLUMN_INDEX_ADDRESS) {
+        cmp = cmp_address(n->address, m->address);
+    } else {
+        fprintf(stderr, "ERROR: no compare available for index %d\n", col);
+        exit(EXIT_FAILURE);
+    }
+    return cmp;
+}
+
+/*  Compare grade1in. Order matters.
     Return values are:
     - [ < 0] `n` is smaller than `m`
     - [== 0] `n` is equal to `m`
@@ -115,7 +129,7 @@ double cmp_grade1in(double n, double m) {
     return n - m;
 }
 
-/*  Compare address.
+/*  Compare address. Order matters.
     Return values are:
     - [ < 0] `n` is smaller than `m`
     - [== 0] `n` is equal to `m`
