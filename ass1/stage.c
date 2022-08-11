@@ -77,7 +77,7 @@ void stage2(FILE *in, FILE *out) {
         print_footpath_segments(out, result_list);
 
         // print to `stdout`
-        printf("%s --> %lf\n", line, result_list->head->fp->grade1in);
+        printf("%s --> %.1lf\n", line, result_list->head->fp->grade1in);
         
         free_list(result_list);
     }
