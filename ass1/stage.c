@@ -3,7 +3,6 @@
    stage.c :
             = the stages of the project
 ============================================================================= */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +10,7 @@
 #include "stage.h"
 #include "linkedlist.h"
 #include "readcsv.h"
+#include "data.h"
 
 /*  Stage 1 of project.
 */

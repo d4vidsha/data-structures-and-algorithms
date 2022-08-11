@@ -13,11 +13,6 @@
 #include "readcsv.h"
 #include "stage.h"
 
-#define NUM_ARGS 3
-#define STAGE_ARG_POS 1
-#define IN_FILENAME_ARG_POS 2
-#define OUT_FILENAME_ARG_POS 3
-
 /*  This main function contains both stage 1 and stage 2.
 */
 int main(int argc, char *argv[]) {

@@ -1,17 +1,33 @@
 /* =============================================================================
    Project: Assignment 1
    data.h :
-            = all related to the data
-============================================================================= */
+            = includes the footpath_segment struct used over multiple files
+              
+              this is also where all the #defines lie
 
+              ensure that "data.h" is #included in all modules
+============================================================================= */
 #ifndef _DATA_H_
 #define _DATA_H_
 
+/* #defines ================================================================= */
 #define NEWLINE '\n'
 #define NUM_FIELDS 19
 #define MAX_STR_LEN 128
 #define NULLBYTE_LEN 1      // size of nullbyte
+#define NUM_ARGS 3
+#define STAGE_ARG_POS 1
+#define IN_FILENAME_ARG_POS 2
+#define OUT_FILENAME_ARG_POS 3
+#define NEWLINE_LEN 1
+#define NOTFOUND "NOTFOUND"
+#define COMMA ','
+#define DOUBLEQUOTE '"'
+#define NULLBYTE '\0'
+#define TRUE 1
+#define FALSE 0
 
+/* structures =============================================================== */
 typedef struct footpath_segment footpath_segment_t;
 struct footpath_segment {
     int footpath_id;
@@ -36,9 +52,6 @@ struct footpath_segment {
 };
 
 #endif
-
-
-
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */

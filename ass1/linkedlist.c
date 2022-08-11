@@ -3,7 +3,6 @@
    linkedlist.c :
             = all related to linked lists
 ============================================================================= */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

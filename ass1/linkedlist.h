@@ -3,11 +3,13 @@
    linkedlist.h :
             = all related to linked lists
 ============================================================================= */
-
 #ifndef _LINKEDLIST_H_
 #define _LINKEDLIST_H_
+
+/* #includes ================================================================ */
 #include "data.h"
 
+/* structures =============================================================== */
 typedef struct node node_t;
 struct node {
     footpath_segment_t *fp;
@@ -20,6 +22,7 @@ struct list {
     node_t *foot;
 };
 
+/* function prototypes ====================================================== */
 list_t *create_empty_list(void);
 int is_empty_list(list_t *list);
 void free_list(list_t *list);
@@ -38,9 +41,6 @@ footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp);
 list_t *linearsearch(double value, list_t *list);
 
 #endif
-
-
-
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */

@@ -3,13 +3,10 @@
    stage.h :
             = the stages of the project
 ============================================================================= */
-
 #ifndef _STAGE_H_
 #define _STAGE_H_
 
-#define NEWLINE_LEN 1
-#define NOTFOUND "NOTFOUND"
-
+/* function prototypes ====================================================== */
 /*  Stage 1 of project.
 */
 void stage1(FILE *in, FILE *out);
@@ -19,7 +16,6 @@ void stage1(FILE *in, FILE *out);
 void stage2(FILE *in, FILE *out);
 
 #endif
-
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */
