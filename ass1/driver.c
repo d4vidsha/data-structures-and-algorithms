@@ -63,6 +63,4 @@ int main(int argc, char *argv[]) {
 
 /* =============================================================================
    Written by David Sha.
-   - Read line-by-line from stdin: https://stackoverflow.com/a/9206332/15444163
-   - Remove newline from fgets: https://stackoverflow.com/a/28462221/15444163
 ============================================================================= */

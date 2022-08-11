@@ -45,15 +45,22 @@ void stage2(FILE *in, FILE *out) {
     skip_header_line(in);
     build_list(in, list);
 
-    // sort list
-    fprintf(out, "BEFORE\n");
-    print_footpath_segments(out, list);
+    // sort list (THIS IS A DUPLICATE, REMOVE SOON)
     quicksort(list->head, list->foot);
-    fprintf(out, "\nAFTER\n");
-    print_footpath_segments(out, list);
-    print_grade1in(out, list);
+    // print_footpath_segments(out, list);
+    // print_grade1in(out, list);
 
     // process queries on the fly
+    char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0;      // removes "\n" from line
+        list_t *result_list = binarysearch(line, list, SEARCH_COLUMN_INDEX);
+        fprintf(out, "%s\n", line);
+        print_footpath_segments(out, result_list);
+
+        free(result_list);
+
+    }
 
     // free everything
     free_list(list);
@@ -61,4 +68,6 @@ void stage2(FILE *in, FILE *out) {
 
 /* =============================================================================
    Written by David Sha.
+   - Read line-by-line from stdin: https://stackoverflow.com/a/9206332/15444163
+   - Remove newline from fgets: https://stackoverflow.com/a/28462221/15444163
 ============================================================================= */

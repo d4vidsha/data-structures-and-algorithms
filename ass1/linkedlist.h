@@ -33,6 +33,8 @@ void print_grade1in(FILE *f, list_t *list);
 void quicksort(node_t *low, node_t *high);
 node_t *partition(node_t *low, node_t *high);
 void swap(node_t *n1, node_t *n2);
+node_t **convert_to_array(list_t *list);
+list_t *binarysearch(char *line, list_t *list, int index);
 
 #endif
 

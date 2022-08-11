@@ -227,6 +227,38 @@ void swap(node_t *n1, node_t *n2) {
     n2->fp = temp;
 }
 
+node_t **convert_to_array(list_t *list) {
+    assert(list);
+    node_t **A;
+    A = (node_t **)malloc(sizeof(**A) * list_len(list));
+    assert(A);
+    node_t *curr;
+    curr = list->head;
+    int i = 0;
+    while (curr) {
+        A[i] = curr;
+        curr = curr->next;
+        i++;
+    }
+    return A;
+}
+
+list_t *binarysearch(char *line, list_t *list, int index) {
+    char *ptr;
+    double value = strtod(line, &ptr);
+
+    // sort linked list using quicksort
+    quicksort(list->head, list->foot);
+
+    // cannot implement binary search with linked list, so using a generic
+    // array instead
+    node_t **A = convert_to_array(list);
+    
+
+    free(A);
+
+}
+
 /* =============================================================================
    Written by David Sha.
    - Implementation of linked list structs inspired by Artem Polyvyanyy from
