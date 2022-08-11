@@ -45,16 +45,16 @@ void stage2(FILE *in, FILE *out) {
     skip_header_line(in);
     build_list(in, list);
 
-    // sort list (THIS IS A DUPLICATE, REMOVE SOON)
+    // sort list
     quicksort(list->head, list->foot);
-    // print_footpath_segments(out, list);
-    // print_grade1in(out, list);
 
     // process queries on the fly
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;      // removes "\n" from line
-        list_t *result_list = binarysearch(line, list, SEARCH_COLUMN_INDEX);
+        char *ptr;
+        double value = strtod(line, &ptr);
+        list_t *result_list = linearsearch(value, list);
         fprintf(out, "%s\n", line);
         print_footpath_segments(out, result_list);
 

@@ -243,20 +243,39 @@ node_t **convert_to_array(list_t *list) {
     return A;
 }
 
-list_t *binarysearch(char *line, list_t *list, int index) {
-    char *ptr;
-    double value = strtod(line, &ptr);
+list_t *linearsearch(double value, list_t *list) {
+    assert(list);
+    node_t *curr;
+    curr = list->head;
+    node_t *closest = curr;
+    int diff = abs(value - curr->fp->grade1in);
+    int smallest_diff = diff;
+    curr = curr->next;
+    int prev_diff;
+    while (curr) {
+        prev_diff = diff;
 
-    // sort linked list using quicksort
-    quicksort(list->head, list->foot);
+        if (prev_diff < diff) {
+            // the sorted array elements are only getting bigger from here on
+            // so stop searching
+            break;
+        }
 
-    // cannot implement binary search with linked list, so using a generic
-    // array instead
-    node_t **A = convert_to_array(list);
-    int n = list_len(list);
+        // only return the first found closest (<), if you want the last found
+        // closest or if you intend on generating a list of all found closest 
+        // use (<=) instead
+        if ((diff = abs(value - curr->fp->grade1in)) < smallest_diff) {
+            smallest_diff = diff;
+            closest = curr;
+        }
+        
 
-    free(A);
+        curr = curr->next;
+    }
 
+    list_t *result_list = create_empty_list();
+    result_list = append(result_list, closest->fp);
+    return result_list;
 }
 
 /* =============================================================================
