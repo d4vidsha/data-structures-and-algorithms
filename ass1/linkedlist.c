@@ -20,6 +20,15 @@ list_t *create_empty_list(void) {
     return list;
 }
 
+/*  Create a linked list given the head and foot.
+*/
+list_t *create_list(node_t *head, node_t *foot) {
+    list_t *new = create_empty_list();
+    new->head = head;
+    new->foot = foot;
+    return new;
+}
+
 /*  Checks if list is empty.
 */
 int is_empty_list(list_t *list) {
@@ -136,7 +145,7 @@ void print_footpath_segments(FILE *f, list_t *list) {
     }
 }
 
-/* Provided a file output `f`, print the list in the specified format.
+/* Provided a file output `f`, print the the value of `grade1in` only.
 */
 void print_grade1in(FILE *f, list_t *list) {
     assert(list);

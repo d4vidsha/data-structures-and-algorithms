@@ -24,6 +24,7 @@ struct list {
 
 /* function prototypes ====================================================== */
 list_t *create_empty_list(void);
+list_t *create_list(node_t *head, node_t *foot);
 int is_empty_list(list_t *list);
 void free_list(list_t *list);
 list_t *prepend(list_t *list, footpath_segment_t *fp);

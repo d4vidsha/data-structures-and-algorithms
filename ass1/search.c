@@ -19,6 +19,7 @@ list_t *find_addresses(char *address, list_t *list) {
     list_t *new = create_empty_list();
     node_t *curr;
     curr = list->head;
+    
     while (curr) {
         int result = strcmp(address, curr->fp->address);
         if (result == 0) {

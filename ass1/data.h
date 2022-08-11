@@ -11,23 +11,24 @@
 #define _DATA_H_
 
 /* #defines ================================================================= */
-#define NEWLINE '\n'
-#define NUM_FIELDS 19
-#define MAX_STR_LEN 128
-#define NULLBYTE_LEN 1      // size of nullbyte
-#define NUM_ARGS 3
-#define STAGE_ARG_POS 1
-#define IN_FILENAME_ARG_POS 2
-#define OUT_FILENAME_ARG_POS 3
-#define NEWLINE_LEN 1
-#define NOTFOUND "NOTFOUND"
 #define COMMA ','
 #define DOUBLEQUOTE '"'
+#define NEWLINE '\n'
 #define NULLBYTE '\0'
+#define NOTFOUND "NOTFOUND"
 #define TRUE 1
 #define FALSE 0
-#define COLUMN_INDEX_GRADE1IN 6
-#define COLUMN_INDEX_ADDRESS 1
+
+#define NEWLINE_LEN 1            // length of newline
+#define NUM_FIELDS 19            // total number of fields/attributes
+#define MAX_STR_LEN 128          // max string length
+#define NULLBYTE_LEN 1           // size of nullbyte
+#define NUM_ARGS 3               // number of arguments
+#define STAGE_ARG_POS 1          // stage argument position
+#define IN_FILENAME_ARG_POS 2    // input file argument position
+#define OUT_FILENAME_ARG_POS 3   // output file argument position
+#define COLUMN_INDEX_GRADE1IN 6  // grade1in column index
+#define COLUMN_INDEX_ADDRESS 1   // address column index
 
 /* structures =============================================================== */
 typedef struct footpath_segment footpath_segment_t;

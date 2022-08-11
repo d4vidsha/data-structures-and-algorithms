@@ -17,17 +17,18 @@
 void quicksort(list_t *list, int col) {
     node_t *low = list->head;
     node_t *high = list->foot;
+
+    // there is only one element in this list, so it's sorted
     if (low == high) {
         return;
     }
     
+    // find the pivot position on linked list
     node_t *pivot = partition(low, high, col);
 
-    // ensure pivot exists and the pivot is not the last position
+    // quicksort upper segment
     if (pivot != NULL && pivot != high) {
-        list_t *temp = create_empty_list();
-        temp->head = pivot->next;
-        temp->foot = high;
+        list_t *temp = create_list(pivot->next, high);
         quicksort(temp, col);
         free(temp);
     }
@@ -36,10 +37,9 @@ void quicksort(list_t *list, int col) {
     // just the pivot, we would have an infinite quicksort loop
     node_t *prev = get_prev_node(low, pivot);
 
+    // quicksort lower segment
     if (prev != NULL && prev != high) {
-        list_t *temp = create_empty_list();
-        temp->head = low;
-        temp->foot = prev;
+        list_t *temp = create_list(low, prev);
         quicksort(temp, col);
         free(temp);
     }
@@ -49,13 +49,12 @@ void quicksort(list_t *list, int col) {
     the highest value in the linked list. Compare by `col`.
 */
 node_t *partition(node_t *low, node_t *high, int col) {
-
     node_t *pivot = high;
     node_t *i = low;
     node_t *j = low;
     double cmp;
+
     while (j != NULL && j != high) {
-        
         // choose what to compare
         if (col == COLUMN_INDEX_GRADE1IN) {
             cmp = cmp_grade1in(j->fp->grade1in, pivot->fp->grade1in);
@@ -68,14 +67,11 @@ node_t *partition(node_t *low, node_t *high, int col) {
 
         if (cmp < 0) {
             // j is less than pivot
-            // assert(i != NULL && j != NULL);
             swap(i, j);
-            // assert(i->next != NULL);
             i = i->next;
         }
         j = j->next;
     }
-    // assert(i != NULL);
     swap(i, pivot);
 
     // return the pivot position. Note that this is `i` and not `pivot` because
