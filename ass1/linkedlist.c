@@ -146,6 +146,19 @@ void print_footpath_segments(FILE *f, list_t *list) {
     }
 }
 
+node_t *get_prev_node(node_t *start, node_t *node) {
+    node_t *curr, *prev = NULL;
+    curr = start;
+    while (curr) {
+        if (curr == node) {
+            break;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+    return prev;
+}
+
 /* Provided a file output `f`, print the list in the specified format.
 */
 void print_grade1in(FILE *f, list_t *list) {
@@ -168,22 +181,15 @@ void quicksort(node_t *low, node_t *high) {
     node_t *pivot = partition(low, high);
 
     // ensure pivot exists and the pivot is not the last position
-    if (pivot != NULL && high != pivot) {
+    if (pivot != NULL && pivot != high) {
         quicksort(pivot->next, high);
     }
 
-    node_t *prev_pivot = 
-    node_t *curr, *prev = NULL;
-    curr = low;
-    while (curr) {
-        if (curr == pivot) {
-            break;
-        }
-        prev = curr;
-        curr = curr->next;
-    }
+    // get the position one unit before the pivot, otherwise if we were to use
+    // just the pivot, we would have an infinite quicksort loop
+    node_t *prev = get_prev_node(low, pivot);
 
-    if (prev != NULL && high != prev) {
+    if (prev != NULL && prev != high) {
         quicksort(low, prev);
     }
 }
@@ -211,6 +217,9 @@ node_t *partition(node_t *low, node_t *high) {
     return i;
 }
 
+/*  Swaps the values inside the nodes. Note that it does NOT swap the nodes
+    themselves.
+*/
 void swap(node_t *n1, node_t *n2) {
     footpath_segment_t *temp;
     temp = n1->fp;
