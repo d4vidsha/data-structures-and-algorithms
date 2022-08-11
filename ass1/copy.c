@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "readin.h"
+#include "copy.h"
 #include "data.h"
 
 /*  Copies specified argument to `filename` string. This includes a malloc.

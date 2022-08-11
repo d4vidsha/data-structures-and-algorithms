@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "readin.h"
+#include "copy.h"
 #include "linkedlist.h"
 #include "readcsv.h"
 #include "stage.h"

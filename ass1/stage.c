@@ -12,6 +12,7 @@
 #include "readcsv.h"
 #include "data.h"
 #include "quicksort.h"
+#include "search.h"
 
 /*  Stage 1 of project.
 */
