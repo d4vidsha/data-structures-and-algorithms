@@ -9,6 +9,8 @@
 #include <assert.h>
 #include "readcsv.h"
 
+/*  When creating strings, check if we still have space to continue.
+*/
 int is_in_cell_length(int curr, int max) {
     if (curr >= max) {
         fprintf(stderr, "NOTE: CSV cell exceeds %d characters.\n", max);
@@ -18,6 +20,9 @@ int is_in_cell_length(int curr, int max) {
     return TRUE;
 }
 
+/*  Given a .csv file `f`, write cell to the `string`. This function supports
+    CSV cells with double quotes.
+*/
 void get_str(FILE *f, char *string) {
     int i = 0;
     int c;
@@ -55,6 +60,8 @@ void get_str(FILE *f, char *string) {
     string[i] = NULLBYTE;
 }
 
+/*  Given a .csv file `f`, write cell into an integer.
+*/
 int get_int(FILE *f) {
     char temp[MAX_STR_LEN + NULLBYTE_LEN];
     get_str(f, temp);
@@ -62,6 +69,8 @@ int get_int(FILE *f) {
     return value;
 }
 
+/*  Given a .csv file `f`, write cell into a double.
+*/
 double get_double(FILE *f) {
     char temp[MAX_STR_LEN + NULLBYTE_LEN];
     char *ptr;

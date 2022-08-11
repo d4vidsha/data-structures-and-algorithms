@@ -321,4 +321,8 @@ list_t *linearsearch(double value, list_t *list) {
      ass2-soln-2020.c.
    - Implementation of linked list functions inspired by Alistair Moffat
      from "Programming, Problem Solving, and Abstraction with C".
+   - Implementation of quicksort inspired by;
+        - https://www.geeksforgeeks.org/quicksort-on-singly-linked-list/
+        - https://www.geeksforgeeks.org/quick-sort/
+        - https://www.youtube.com/watch?v=Hoixgm4-P4M
 ============================================================================= */
