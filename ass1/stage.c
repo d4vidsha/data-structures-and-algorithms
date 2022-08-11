@@ -58,7 +58,7 @@ void stage2(FILE *in, FILE *out) {
     build_list(in, list);
 
     // sort linked list from lowest to highest grade1in
-    quicksort(list->head, list->foot);
+    quicksort(list->head, list->foot, COLUMN_INDEX_GRADE1IN);
 
     // process queries on the fly
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];

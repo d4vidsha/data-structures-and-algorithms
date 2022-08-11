@@ -11,10 +11,12 @@
 #include "linkedlist.h"
 
 /* function prototypes ====================================================== */
-void quicksort(node_t *low, node_t *high);
-node_t *partition(node_t *low, node_t *high);
+void quicksort(node_t *low, node_t *high, int col);
+node_t *partition(node_t *low, node_t *high, int col);
 void swap(node_t *n1, node_t *n2);
 node_t *get_prev_node(node_t *start, node_t *node);
+double cmp_grade1in(double n, double m);
+int cmp_address(char *n, char *m);
 
 #endif
 /* =============================================================================

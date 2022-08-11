@@ -26,6 +26,8 @@
 #define NULLBYTE '\0'
 #define TRUE 1
 #define FALSE 0
+#define COLUMN_INDEX_GRADE1IN 6
+#define COLUMN_INDEX_ADDRESS 1
 
 /* structures =============================================================== */
 typedef struct footpath_segment footpath_segment_t;
