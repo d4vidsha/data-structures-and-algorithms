@@ -28,6 +28,8 @@ int is_empty_list(list_t *list) {
     return list->head == NULL;
 }
 
+/*  Free the list by freeing all nodes and its contents.
+*/
 void free_list(list_t *list) {
     node_t *curr, *prev;
     assert(list);
@@ -41,6 +43,8 @@ void free_list(list_t *list) {
     free(list);
 }
 
+/*  Prepend to the list i.e. add to head of linked list.
+*/
 list_t *prepend(list_t *list, footpath_segment_t *fp) {
     node_t *new;
     assert(list);
@@ -56,6 +60,8 @@ list_t *prepend(list_t *list, footpath_segment_t *fp) {
     return list;
 }
 
+/*  Append to the list i.e. add to foot of linked list.
+*/
 list_t *append(list_t *list, footpath_segment_t *fp) {
     node_t *new;
     assert(list);
@@ -73,6 +79,8 @@ list_t *append(list_t *list, footpath_segment_t *fp) {
     return list;
 }
 
+/*  Get the linked list length.
+*/
 int list_len(list_t *list) {
     assert(list);
     int len = 0;
@@ -97,6 +105,8 @@ void build_list(FILE *f, list_t *list) {
     }
 }
 
+/*  Creates a new list with new nodes for address search results. 
+*/
 list_t *find_addresses(char *address, list_t *list) {
     assert(list);
     list_t *new = create_empty_list();
@@ -147,6 +157,8 @@ void print_footpath_segments(FILE *f, list_t *list) {
     }
 }
 
+/*  Given a node in linked list, find the previous node and return it.
+*/
 node_t *get_prev_node(node_t *start, node_t *node) {
     node_t *curr, *prev = NULL;
     curr = start;
@@ -174,6 +186,9 @@ void print_grade1in(FILE *f, list_t *list) {
     }
 }
 
+/*  Implementation of quicksort to sort linked list by `grade1in`.
+    See details of sources on the very bottom of this module.
+*/
 void quicksort(node_t *low, node_t *high) {
     if (low == high) {
         return;
@@ -195,6 +210,9 @@ void quicksort(node_t *low, node_t *high) {
     }
 }
 
+/*  Partition the linked list. The pivot is automatically set to be
+    the highest value in the linked list.
+*/
 node_t *partition(node_t *low, node_t *high) {
 
     node_t *pivot = high;
@@ -228,6 +246,8 @@ void swap(node_t *n1, node_t *n2) {
     n2->fp = temp;
 }
 
+/*  Converts linked list to a normal `node_t` array.
+*/
 node_t **convert_to_array(list_t *list) {
     assert(list);
     node_t **A;
@@ -244,6 +264,8 @@ node_t **convert_to_array(list_t *list) {
     return A;
 }
 
+/*  Copies a `footpath_segment` struct to a new struct.
+*/
 footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
     footpath_segment_t *new;
     new = (footpath_segment_t *)malloc(sizeof(*new));
@@ -252,6 +274,10 @@ footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
     return new;
 }
 
+/*  Linear search through sorted linked list and stopping when search value
+    starts to grow bigger. The difference `diff` will be decreasing up until
+    a point before it increases again.
+*/
 list_t *linearsearch(double value, list_t *list) {
     assert(list);
     node_t *curr = list->head;
