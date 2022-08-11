@@ -43,7 +43,6 @@ list_t *linearsearch(double value, list_t *list) {
     double diff = fabs(value - curr->fp->grade1in);
     double prev_diff;
     double smallest_diff = diff;
-    curr = curr->next;
 
     // find the smallest difference
     while (curr) {
@@ -68,6 +67,7 @@ list_t *linearsearch(double value, list_t *list) {
     // find all footpath segments with the smallest difference
     list_t *result_list = create_empty_list();
     curr = list->head;
+    diff = fabs(value - curr->fp->grade1in);
     while (curr) {
         prev_diff = diff;
         diff = fabs(value - curr->fp->grade1in);
