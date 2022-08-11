@@ -32,6 +32,7 @@ int list_len(list_t *list);
 void build_list(FILE *f, list_t *list);
 list_t *find_addresses(char *address, list_t *list);
 void print_footpath_segments(FILE *f, list_t *list);
+node_t *get_prev_node(node_t *start, node_t *node);
 void print_grade1in(FILE *f, list_t *list);
 void quicksort(node_t *low, node_t *high);
 node_t *partition(node_t *low, node_t *high);

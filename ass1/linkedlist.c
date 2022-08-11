@@ -11,6 +11,8 @@
 #include "linkedlist.h"
 #include "readcsv.h"
 
+/*  Creates an empty linked list.
+*/
 list_t *create_empty_list(void) {
     list_t *list;
     list = (list_t *)malloc(sizeof(*list));
@@ -19,6 +21,8 @@ list_t *create_empty_list(void) {
     return list;
 }
 
+/*  Checks if list is empty.
+*/
 int is_empty_list(list_t *list) {
     assert(list);
     return list->head == NULL;
