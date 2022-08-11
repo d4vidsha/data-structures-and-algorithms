@@ -14,7 +14,9 @@
 /*  Implementation of quicksort to sort linked list by `col`.
     See details of sources on the very bottom of this module.
 */
-void quicksort(node_t *low, node_t *high, int col) {
+void quicksort(list_t *list, int col) {
+    node_t *low = list->head;
+    node_t *high = list->foot;
     if (low == high) {
         return;
     }
@@ -23,7 +25,11 @@ void quicksort(node_t *low, node_t *high, int col) {
 
     // ensure pivot exists and the pivot is not the last position
     if (pivot != NULL && pivot != high) {
-        quicksort(pivot->next, high, col);
+        list_t *temp = create_empty_list();
+        temp->head = pivot->next;
+        temp->foot = high;
+        quicksort(temp, col);
+        free(temp);
     }
 
     // get the position one unit before the pivot, otherwise if we were to use
@@ -31,7 +37,11 @@ void quicksort(node_t *low, node_t *high, int col) {
     node_t *prev = get_prev_node(low, pivot);
 
     if (prev != NULL && prev != high) {
-        quicksort(low, prev, col);
+        list_t *temp = create_empty_list();
+        temp->head = low;
+        temp->foot = prev;
+        quicksort(temp, col);
+        free(temp);
     }
 }
 
@@ -99,7 +109,7 @@ node_t *get_prev_node(node_t *start, node_t *node) {
     return prev;
 }
 
-/*  Compare grade1in attributes.
+/*  Compare grade1in.
     Return values are:
     - [ < 0] `n` is smaller than `m`
     - [== 0] `n` is equal to `m`
@@ -109,6 +119,12 @@ double cmp_grade1in(double n, double m) {
     return n - m;
 }
 
+/*  Compare address.
+    Return values are:
+    - [ < 0] `n` is smaller than `m`
+    - [== 0] `n` is equal to `m`
+    - [ > 0] `n` is larger than `m`
+*/
 int cmp_address(char *n, char *m) {
     return strcmp(n, m);
 }

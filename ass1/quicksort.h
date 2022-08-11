@@ -11,7 +11,7 @@
 #include "linkedlist.h"
 
 /* function prototypes ====================================================== */
-void quicksort(node_t *low, node_t *high, int col);
+void quicksort(list_t *list, int col);
 node_t *partition(node_t *low, node_t *high, int col);
 void swap(node_t *n1, node_t *n2);
 node_t *get_prev_node(node_t *start, node_t *node);
