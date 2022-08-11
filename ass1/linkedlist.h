@@ -29,6 +29,7 @@ int list_len(list_t *list);
 void build_list(FILE *f, list_t *list);
 list_t *find_addresses(char *address, list_t *list);
 void print_footpath_segments(FILE *f, list_t *list);
+void quicksort(list_t *list);
 
 #endif
 

@@ -146,6 +146,10 @@ void print_footpath_segments(FILE *f, list_t *list) {
     }
 }
 
+void quicksort(list_t *list) {
+
+}
+
 /* =============================================================================
    Written by David Sha.
    - Implementation of linked list structs inspired by Artem Polyvyanyy from

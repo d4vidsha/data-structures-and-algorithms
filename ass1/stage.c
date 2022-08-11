@@ -39,6 +39,18 @@ void stage1(FILE *in, FILE *out) {
     free_list(list);
 }
 
+void stage2(FILE *in, FILE *out) {
+    // read footpath segments to a linked list
+    list_t *list = create_empty_list();
+    skip_header_line(in);
+    build_list(in, list);
+
+    // sort list
+    quicksort(list);
+
+    // process queries on the fly
+}
+
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */
