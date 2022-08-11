@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     if (stage == 1) {
         stage1(in, out);
     } else if (stage == 2) {
-        
+        stage2(in, out);
     } else {
         fprintf(stderr, "ERROR: invalid stage");
         exit(EXIT_FAILURE);

@@ -11,6 +11,7 @@
 #define NOTFOUND "NOTFOUND"
 
 void stage1(FILE *in, FILE *out);
+void stage2(FILE *in, FILE *out);
 
 #endif
 

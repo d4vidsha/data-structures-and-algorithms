@@ -46,9 +46,17 @@ void stage2(FILE *in, FILE *out) {
     build_list(in, list);
 
     // sort list
-    quicksort(list);
+    fprintf(out, "BEFORE\n");
+    print_footpath_segments(out, list);
+    quicksort(list->head, list->foot);
+    fprintf(out, "\nAFTER\n");
+    print_footpath_segments(out, list);
+    print_grade1in(out, list);
 
     // process queries on the fly
+
+    // free everything
+    free_list(list);
 }
 
 /* =============================================================================

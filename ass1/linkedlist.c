@@ -146,8 +146,76 @@ void print_footpath_segments(FILE *f, list_t *list) {
     }
 }
 
-void quicksort(list_t *list) {
+/* Provided a file output `f`, print the list in the specified format.
+*/
+void print_grade1in(FILE *f, list_t *list) {
+    assert(list);
+    node_t *curr;
+    curr = list->head;
+    while (curr) {
+        fprintf(f, "--> ");
+        fprintf(f, "grade1in: %lf || ", curr->fp->grade1in);
+        fprintf(f, "\n");
+        curr = curr->next;
+    }
+}
 
+void quicksort(node_t *low, node_t *high) {
+    if (low == high) {
+        return;
+    }
+    
+    node_t *pivot = partition(low, high);
+
+    // ensure pivot exists and the pivot is not the last position
+    if (pivot != NULL && high != pivot) {
+        quicksort(pivot->next, high);
+    }
+
+    node_t *prev_pivot = 
+    node_t *curr, *prev = NULL;
+    curr = low;
+    while (curr) {
+        if (curr == pivot) {
+            break;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (prev != NULL && high != prev) {
+        quicksort(low, prev);
+    }
+}
+
+node_t *partition(node_t *low, node_t *high) {
+
+    node_t *pivot = high;
+    node_t *i = low;
+    node_t *j = low;
+    while (j != NULL && j != high) {
+        if (j->fp->grade1in < pivot->fp->grade1in) {
+            assert(i != NULL && j != NULL);
+            swap(i, j);
+            assert(i->next != NULL);
+            i = i->next;
+        }
+        j = j->next;
+    }
+    assert(i != NULL);
+    swap(i, pivot);
+
+    // return the pivot position. Note that this is `i` and not `pivot` because
+    // when swapping, we are only swapping the node values and not the nodes
+    // themselves
+    return i;
+}
+
+void swap(node_t *n1, node_t *n2) {
+    footpath_segment_t *temp;
+    temp = n1->fp;
+    n1->fp = n2->fp;
+    n2->fp = temp;
 }
 
 /* =============================================================================
