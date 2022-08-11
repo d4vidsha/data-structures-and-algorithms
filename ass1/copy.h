@@ -1,13 +1,14 @@
 /* =============================================================================
    Project: Assignment 1
-   readin.h :
-            = related all to reading from input arguments
+   copy.h :
+            = related all to copying between structs/strings
 ============================================================================= */
-#ifndef _READIN_H_
-#define _READIN_H_
+#ifndef _COPY_H_
+#define _COPY_H_
 
 /* function prototypes ====================================================== */
 char *filename_strcpy(char *arg);
+footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp);
 
 #endif
 /* =============================================================================

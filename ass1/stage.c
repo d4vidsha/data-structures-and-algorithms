@@ -11,6 +11,7 @@
 #include "linkedlist.h"
 #include "readcsv.h"
 #include "data.h"
+#include "quicksort.h"
 
 /*  Stage 1 of project.
 */

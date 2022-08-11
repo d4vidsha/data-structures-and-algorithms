@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 1
-   readin.c :
-            = related all to reading from input arguments
+   copy.c :
+            = related all to copying between structs/strings
 ============================================================================= */
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +20,16 @@ char *filename_strcpy(char *arg) {
     assert(filename);
     strcpy(filename, arg);
     return filename;
+}
+
+/*  Copies a `footpath_segment` struct to a new struct.
+*/
+footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
+    footpath_segment_t *new;
+    new = (footpath_segment_t *)malloc(sizeof(*new));
+    assert(new);
+    memcpy(new, fp, sizeof(*new));
+    return new;
 }
 
 /* =============================================================================
