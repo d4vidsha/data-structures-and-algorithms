@@ -3,7 +3,6 @@
    driver.c :
             = the main program of the project
 ============================================================================= */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>

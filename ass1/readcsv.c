@@ -3,7 +3,6 @@
    readcsv.c :
             = related all to reading from .csv file
 ============================================================================= */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
