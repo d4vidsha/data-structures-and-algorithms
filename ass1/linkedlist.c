@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 #include "linkedlist.h"
 #include "readcsv.h"
 
@@ -250,15 +251,16 @@ footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
 
 list_t *linearsearch(double value, list_t *list) {
     assert(list);
-    node_t *curr;
-    curr = list->head;
+    node_t *curr = list->head;
     node_t *closest = curr;
-    int diff = abs(value - curr->fp->grade1in);
-    int smallest_diff = diff;
+    double diff = fabs(value - curr->fp->grade1in);
+    double prev_diff;
+    double smallest_diff = diff;
     curr = curr->next;
-    int prev_diff;
+
     while (curr) {
         prev_diff = diff;
+        diff = fabs(value - curr->fp->grade1in);
 
         if (prev_diff < diff) {
             // the sorted array elements are only getting bigger from here on
@@ -269,11 +271,10 @@ list_t *linearsearch(double value, list_t *list) {
         // only return the first found closest (<), if you want the last found
         // closest or if you intend on generating a list of all found closest 
         // use (<=) instead
-        if ((diff = abs(value - curr->fp->grade1in)) < smallest_diff) {
+        if (diff < smallest_diff) {
             smallest_diff = diff;
             closest = curr;
         }
-        
 
         curr = curr->next;
     }
