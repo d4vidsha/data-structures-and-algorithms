@@ -34,18 +34,18 @@ list_t *find_addresses(char *address, list_t *list) {
 }
 
 /*  Linear search through sorted linked list and stopping when search value
-    starts to grow bigger. The difference `diff` will be decreasing up until
-    a point before it increases again.
+    difference starts to grow bigger. The difference `diff` will be decreasing 
+    up until a point before it increases again.
 */
 list_t *linearsearch(double value, list_t *list) {
     assert(list);
     node_t *curr = list->head;
-    node_t *closest = curr;
     double diff = fabs(value - curr->fp->grade1in);
     double prev_diff;
     double smallest_diff = diff;
     curr = curr->next;
 
+    // find the smallest difference
     while (curr) {
         prev_diff = diff;
         diff = fabs(value - curr->fp->grade1in);
@@ -57,20 +57,36 @@ list_t *linearsearch(double value, list_t *list) {
         }
 
         // only return the first found closest (<), if you want the last found
-        // closest or if you intend on generating a list of all found closest 
-        // use (<=) instead
+        // closest use (<=) instead
         if (diff < smallest_diff) {
             smallest_diff = diff;
-            closest = curr;
         }
 
         curr = curr->next;
     }
 
-    // this guarantees one result in list of results
+    // find all footpath segments with the smallest difference
     list_t *result_list = create_empty_list();
-    footpath_segment_t *fp = footpath_segment_cpy(closest->fp);
-    result_list = append(result_list, fp);
+    curr = list->head;
+    while (curr) {
+        prev_diff = diff;
+        diff = fabs(value - curr->fp->grade1in);
+
+        if (prev_diff < diff) {
+            // the sorted array elements are only getting bigger from here on
+            // so stop searching
+            break;
+        }
+
+        // we are guaranteed at least one footpath segment appears
+        if (diff == smallest_diff) {
+            footpath_segment_t *fp = footpath_segment_cpy(curr->fp);
+            result_list = append(result_list, fp);
+        }
+
+        curr = curr->next;
+    }
+
     return result_list;
 }
 
