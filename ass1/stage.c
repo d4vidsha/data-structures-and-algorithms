@@ -57,9 +57,8 @@ void stage2(FILE *in, FILE *out) {
         list_t *result_list = linearsearch(value, list);
         fprintf(out, "%s\n", line);
         print_footpath_segments(out, result_list);
-
-        free(result_list);
-
+        printf("%s --> %lf\n", line, result_list->head->fp->grade1in);
+        free_list(result_list);
     }
 
     // free everything

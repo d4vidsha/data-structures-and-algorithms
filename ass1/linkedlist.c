@@ -102,10 +102,7 @@ list_t *find_addresses(char *address, list_t *list) {
         int result = strcmp(address, curr->fp->address);
         if (result == 0) {
             // addresses are exactly the same
-            footpath_segment_t *fp;
-            fp = (footpath_segment_t *)malloc(sizeof(*fp));
-            assert(fp);
-            memcpy(fp, curr->fp, sizeof(*fp));
+            footpath_segment_t *fp = footpath_segment_cpy(curr->fp);
             // fp = curr->fp;   is insufficient as only assigns pointer
             new = append(new, fp);
         }
@@ -243,6 +240,14 @@ node_t **convert_to_array(list_t *list) {
     return A;
 }
 
+footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
+    footpath_segment_t *new;
+    new = (footpath_segment_t *)malloc(sizeof(*new));
+    assert(new);
+    memcpy(new, fp, sizeof(*new));
+    return new;
+}
+
 list_t *linearsearch(double value, list_t *list) {
     assert(list);
     node_t *curr;
@@ -273,8 +278,10 @@ list_t *linearsearch(double value, list_t *list) {
         curr = curr->next;
     }
 
+    // this guarantees one result in list of results
     list_t *result_list = create_empty_list();
-    result_list = append(result_list, closest->fp);
+    footpath_segment_t *fp = footpath_segment_cpy(closest->fp);
+    result_list = append(result_list, fp);
     return result_list;
 }
 

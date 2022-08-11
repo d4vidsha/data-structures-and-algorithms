@@ -34,6 +34,7 @@ void quicksort(node_t *low, node_t *high);
 node_t *partition(node_t *low, node_t *high);
 void swap(node_t *n1, node_t *n2);
 node_t **convert_to_array(list_t *list);
+footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp);
 list_t *linearsearch(double value, list_t *list);
 
 #endif
