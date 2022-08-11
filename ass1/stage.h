@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: dict1
+   Project: Assignment 1
    stage.h :
             = the stages of the project
 ============================================================================= */
@@ -10,7 +10,12 @@
 #define NEWLINE_LEN 1
 #define NOTFOUND "NOTFOUND"
 
+/*  Stage 1 of project.
+*/
 void stage1(FILE *in, FILE *out);
+
+/*  Stage 2 of project.
+*/
 void stage2(FILE *in, FILE *out);
 
 #endif

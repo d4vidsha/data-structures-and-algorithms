@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: dict1
+   Project: Assignment 1
    driver.c :
             = the main program of the project
 ============================================================================= */
@@ -18,7 +18,8 @@
 #define IN_FILENAME_ARG_POS 2
 #define OUT_FILENAME_ARG_POS 3
 
-
+/*  This main function contains both stage 1 and stage 2.
+*/
 int main(int argc, char *argv[]) {
 
     // ensure exactly `NUM_ARGS` arguments
