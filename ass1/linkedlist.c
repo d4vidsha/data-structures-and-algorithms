@@ -253,7 +253,7 @@ list_t *binarysearch(char *line, list_t *list, int index) {
     // cannot implement binary search with linked list, so using a generic
     // array instead
     node_t **A = convert_to_array(list);
-    
+    int n = list_len(list);
 
     free(A);
 
