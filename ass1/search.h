@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 1
-   quicksort.h :
-            = all related to quicksort
+   search.h :
+            = all related to searching
 ============================================================================= */
 #ifndef _SEARCH_H_
 #define _SEARCH_H_

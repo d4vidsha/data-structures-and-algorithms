@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 1
-   quicksort.c :
-            = all related to quicksort
+   search.h :
+            = all related to searching
 ============================================================================= */
 #include <stdio.h>
 #include <stdlib.h>
