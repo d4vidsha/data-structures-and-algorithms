@@ -124,6 +124,7 @@ student_t *bestStudent(array_t *arr) {
 // Linear search
 student_t *arraySearch(array_t *A, int query, int *comps, int *dictSize) {
 	student_t *result = NULL;
+	*comps = 0;
 	*dictSize = A->n;
 	for (int i = 0; i < *dictSize; i++) {
 		(*comps)++;
