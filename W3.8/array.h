@@ -53,6 +53,7 @@ student_t *arraySearch(array_t *arr, int id, int *comps, int *dictSize);
 //      and     "*dictSize" - the number of elements in array/dictionnary
 student_t *arrayBinarySearch(array_t *arr, int id, int *comps, int *dictSize);
 
+void arrayEnableInsert(array_t *arr);
 
 #endif
 

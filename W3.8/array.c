@@ -33,6 +33,16 @@ array_t *arrayCreate() {
 	return arr;
 }
 
+// makes sure that array's size exceeds its number of elements
+//    ie. there is space for adding new element
+void arrayEnableInsert(array_t *arr) {
+	if (arr->n == arr->size) {
+		arr->size <<= 1;       // same as arr->size *= 2;
+		arr->A= realloc(arr->A, arr->size * sizeof(*(arr->A)));
+		assert(arr->A);
+	}
+}
+
 // free memory used by array "arr"
 void arrayFree(array_t *arr) {
 	for (int i = 0; i < arr->n; i++) {
@@ -139,10 +149,17 @@ student_t *arraySearch(array_t *arr, int id, int *comps, int *dictSize) {
 	return s;
 }
 
-// inserts data "s" into sorted array "arr", ensuring "arr" remains sorted 
+// inserts data "s" into sorted array "arr", ensuring "arr" remain sorted 
 void sortedArrayInsert(array_t *arr, student_t *s) {
-	// FILL IN CODE HERE 
-
+	int i;
+	arrayEnableInsert(arr);
+	// starting from the end, shift all elements > s one position to the right
+	for (i = arr->n - 1; i >= 0 && studentCmpID(s, arr->A[i]) == -1; i-- ) {
+		arr->A[i + 1] = arr->A[i];
+	}
+	// now "s" should be in A[i+1]
+	arr->A[i + 1] = s;
+	arr->n++;
 }
 
 // searches for student with "id" in sorted array "arr"
@@ -152,12 +169,23 @@ void sortedArrayInsert(array_t *arr, student_t *s) {
 student_t *arrayBinarySearch(array_t *arr, int id, int *comps, int *dictSize) {
 	*dictSize = arr->n;
 	*comps = 0;
-
+	
 	// FILL IN CODE HERE FOR BINARY SEARCH
-
+	student_t **A = arr->A;    // for convenience 
+	int mid, lo = 0, hi = arr->n - 1;
+	while (lo <= hi) {
+		mid = (lo + hi)/2;
+		(*comps)++;
+		int cmp = id - studentGetID(A[mid]);
+		if (cmp == 0) return A[mid];
+		if (cmp < 0) {
+			hi = mid - 1;
+		} else {
+			lo = mid + 1;
+		}
+	}
 	return NULL;
 }
-
 
 /* =====================================================================
    This skeleton/program is compiled by the comp20003 teaching team,
