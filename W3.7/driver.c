@@ -102,7 +102,7 @@ void arrayQuerying(char *dataFileName, FILE *inFile, FILE *outFile, FILE *infoFi
 		i++;
 		// THE TASK: 
 		// FILL IN: uncomment the next line, and add function arraySearch 
-		// s = arraySearch(students, query, &comps, &dictSize);
+		s = arraySearch(students, query, &comps, &dictSize);
 		if (i <= OUTPUT_SEARCHES) fprintf(outFile, "%d \t: ", query);
 		if (s) {
 			if (i <= OUTPUT_SEARCHES) {

@@ -121,6 +121,21 @@ student_t *bestStudent(array_t *arr) {
 	return max;
 }
 
+// Linear search
+student_t *arraySearch(array_t *A, int query, int *comps, int *dictSize) {
+	student_t *result = NULL;
+	*dictSize = A->n;
+	for (int i = 0; i < *dictSize; i++) {
+		(*comps)++;
+		if (query == studentGetID(A->A[i])) {
+			result = A->A[i];
+			break;
+		}
+	}
+	return result;
+}
+
+
 /* =====================================================================
    This skeleton/program is compiled by the comp20003 teaching team,
    the university of Melbourne.

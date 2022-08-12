@@ -38,6 +38,9 @@ void arrayPrint(FILE *f, array_t *arr, int first, int last);
 // Returns memory used (in bytes) by the array 
 size_t arrayBytesUsed(array_t *arr);
 
+// Linear search
+student_t *arraySearch(array_t *A, int query, int *comps, int *dictSize);
+
 #endif
 
 
