@@ -34,7 +34,9 @@ void quicksort(list_t *list, int col) {
     }
 
     // get the position one unit before the pivot, otherwise if we were to use
-    // just the pivot, we would have an infinite quicksort loop
+    // just the pivot, we would have an infinite quicksort loop. Notice that
+    // using this method of getting previous node will reduce the efficiency
+    // of quicksort
     node_t *prev = get_prev_node(low, pivot);
 
     // quicksort lower segment
