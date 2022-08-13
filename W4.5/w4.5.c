@@ -19,6 +19,15 @@ int main(int argc, char *argv[]) {
     head->data = 5;
 
     // FILL IN THE REST FOR NODES 10, 20, 1
+    // int arr[] = {10, 20, 1};
+    // int n = 3;
+    // for (int i = 0; i < n; i++) {
+    struct node *node;
+    node = (struct node *)malloc(sizeof(*head));
+    assert(node);
+    node->data = 10;
+    head->next = node;
+    
 
     return 0;
 }
