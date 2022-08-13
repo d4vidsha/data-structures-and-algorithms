@@ -14,6 +14,7 @@ typedef struct node node_t;
 struct node {
     footpath_segment_t *fp;
     node_t *next;
+    node_t *prev;
 };
 
 typedef struct list list_t;
