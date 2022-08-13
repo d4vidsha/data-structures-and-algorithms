@@ -60,6 +60,7 @@ list_t *prepend(list_t *list, footpath_segment_t *fp) {
     assert(new);
     new->fp = fp;
     new->next = list->head;
+    new->prev = NULL;
     list->head = new;
     if (list->foot == NULL) {
         /* this is the first insert into list */
@@ -77,6 +78,7 @@ list_t *append(list_t *list, footpath_segment_t *fp) {
     assert(new);
     new->fp = fp;
     new->next = NULL;
+    new->prev = list->foot;
     if (list->foot == NULL) {
         /* this is the first insert into list */
         list->head = list->foot = new;
