@@ -33,15 +33,9 @@ void quicksort(list_t *list, int col) {
         free(temp);
     }
 
-    // get the position one unit before the pivot, otherwise if we were to use
-    // just the pivot, we would have an infinite quicksort loop. Notice that
-    // using this method of getting previous node will reduce the efficiency
-    // of quicksort
-    node_t *prev = get_prev_node(low, pivot);
-
     // quicksort lower segment
-    if (prev != NULL && prev != high) {
-        list_t *temp = create_list(low, prev);
+    if (pivot->prev != NULL && pivot->prev != high) {
+        list_t *temp = create_list(low, pivot->prev);
         quicksort(temp, col);
         free(temp);
     }
@@ -72,17 +66,41 @@ node_t *partition(node_t *low, node_t *high, int col) {
     // return the pivot position. Note that this is `i` and not `pivot` because
     // when swapping, we are only swapping the node values and not the nodes
     // themselves
-    return i;
+    return pivot;
 }
 
 /*  Swaps the values inside the nodes. Note that it does NOT swap the nodes
     themselves.
 */
 void swap(node_t *n1, node_t *n2) {
-    footpath_segment_t *temp;
-    temp = n1->fp;
-    n1->fp = n2->fp;
-    n2->fp = temp;
+    node_t *temp;
+    temp = n1;
+    n1 = n2;
+    n2 = temp;
+    
+    node_t *next, *prev;
+    next = n1->next;
+    prev = n1->prev;
+    if (n2->next == NULL) {
+        n1->next = NULL;
+    } else {
+        n1->next = n2->next;
+    }
+    if (n2->prev == NULL) {
+        n1->prev = NULL;
+    } else {
+        n1->prev = n2->prev;
+    }
+    if (next == NULL) {
+        n2->next = NULL;
+    } else {
+        n2->next = next;
+    }
+    if (prev == NULL) {
+        n2->prev = NULL;
+    } else {
+        n2->prev = prev;
+    }
 }
 
 /*  Given a node in linked list, find the previous node and return it.
