@@ -75,19 +75,27 @@ list_t *prepend(list_t *list, footpath_segment_t *fp) {
 */
 list_t *append(list_t *list, footpath_segment_t *fp) {
     assert(list && fp);
+
+    // create new node and add data to node
     node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
     new->fp = fp;
+
+    // specify new nodes next and previous nodes
     new->next = NULL;
     new->prev = list->foot;
+
+    // check for empty list exception
     if (list->foot == NULL) {
         /* this is the first insert into list */
         list->head = list->foot = new;
-    } else {
-        list->foot->next = new;
-        list->foot = new;
+        return list;
     }
+    // add to list
+    list->foot->next = new;
+    list->foot = new;
+
     return list;
 }
 
