@@ -63,9 +63,6 @@ node_t *partition(node_t *low, node_t *high, int col) {
     }
     swap(i, pivot);
 
-    // return the pivot position. Note that this is `i` and not `pivot` because
-    // when swapping, we are only swapping the node values and not the nodes
-    // themselves
     return pivot;
 }
 
@@ -73,34 +70,45 @@ node_t *partition(node_t *low, node_t *high, int col) {
     themselves.
 */
 void swap(node_t *n1, node_t *n2) {
-    node_t *temp;
-    temp = n1;
-    n1 = n2;
-    n2 = temp;
+    
     
     node_t *next, *prev;
     next = n1->next;
     prev = n1->prev;
-    if (n2->next == NULL) {
-        n1->next = NULL;
-    } else {
-        n1->next = n2->next;
-    }
-    if (n2->prev == NULL) {
-        n1->prev = NULL;
-    } else {
-        n1->prev = n2->prev;
-    }
-    if (next == NULL) {
-        n2->next = NULL;
-    } else {
-        n2->next = next;
-    }
-    if (prev == NULL) {
-        n2->prev = NULL;
-    } else {
-        n2->prev = prev;
-    }
+    // assert(n1->next != NULL);
+    // assert(n1->prev != NULL);
+    // assert(n2->next != NULL);
+    // assert(n2->prev != NULL);
+    n1->next = n2->next;
+    n1->prev = n2->prev;
+    n2->next = next;
+    n2->prev = prev;
+
+    // node_t *temp;
+    // temp = n1;
+    // n1 = n2;
+    // n2 = temp;
+
+    // if (n2->next == NULL) {
+    //     n1->next = NULL;
+    // } else {
+    //     n1->next = n2->next;
+    // }
+    // if (n2->prev == NULL) {
+    //     n1->prev = NULL;
+    // } else {
+    //     n1->prev = n2->prev;
+    // }
+    // if (next == NULL) {
+    //     n2->next = NULL;
+    // } else {
+    //     n2->next = next;
+    // }
+    // if (prev == NULL) {
+    //     n2->prev = NULL;
+    // } else {
+    //     n2->prev = prev;
+    // }
 }
 
 /*  Given a node in linked list, find the previous node and return it.

@@ -55,12 +55,14 @@ void free_list(list_t *list) {
 */
 list_t *prepend(list_t *list, footpath_segment_t *fp) {
     assert(list);
-    node_t *new;
+    node_t *new, *old;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
     new->fp = fp;
+    old = list->head;
     new->next = list->head;
     new->prev = NULL;
+    old->prev = new;
     list->head = new;
     if (list->foot == NULL) {
         /* this is the first insert into list */
