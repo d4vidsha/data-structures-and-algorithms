@@ -22,6 +22,12 @@ struct list {
     node_t *foot;
 };
 
+typedef struct skiplist skiplist_t;
+struct skiplist {
+    list_t *head;
+    list_t *foot;
+};
+
 /* function prototypes ====================================================== */
 list_t *create_empty_list(void);
 list_t *create_list(node_t *head, node_t *foot);

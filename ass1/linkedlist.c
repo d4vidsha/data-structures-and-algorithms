@@ -181,6 +181,15 @@ node_t **convert_to_array(list_t *list) {
     return A;
 }
 
+skiplist_t *create_skip_list(list_t *list) {
+    skiplist_t *new;
+    new = (skiplist_t *)malloc(sizeof(*new));
+    assert(new);
+    list_t *half;
+    half = half_list(list);
+    skiplist
+}
+
 /* =============================================================================
    Written by David Sha.
    - Implementation of linked list structs inspired by Artem Polyvyanyy from
