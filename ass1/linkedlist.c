@@ -23,6 +23,7 @@ list_t *create_empty_list(void) {
 /*  Create a linked list given the head and foot.
 */
 list_t *create_list(node_t *head, node_t *foot) {
+    assert(head && foot);
     list_t *new = create_empty_list();
     new->head = head;
     new->foot = foot;
@@ -54,7 +55,7 @@ void free_list(list_t *list) {
 /*  Prepend to the list i.e. add to head of linked list.
 */
 list_t *prepend(list_t *list, footpath_segment_t *fp) {
-    assert(list);
+    assert(list && fp);
     node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
@@ -73,7 +74,7 @@ list_t *prepend(list_t *list, footpath_segment_t *fp) {
 /*  Append to the list i.e. add to foot of linked list.
 */
 list_t *append(list_t *list, footpath_segment_t *fp) {
-    assert(list);
+    assert(list && fp);
     node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
