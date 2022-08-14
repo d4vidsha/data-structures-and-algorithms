@@ -49,76 +49,34 @@ node_t *partition(node_t *low, node_t *high, int col) {
     node_t *pivot = high;
     node_t *i = low;
     node_t *j = low;
-    node_t *i_next, *j_next;
+
     while (j != NULL && j != high) {
         double cmp = cmp_column(col, j->fp, pivot->fp);
 
         if (cmp < 0) {
             // j is less than pivot
-            assert(i);
-            assert(j);
-            i_next = i->next;
-            j_next = j->next;
             swap(i, j);
-            i = i_next;
-            j = j_next;
-        } else {
-            j = j->next;
+            i = i->next;
         }
+
+        j = j->next;
     }
-    assert(i);
-    assert(pivot);
     swap(i, pivot);
 
-    return pivot;
+    // return the pivot position. Note that this is `i` and not `pivot` because
+    // when swapping, we are only swapping the node values and not the nodes
+    // themselves
+    return i;
 }
 
-/*  Swaps the nodes by swapping `next` and `prev`.
+/*  Swaps the values inside the nodes. Note that it does NOT swap the nodes
+    themselves.
 */
 void swap(node_t *n1, node_t *n2) {
-    assert(n1 && n2);
-    node_t *next, *prev;
-    next = n1->next;
-    prev = n1->prev;
-    n1->next = n2->next;
-    n1->prev = n2->prev;
-    n2->next = next;
-    n2->prev = prev;
-
-    // assert(n1->next != NULL);
-    // assert(n1->prev != NULL);
-    // assert(n2->next != NULL);
-    // assert(n2->prev != NULL);
-    // if (n1->next == NULL) {
-    //     next = NULL;
-    // } else {
-    //     next = n1->next;
-    // }
-    // if (n1->prev == NULL) {
-    //     prev = NULL;
-    // } else {
-    //     prev = n1->prev;
-    // }
-    // if (n2->next == NULL) {
-    //     n1->next = NULL;
-    // } else {
-    //     n1->next = n2->next;
-    // }
-    // if (n2->prev == NULL) {
-    //     n1->prev = NULL;
-    // } else {
-    //     n1->prev = n2->prev;
-    // }
-    // if (next == NULL) {
-    //     n2->next = NULL;
-    // } else {
-    //     n2->next = next;
-    // }
-    // if (prev == NULL) {
-    //     n2->prev = NULL;
-    // } else {
-    //     n2->prev = prev;
-    // }
+    footpath_segment_t *temp;
+    temp = n1->fp;
+    n1->fp = n2->fp;
+    n2->fp = temp;
 }
 
 /*  Given a node in linked list, find the previous node and return it.
