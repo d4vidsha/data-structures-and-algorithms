@@ -165,16 +165,16 @@ void print_grade1in(FILE *f, list_t *list) {
 
 /*  Converts linked list to a normal `node_t` array.
 */
-node_t **convert_to_array(list_t *list) {
+footpath_segment_t **convert_to_array(list_t *list) {
     assert(list);
-    node_t **A;
-    A = (node_t **)malloc(sizeof(**A) * list_len(list));
+    footpath_segment_t **A;
+    A = (footpath_segment_t **)malloc(sizeof(**A) * list_len(list));
     assert(A);
     node_t *curr;
     curr = list->head;
     int i = 0;
     while (curr) {
-        A[i] = curr;
+        A[i] = curr->fp;
         curr = curr->next;
         i++;
     }

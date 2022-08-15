@@ -57,6 +57,9 @@ void stage2(FILE *in, FILE *out) {
     skip_header_line(in);
     build_list(in, list);
 
+    // convert linked list to array
+    footpath_segment_t **array = convert_to_array(list);
+
     // sort linked list from lowest to highest by the given column index
     quicksort(list, COLUMN_INDEX_GRADE1IN);
 
@@ -82,6 +85,7 @@ void stage2(FILE *in, FILE *out) {
         free_list(result_list);
     }
     free_list(list);
+    free(array);
 }
 
 /* =============================================================================
