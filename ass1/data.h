@@ -29,6 +29,7 @@
 #define OUT_FILENAME_ARG_POS 3   // output file argument position
 #define COLUMN_INDEX_GRADE1IN 6  // grade1in column index
 #define COLUMN_INDEX_ADDRESS 1   // address column index
+#define INIT_ARRAY_LEN 2         // initial array length
 
 /* structures =============================================================== */
 typedef struct footpath_segment footpath_segment_t;

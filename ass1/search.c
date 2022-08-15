@@ -90,6 +90,35 @@ list_t *linearsearch(double value, list_t *list) {
     return result_list;
 }
 
+/*  Binary search through sorted array for matching `grade1in` values. 
+    `arr_n` is the buddy variable of the sorted array.
+    `res_n` is the buddy variable of the resulting array.
+    Returns array of results.
+*/
+footpath_segment_t **binarysearch(double val, footpath_segment_t **A, 
+                                        int *arr_n, int *res_n) {
+    assert(A);
+    footpath_segment_t **result;
+    result = (footpath_segment_t **)malloc(sizeof(**result) * INIT_ARRAY_LEN);
+    int lo, mid, hi;
+    lo = 0;
+    hi = *arr_n;
+    for (int i = 0; i < *arr_n; i++) {
+        mid = (lo + hi) / 2;
+        if (val == A[mid]->grade1in) {
+            break;
+        } else if (val > A[mid]->grade1in) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    // add to list and increment buddy variable
+    (*res_n)++;
+    result[0] = A[mid];
+    return result;
+}
+
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */

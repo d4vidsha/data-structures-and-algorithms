@@ -33,7 +33,7 @@ void stage1(FILE *in, FILE *out) {
 
         // print to `out` file
         fprintf(out, "%s\n", line);
-        print_footpath_segments(out, result_list);
+        print_list(out, result_list);
         
         // print to `stdout`
         int list_length = list_len(result_list);
@@ -57,11 +57,12 @@ void stage2(FILE *in, FILE *out) {
     skip_header_line(in);
     build_list(in, list);
 
-    // convert linked list to array
-    footpath_segment_t **array = convert_to_array(list);
-
     // sort linked list from lowest to highest by the given column index
     quicksort(list, COLUMN_INDEX_GRADE1IN);
+
+    // convert linked list to array
+    int arr_n = 0;
+    footpath_segment_t **array = convert_to_array(list, &arr_n);
 
     // process queries on the fly
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -73,16 +74,18 @@ void stage2(FILE *in, FILE *out) {
         double value = strtod(line, &ptr);
 
         // search through linked list for closest match
-        list_t *result_list = linearsearch(value, list);
+        int res_n = 0;
+        footpath_segment_t **results;
+        results = binarysearch(value, array, &arr_n, &res_n);
         
         // print to `out` file
         fprintf(out, "%s\n", line);
-        print_footpath_segments(out, result_list);
+        print_array(out, results, res_n);
 
         // print to `stdout`
-        printf("%s --> %.1lf\n", line, result_list->head->fp->grade1in);
+        printf("%s --> %.1lf\n", line, results[0]->grade1in);
         
-        free_list(result_list);
+        free(results);
     }
     free_list(list);
     free(array);
