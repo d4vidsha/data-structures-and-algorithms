@@ -13,8 +13,7 @@
 /* function prototypes ====================================================== */
 list_t *find_addresses(char *address, list_t *list);
 list_t *linearsearch(double value, list_t *list);
-footpath_segment_t **binarysearch(double val, footpath_segment_t **A, 
-                                        int *arr_n, int *res_n);
+array_t *binarysearch(double val, array_t *A);
 
 #endif
 /* =============================================================================

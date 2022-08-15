@@ -8,6 +8,7 @@
 
 /* #includes ================================================================ */
 #include "data.h"
+#include "array.h"
 
 /* structures =============================================================== */
 typedef struct node node_t;
@@ -33,9 +34,9 @@ int list_len(list_t *list);
 void build_list(FILE *f, list_t *list);
 void print_footpath_segment(FILE *f, footpath_segment_t *fp);
 void print_list(FILE *f, list_t *list);
-void print_array(FILE *f, footpath_segment_t **A, int n);
+void print_array(FILE *f, array_t *A);
 void print_grade1in(FILE *f, list_t *list);
-footpath_segment_t **convert_to_array(list_t *list, int *n);
+array_t *convert_to_array(list_t *list);
 
 #endif
 /* =============================================================================

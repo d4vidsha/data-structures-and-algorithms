@@ -13,6 +13,7 @@
 #include "data.h"
 #include "quicksort.h"
 #include "search.h"
+#include "array.h"
 
 /*  Stage 1 of project.
 */
@@ -61,8 +62,7 @@ void stage2(FILE *in, FILE *out) {
     quicksort(list, COLUMN_INDEX_GRADE1IN);
 
     // convert linked list to array
-    int arr_n = 0;
-    footpath_segment_t **array = convert_to_array(list, &arr_n);
+    array_t *array = convert_to_array(list);
 
     // process queries on the fly
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -74,21 +74,19 @@ void stage2(FILE *in, FILE *out) {
         double value = strtod(line, &ptr);
 
         // search through linked list for closest match
-        int res_n = 0;
-        footpath_segment_t **results;
-        results = binarysearch(value, array, &arr_n, &res_n);
+        array_t *results = binarysearch(value, array);
         
         // print to `out` file
         fprintf(out, "%s\n", line);
-        print_array(out, results, res_n);
+        print_array(out, results);
 
         // print to `stdout`
-        printf("%s --> %.1lf\n", line, results[0]->grade1in);
+        printf("%s --> %.1lf\n", line, results->A[0]->grade1in);
         
-        free(results);
+        free_array(results);
     }
     free_list(list);
-    free(array);
+    free_array(array);
 }
 
 /* =============================================================================

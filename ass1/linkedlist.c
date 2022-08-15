@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "linkedlist.h"
 #include "readcsv.h"
+#include "array.h"
 
 /*  Creates an empty linked list.
 */
@@ -153,13 +154,6 @@ void print_list(FILE *f, list_t *list) {
     }
 }
 
-void print_array(FILE *f, footpath_segment_t **A, int n) {
-    assert(A);
-    for (int i = 0; i < n; i++) {
-        print_footpath_segment(f, A[i]);
-    }
-}
-
 /* Provided a file output `f`, print the the value of `grade1in` only.
 */
 void print_grade1in(FILE *f, list_t *list) {
@@ -177,19 +171,15 @@ void print_grade1in(FILE *f, list_t *list) {
 /*  Converts linked list to a normal `node_t` array. Also indirectly returns
     the buddy variable of associated array.
 */
-footpath_segment_t **convert_to_array(list_t *list, int *n) {
+array_t *convert_to_array(list_t *list) {
     assert(list);
-    *n = list_len(list);
-    footpath_segment_t **A;
-    A = (footpath_segment_t **)malloc(sizeof(**A) * *n);
-    assert(A);
+    array_t *A = create_array();
     node_t *curr;
     curr = list->head;
-    int i = 0;
     while (curr) {
-        A[i] = curr->fp;
+        footpath_segment_t *fp = footpath_segment_cpy(curr->fp);
+        append_to_array(A, fp);
         curr = curr->next;
-        i++;
     }
     return A;
 }

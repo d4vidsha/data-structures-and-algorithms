@@ -91,21 +91,17 @@ list_t *linearsearch(double value, list_t *list) {
 }
 
 /*  Binary search through sorted array for matching `grade1in` values. 
-    `arr_n` is the buddy variable of the sorted array.
-    `res_n` is the buddy variable of the resulting array.
     Returns array of results.
 */
-footpath_segment_t **binarysearch(double val, footpath_segment_t **A, 
-                                        int *arr_n, int *res_n) {
+array_t *binarysearch(double val, array_t *A) {
     assert(A);
-    footpath_segment_t **result;
-    result = (footpath_segment_t **)malloc(sizeof(**result) * INIT_ARRAY_LEN);
+    array_t *results = create_array();
 
     // find the smallest difference
-    double diff = fabs(val - A[0]->grade1in);
+    double diff = fabs(val - A->A[0]->grade1in);
     double smallest_diff = diff;
-    for (int i = 1; i < *arr_n; i++) {
-        diff = fabs(val - A[i]->grade1in);
+    for (int i = 1; i < A->n; i++) {
+        diff = fabs(val - A->A[i]->grade1in);
         if (diff < smallest_diff) {
             smallest_diff = diff;
         } else if (diff > smallest_diff) {
@@ -119,26 +115,29 @@ footpath_segment_t **binarysearch(double val, footpath_segment_t **A,
     // conduct binary search on the smallest difference
     int lo, mid, hi;
     lo = 0;
-    hi = *arr_n;
-    for (int i = 0; i < *arr_n; i++) {
+    hi = A->n;
+    for (int i = 0; i < A->n; i++) {
         mid = (lo + hi) / 2;
 
-        diff = fabs(val - A[mid]->grade1in);
+        diff = fabs(val - A->A[mid]->grade1in);
 
         if (smallest_diff == diff) {
+            // reached section of array where value closest matches
+            // the array elements
+            footpath_segment_t *fp = footpath_segment_cpy(A->A[mid]);
+            append_to_array(results, fp);
             break;
-        } else if (val > A[mid]->grade1in) {
+        } else if (val > A->A[mid]->grade1in) {
             lo = mid + 1;
         } else {
             hi = mid - 1;
         }
     }
-    // add to list and increment buddy variable
-    (*res_n)++;
-    result[0] = A[mid];
-    return result;
+
+    return results;
 }
 
 /* =============================================================================
    Written by David Sha.
+   - Binary search inspired by https://www.geeksforgeeks.org/binary-search/
 ============================================================================= */
