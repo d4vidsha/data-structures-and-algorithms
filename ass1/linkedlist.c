@@ -31,7 +31,8 @@ list_t *create_list(node_t *head, node_t *foot) {
     return new;
 }
 
-/*  Checks if list is empty.
+/*  UNUSED FUNCTION IN IMPLEMENTATION
+    Checks if list is empty.
 */
 int is_empty_list(list_t *list) {
     assert(list);
@@ -53,7 +54,8 @@ void free_list(list_t *list) {
     free(list);
 }
 
-/*  Prepend to the list i.e. add to head of linked list.
+/*  UNUSED FUNCTION IN IMPLEMENTATION
+    Prepend to the list i.e. add to head of linked list.
 */
 list_t *prepend(list_t *list, footpath_segment_t *fp) {
     assert(list);
@@ -154,7 +156,8 @@ void print_list(FILE *f, list_t *list) {
     }
 }
 
-/* Provided a file output `f`, print the the value of `grade1in` only.
+/*  UNUSED FUNCTION IN IMPLEMENTATION
+    Provided a file output `f`, print the the value of `grade1in` only.
 */
 void print_grade1in(FILE *f, list_t *list) {
     assert(list);
@@ -181,6 +184,7 @@ array_t *convert_to_array(list_t *list) {
         append_to_array(A, fp);
         curr = curr->next;
     }
+    shrink_array(A);
     return A;
 }
 

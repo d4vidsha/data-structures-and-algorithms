@@ -33,7 +33,8 @@ list_t *find_addresses(char *address, list_t *list) {
     return new;
 }
 
-/*  Linear search through sorted linked list and stopping when search value
+/*  UNUSED FUNCTION IN IMPLEMENTATION
+    Linear search through sorted linked list and stopping when search value
     difference starts to grow bigger. The difference `diff` will be decreasing 
     up until a point before it increases again.
 */
@@ -91,7 +92,10 @@ list_t *linearsearch(double value, list_t *list) {
 }
 
 /*  Binary search through sorted array for matching `grade1in` values. 
-    Returns array of results.
+    Returns array of results. Note that this implementation is not
+    complete as there is currently no way to return multiple results.
+    However, `linearsearch` function achieves returning multiple results
+    and should be used instead if that is what you want.
 */
 array_t *binarysearch(double val, array_t *A) {
     assert(A);

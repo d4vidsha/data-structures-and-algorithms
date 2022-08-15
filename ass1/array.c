@@ -10,6 +10,8 @@
 #include "array.h"
 #include "readcsv.h"
 
+/*  Create an empty array.
+*/
 array_t *create_array() {
     array_t *new;
     new = (array_t *)malloc(sizeof(*new));
@@ -22,6 +24,8 @@ array_t *create_array() {
     return new;
 }
 
+/*  Free the array.
+*/
 void free_array(array_t *A) {
     for (int i = 0; i < A->n; i++) {
         free(A->A[i]);
@@ -30,6 +34,8 @@ void free_array(array_t *A) {
     free(A);
 }
 
+/*  Shrink the array size to the number of elements.
+*/
 void shrink_array(array_t *A) {
     if (A->size != A->n) {
         // new size should at least be `INIT_ARRAY_SIZE`
@@ -39,6 +45,8 @@ void shrink_array(array_t *A) {
     }
 }
 
+/*  Ensure that there is enough space for inserting into the array.
+*/
 void ensure_insert_to_array(array_t *A) {
     if (A->n == A->size) {
         A->size *= 2;
@@ -47,12 +55,16 @@ void ensure_insert_to_array(array_t *A) {
     }
 }
 
+/*  Append footpath segment to array.
+*/
 void append_to_array(array_t *A, footpath_segment_t *fp) {
     ensure_insert_to_array(A);
     A->A[A->n] = fp;
     (A->n)++;
 }
 
+/*  Print the array.
+*/
 void print_array(FILE *f, array_t *A) {
     assert(A);
     for (int i = 0; i < A->n; i++) {

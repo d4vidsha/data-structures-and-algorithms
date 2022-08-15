@@ -61,8 +61,9 @@ void stage2(FILE *in, FILE *out) {
     // sort linked list from lowest to highest by the given column index
     quicksort(list, COLUMN_INDEX_GRADE1IN);
 
-    // convert linked list to array
+    // convert linked list to array and remove linked list
     array_t *array = convert_to_array(list);
+    free_list(list);
 
     // process queries on the fly
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -85,7 +86,6 @@ void stage2(FILE *in, FILE *out) {
         
         free_array(results);
     }
-    free_list(list);
     free_array(array);
 }
 

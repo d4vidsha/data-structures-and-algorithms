@@ -131,7 +131,8 @@ double cmp_grade1in(double n, double m) {
     return n - m;
 }
 
-/*  Compare address. Order matters.
+/*  UNUSED FUNCTION IN IMPLEMENTATION
+    Compare address. Order matters.
     Return values are:
     - [ < 0] `n` is smaller than `m`
     - [== 0] `n` is equal to `m`

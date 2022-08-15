@@ -11,24 +11,38 @@
 #define _DATA_H_
 
 /* #defines ================================================================= */
+
+// readcsv.c
 #define COMMA ','
 #define DOUBLEQUOTE '"'
 #define NEWLINE '\n'
 #define NULLBYTE '\0'
-#define NOTFOUND "NOTFOUND"
 #define TRUE 1
 #define FALSE 0
 
+// stage.c
+#define NOTFOUND "NOTFOUND"
 #define NEWLINE_LEN 1            // length of newline
-#define NUM_FIELDS 19            // total number of fields/attributes
+
+// readcsv.c stage.c
 #define MAX_STR_LEN 128          // max string length
+
+// copy.c readcsv.c stage.c
 #define NULLBYTE_LEN 1           // size of nullbyte
+
+// driver.c
 #define NUM_ARGS 3               // number of arguments
 #define STAGE_ARG_POS 1          // stage argument position
 #define IN_FILENAME_ARG_POS 2    // input file argument position
 #define OUT_FILENAME_ARG_POS 3   // output file argument position
+
+// quicksort.c stage.c
 #define COLUMN_INDEX_GRADE1IN 6  // grade1in column index
+
+// quicksort.c
 #define COLUMN_INDEX_ADDRESS 1   // address column index
+
+// array.c
 #define INIT_ARRAY_SIZE 2        // initial array size
 
 /* structures =============================================================== */
