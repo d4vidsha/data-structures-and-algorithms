@@ -117,7 +117,7 @@ void build_list(FILE *f, list_t *list) {
     }
 }
 
-void print_footpath_segment(footpath_segment_t *fp) {
+void print_footpath_segment(FILE *f, footpath_segment_t *fp) {
     fprintf(f, "--> ");
     fprintf(f, "footpath_id: %d || ", fp->footpath_id);
     fprintf(f, "address: %s || ", fp->address);
@@ -148,7 +148,7 @@ void print_list(FILE *f, list_t *list) {
     node_t *curr;
     curr = list->head;
     while (curr) {
-        print_footpath_segment(curr->fp);
+        print_footpath_segment(f, curr->fp);
         curr = curr->next;
     }
 }
@@ -156,7 +156,7 @@ void print_list(FILE *f, list_t *list) {
 void print_array(FILE *f, footpath_segment_t **A, int n) {
     assert(A);
     for (int i = 0; i < n; i++) {
-        print_footpath_segment(A[i]);
+        print_footpath_segment(f, A[i]);
     }
 }
 
