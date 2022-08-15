@@ -102,8 +102,8 @@ footpath_segment_t **binarysearch(double val, footpath_segment_t **A,
     result = (footpath_segment_t **)malloc(sizeof(**result) * INIT_ARRAY_LEN);
 
     // find the smallest difference
-    int diff = fabs(val - A[0]->grade1in);
-    int smallest_diff = diff;
+    double diff = fabs(val - A[0]->grade1in);
+    double smallest_diff = diff;
     for (int i = 1; i < *arr_n; i++) {
         diff = fabs(val - A[i]->grade1in);
         if (diff < smallest_diff) {
