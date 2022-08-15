@@ -31,7 +31,9 @@ list_t *prepend(list_t *list, footpath_segment_t *fp);
 list_t *append(list_t *list, footpath_segment_t *fp);
 int list_len(list_t *list);
 void build_list(FILE *f, list_t *list);
-void print_footpath_segments(FILE *f, list_t *list);
+void print_footpath_segment(footpath_segment_t *fp);
+void print_list(FILE *f, list_t *list);
+void print_array(FILE *f, footpath_segment_t **A, int n);
 void print_grade1in(FILE *f, list_t *list);
 footpath_segment_t **convert_to_array(list_t *list);
 

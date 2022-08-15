@@ -117,35 +117,46 @@ void build_list(FILE *f, list_t *list) {
     }
 }
 
+void print_footpath_segment(footpath_segment_t *fp) {
+    fprintf(f, "--> ");
+    fprintf(f, "footpath_id: %d || ", fp->footpath_id);
+    fprintf(f, "address: %s || ", fp->address);
+    fprintf(f, "clue_sa: %s || ", fp->clue_sa);
+    fprintf(f, "asset_type: %s || ", fp->asset_type);
+    fprintf(f, "deltaz: %.2lf || ", fp->deltaz);
+    fprintf(f, "distance: %.2lf || ", fp->distance);
+    fprintf(f, "grade1in: %.1lf || ", fp->grade1in);
+    fprintf(f, "mcc_id: %d || ", fp->mcc_id);
+    fprintf(f, "mccid_int: %d || ", fp->mccid_int);
+    fprintf(f, "rlmax: %.2lf || ", fp->rlmax);
+    fprintf(f, "rlmin: %.2lf || ", fp->rlmin);
+    fprintf(f, "segside: %s || ", fp->segside);
+    fprintf(f, "statusid: %d || ", fp->statusid);
+    fprintf(f, "streetid: %d || ", fp->streetid);
+    fprintf(f, "street_group: %d || ", fp->street_group);
+    fprintf(f, "start_lat: %.8lf || ", fp->start_lat);
+    fprintf(f, "start_lon: %.8lf || ", fp->start_lon);
+    fprintf(f, "end_lat: %.8lf || ", fp->end_lat);
+    fprintf(f, "end_lon: %.8lf || ", fp->end_lon);
+    fprintf(f, "\n");
+}
+
 /* Provided a file output `f`, print the list in the specified format.
 */
-void print_footpath_segments(FILE *f, list_t *list) {
+void print_list(FILE *f, list_t *list) {
     assert(list);
     node_t *curr;
     curr = list->head;
     while (curr) {
-        fprintf(f, "--> ");
-        fprintf(f, "footpath_id: %d || ", curr->fp->footpath_id);
-        fprintf(f, "address: %s || ", curr->fp->address);
-        fprintf(f, "clue_sa: %s || ", curr->fp->clue_sa);
-        fprintf(f, "asset_type: %s || ", curr->fp->asset_type);
-        fprintf(f, "deltaz: %.2lf || ", curr->fp->deltaz);
-        fprintf(f, "distance: %.2lf || ", curr->fp->distance);
-        fprintf(f, "grade1in: %.1lf || ", curr->fp->grade1in);
-        fprintf(f, "mcc_id: %d || ", curr->fp->mcc_id);
-        fprintf(f, "mccid_int: %d || ", curr->fp->mccid_int);
-        fprintf(f, "rlmax: %.2lf || ", curr->fp->rlmax);
-        fprintf(f, "rlmin: %.2lf || ", curr->fp->rlmin);
-        fprintf(f, "segside: %s || ", curr->fp->segside);
-        fprintf(f, "statusid: %d || ", curr->fp->statusid);
-        fprintf(f, "streetid: %d || ", curr->fp->streetid);
-        fprintf(f, "street_group: %d || ", curr->fp->street_group);
-        fprintf(f, "start_lat: %.8lf || ", curr->fp->start_lat);
-        fprintf(f, "start_lon: %.8lf || ", curr->fp->start_lon);
-        fprintf(f, "end_lat: %.8lf || ", curr->fp->end_lat);
-        fprintf(f, "end_lon: %.8lf || ", curr->fp->end_lon);
-        fprintf(f, "\n");
+        print_footpath_segment(curr->fp);
         curr = curr->next;
+    }
+}
+
+void print_array(FILE *f, footpath_segment_t **A, int n) {
+    assert(A);
+    for (int i = 0; i < n; i++) {
+        print_footpath_segment(A[i]);
     }
 }
 
