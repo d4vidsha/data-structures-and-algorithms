@@ -19,15 +19,27 @@ int main(int argc, char *argv[]) {
     head->data = 5;
 
     // FILL IN THE REST FOR NODES 10, 20, 1
-    // int arr[] = {10, 20, 1};
-    // int n = 3;
-    // for (int i = 0; i < n; i++) {
-    struct node *node;
-    node = (struct node *)malloc(sizeof(*head));
-    assert(node);
-    node->data = 10;
-    head->next = node;
-    
+    int arr[] = {10, 20, 1};
+    int n = 3;
+    struct node *prev = head;
+    for (int i = 0; i < n; i++) {
+        struct node *node;
+        node = (struct node *)malloc(sizeof(*node));
+        assert(node);
+        node->data = arr[i];
+        node->next = NULL;
+        prev->next = node;
+        prev = node;
+    }
+
+    // print data and free
+    struct node *curr = head;
+    while (curr) {
+        printf("%d\n", curr->data);
+        prev = curr;
+        curr = curr->next;
+        free(prev);
+    }
 
     return 0;
 }
