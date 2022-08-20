@@ -112,7 +112,16 @@ void listAppend(list_t *list, void *data) {
 	assert(new);
 	new->data = data;
 	// FILL IN
-	error("listAppend");
+	// error("listAppend");
+	new->next = NULL;
+	if (list->tail == NULL) {
+		list->head = list->tail = new;
+		list->n = 1;
+	} else {
+		list->tail->next = new;
+		list->tail = new;
+		(list->n)++;
+	}
 }
 
 
@@ -198,7 +207,17 @@ void *listMax(list_t *list, int (*compar) (const void *, const void *)){
 void *listSearch(list_t *list, int key, int *comps, int (*dataGetKey)(void *)) {
 	void *soln = NULL;
 	/* FILL IN */
-	error("listSearch");
+	// error("listSearch");
+	node_t *curr = list->head;
+	*comps = 0;
+	while (curr) {
+		(*comps)++;
+		if (key == dataGetKey(curr->data)) {
+			soln = curr;
+			break;
+		}
+		curr = curr->next;
+	}
 	return soln;
 }
 
