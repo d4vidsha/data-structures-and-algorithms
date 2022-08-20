@@ -14,7 +14,7 @@
 // So here we use "stackADT_t" instead
 
 // FILL IN: define the data type stackADT_t here: ONE simple line
-
+typedef list_t stackADT_t;
 
 // the rest of this file should not be changed
 stackADT_t *stackCreate(); 

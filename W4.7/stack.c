@@ -9,22 +9,27 @@
 
 stackADT_t *stackCreate() {
 	// FILL IN just one simple line here
+    return listCreate();
 } 
 
 void push(stackADT_t *s, int x) {
 	// FILL IN just one simple line here
+    return listPrepend(s, x);
 }
 
 int pop(stackADT_t *s) {
 	// FILL IN just one simple line here
+    return listDeleteHead(s);
 } 
 
 void stackFree(stackADT_t *s) {
 	// FILL IN just one simple line here
+    listFree(s);
 }
 
 int stackCount(stackADT_t *s) {
 	// FILL IN just one simple line here
+    return listCount(s);
 }
 
 
