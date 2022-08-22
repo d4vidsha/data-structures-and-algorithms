@@ -17,12 +17,19 @@ struct bst {
 */
 struct bst *bstInsert(struct bst *parent, int data){
     /* Write this function. */
-    
-    
-    
-    
-    
-    
+    if (parent == NULL) {
+        struct bst *new;
+        new = (struct bst *)malloc(sizeof(*new));
+        new->data = data;
+        new->left = new->right = NULL;
+        parent = new;
+    } else if (parent->data > data) {
+        parent->left = bstInsert(parent->left, data);
+    } else if (parent->data <= data) {
+        parent->right = bstInsert(parent->right, data);
+    }
+
+    return parent;
 }
 
 void freeTree(struct bst *parent){
@@ -30,6 +37,9 @@ void freeTree(struct bst *parent){
         return;
     }
     /* Fill in function according to function description. */
+    freeTree(parent->left);
+    freeTree(parent->right);
+    free(parent);
 }
 
 /* Draws the tree. You will need to change this if your bst uses different names. */
