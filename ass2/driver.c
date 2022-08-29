@@ -24,16 +24,19 @@ int main(int argc, char *argv[]) {
     }
     int stage = atoi(argv[STAGE_ARG_POS]);
 
-    // for the given stage, check if the number of arguments are consistent
-    // with the stage
+    // for the given stage, check if th stage is valid and the number of 
+    // arguments are consistent with the stage
     if (stage == 1 || stage == 2) {
         if (!num_args_match(NUM_ARGS_1, argc)) {
             exit_failure_with_man();
         };
-    } else (stage == 3 || stage == 4) {
+    } else if (stage == 3 || stage == 4) {
         if (!num_args_match(NUM_ARGS_2, argc)) {
             exit_failure_with_man();
         }
+    } else {
+        fprintf(stderr, "ERROR: invalid stage");
+        exit(EXIT_FAILURE);
     }
 
     // store all required arguments for all stages
@@ -46,7 +49,7 @@ int main(int argc, char *argv[]) {
     FILE *out = fopen(out_file, "w");
     assert(out);
 
-    // choose which stage to run
+    // choose which stage to run, knowing that there can only be four stages
     if (stage == 1) {
         stage1(in, out);
     } else if (stage == 2) {
@@ -63,9 +66,6 @@ int main(int argc, char *argv[]) {
         } else {
             stage4(in, out, );
         }
-    } else {
-        fprintf(stderr, "ERROR: invalid stage");
-        exit(EXIT_FAILURE);
     }
     
     // free and close everything
