@@ -18,7 +18,7 @@ struct hashTable {
 void insertLP(struct hashTable *table, int key, int value){
     /* Write this. NOTE: if you have already written insertDH,
         this is one line of code. */
-        
+    insertDH(table, key, value, 1);
 }
 
 void insertDH5(struct hashTable *table, int key, int value){
@@ -30,10 +30,23 @@ void insertDH5(struct hashTable *table, int key, int value){
 
 void insertDH(struct hashTable *table, int key, int value, int hash2key){
     /* Write this. */
-    
-    
-    
-    
+    /* when table is completely full, do nothing */
+    if (table->used >= table->size) {
+        return;
+    }
+
+    if ((table->data)[key] == SENTINEL) {
+        /* when a spot is free, add to table */
+        (table->data)[key] = value;
+        table->used++;
+    } else {
+        /* when a spot is not free, check if next is free and add if free */
+        if (key + hash2key <= table->size) {
+            insertDH(table, key + hash2key, value, hash2key);
+        } else {
+            return;
+        }
+    }
 }
 
 struct hashTable *create(int tableSize, int (*hash)(int), 
