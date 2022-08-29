@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
     int stage = atoi(argv[STAGE_ARG_POS]);
 
     // for the given stage, check if the number of arguments are consistent
+    // with the stage
     if (stage == 1 || stage == 2) {
         if (!num_args_match(NUM_ARGS_1, argc)) {
             exit_failure_with_man();
@@ -50,13 +51,18 @@ int main(int argc, char *argv[]) {
         stage1(in, out);
     } else if (stage == 2) {
         stage2(in, out);
-    } else if (stage == 3) {
+    } else if (stage == 3 || stage == 4) {
+        // store all extra arguments specific to stage 3 and 4
         long double xbl, ybl, xtr, ytr;
         xbl = strtold(argv[XBL_ARG_POS]);
         ybl = strtold(argv[YBL_ARG_POS]);
         xtr = strtold(argv[XTR_ARG_POS]);
         ytr = strtold(argv[YTR_ARG_POS]);
-        stage3(in, out, );
+        if (stage == 3) {
+            stage3(in, out, );
+        } else {
+            stage4(in, out, );
+        }
     } else {
         fprintf(stderr, "ERROR: invalid stage");
         exit(EXIT_FAILURE);
