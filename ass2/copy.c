@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 1
+   Project: Assignment 2 (imported from Assignment 1)
    copy.c :
             = related all to copying between structs/strings
 ============================================================================= */

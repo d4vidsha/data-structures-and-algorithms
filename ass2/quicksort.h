@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 1
+   Project: Assignment 2 (imported from Assignment 1)
    quicksort.h :
             = all related to quicksort
 ============================================================================= */

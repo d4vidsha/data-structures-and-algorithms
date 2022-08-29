@@ -1,7 +1,7 @@
 /* =============================================================================
-   Project: Assignment 1
+   Project: Assignment 2
    driver.h :
-            = contains some functions only used in driver
+            = contains functions only used in driver
 ============================================================================= */
 #ifndef _DRIVER_H_
 #define _DRIVER_H_

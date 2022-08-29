@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 1
+   Project: Assignment 2 (altered from Assignment 1)
    driver.c :
             = the main program of the project
 ============================================================================= */

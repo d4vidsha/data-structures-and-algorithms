@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 1
+   Project: Assignment 2 (altered from Assignment 1)
    data.h :
             = includes the footpath_segment struct used over multiple files
               
