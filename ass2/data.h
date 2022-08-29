@@ -31,10 +31,16 @@
 #define NULLBYTE_LEN 1           // size of nullbyte
 
 // driver.c
-#define NUM_ARGS 3               // number of arguments
-#define STAGE_ARG_POS 1          // stage argument position
-#define IN_FILENAME_ARG_POS 2    // input file argument position
-#define OUT_FILENAME_ARG_POS 3   // output file argument position
+#define NUM_ARGS_1 3             // number of arguments for Assignment 1
+#define NUM_ARGS_2 7             // number of arguments for Assignment 2
+// the following `*_ARG_POS` are argument positions
+#define STAGE_ARG_POS 1          // stage
+#define IN_FILENAME_ARG_POS 2    // input file
+#define OUT_FILENAME_ARG_POS 3   // output file
+#define XBL_ARG_POS 4            // longitude for bottom left of root node
+#define YBL_ARG_POS 5            // latitude for bottom left of root node
+#define XTR_ARG_POS 6            // longitude for top right of root node
+#define YTR_ARG_POS 7            // latitude for top right of root node
 
 // quicksort.c stage.c
 #define COLUMN_INDEX_GRADE1IN 6  // grade1in column index
