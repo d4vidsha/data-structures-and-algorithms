@@ -91,10 +91,20 @@ void stage2(FILE *in, FILE *out) {
 
 void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
 
+    // read footpath segments to a linked list
+    list_t *list = create_empty_list();
+    skip_header_line(in);
+    build_list(in, list);
+
+    // construct quadtree
+    qtnode_t *qt = create_quadtree(list, region);
+
+
 }
 
 void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     
+
 }
 
 /* =============================================================================

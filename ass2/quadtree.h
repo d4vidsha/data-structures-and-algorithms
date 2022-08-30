@@ -35,6 +35,8 @@ struct datapoint {
 typedef struct qtnode qtnode_t;
 struct qtnode {
     rectangle2D_t *region;
+    int colour;
+    datapoint_t **datapoints;
     qtnode_t *nw;
     qtnode_t *ne;
     qtnode_t *sw;
@@ -44,6 +46,11 @@ struct qtnode {
 /* function prototypes ====================================================== */
 point2D_t *create_point(long double x, long double y);
 rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr);
+qtnode_t *create_blank_qtnode(rectangle2D_t *r);
+qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r);
+int in_rectangle(point2D_t *p, rectangle2D_t *r);
+int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2);
+qtnode_t *determine_quadrant(point2D_t *p, rectangle2D_t *r);
 
 #endif
 /* =============================================================================

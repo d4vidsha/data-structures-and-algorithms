@@ -51,6 +51,11 @@
 // array.c
 #define INIT_ARRAY_SIZE 2        // initial array size
 
+// quadtree.c
+#define WHITE NULL               // white contains  0 datapoints
+#define BLACK 1                  // black contains  1 datapoint
+#define GREY 0                   // grey  contains >1 datapoints
+
 /* structures =============================================================== */
 typedef struct footpath_segment footpath_segment_t;
 struct footpath_segment {
