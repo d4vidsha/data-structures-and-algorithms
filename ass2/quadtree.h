@@ -8,9 +8,11 @@
 
 /* #includes ================================================================ */
 #include "data.h"
+#include "linkedlist.h"
+#include "copy.h"
 
 /* structures =============================================================== */
-// point in 2D
+// point in 2D where `x` is longitude and `y` is latitude
 typedef struct point2D point2D_t;
 struct point2D {
     long double x;
@@ -28,14 +30,15 @@ struct rectangle2D {
 typedef struct datapoint datapoint_t;
 struct datapoint {
     footpath_segment_t *fp;
-    point2D_t *loc;
+    point2D_t *start;
+    point2D_t *end;
 };
 
 // quadtree node
 typedef struct qtnode qtnode_t;
 struct qtnode {
     rectangle2D_t *region;
-    int colour;
+    int *colour;
     datapoint_t **datapoints;
     qtnode_t *nw;
     qtnode_t *ne;
@@ -48,9 +51,11 @@ point2D_t *create_point(long double x, long double y);
 rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr);
 qtnode_t *create_blank_qtnode(rectangle2D_t *r);
 qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r);
+void free_quadtree(qtnode_t *root);
 int in_rectangle(point2D_t *p, rectangle2D_t *r);
 int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2);
-qtnode_t *determine_quadrant(point2D_t *p, rectangle2D_t *r);
+rectangle2D_t *determine_quadrant(point2D_t *p, rectangle2D_t *r);
+void add_point(qtnode_t *qt, datapoint_t *dp);
 
 #endif
 /* =============================================================================

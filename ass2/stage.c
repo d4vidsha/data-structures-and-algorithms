@@ -98,7 +98,7 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
 
     // construct quadtree
     qtnode_t *qt = create_quadtree(list, region);
-
+    free_quadtree(qt);
 
 }
 

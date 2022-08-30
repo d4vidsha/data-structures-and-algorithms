@@ -37,7 +37,10 @@ datapoint_t *create_datapoint(footpath_segment_t *fp) {
     datapoint_t *new;
     new = (datapoint_t *)malloc(sizeof(*new));
     assert(new);
-    fp->
+    new->fp = footpath_segment_cpy(fp);
+    new->start = create_point(fp->start_lon, fp->start_lat);
+    new->end = create_point(fp->end_lon, fp->end_lat);
+    return new;
 }
 
 /*  Given a rectangle, create a blank quadtree node. A quadtree node is blank
@@ -50,6 +53,7 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
     assert(new);
     new->region = r;
     new->colour = WHITE;
+    return new;
 }
 
 /*  Create quadtree from a provided linked list.
@@ -57,15 +61,22 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
 qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
     qtnode_t *root = create_blank_qtnode(r);
 
+    datapoint_t *dp;
     node_t *curr;
     curr = list->head;
     while (curr) {
-        curr->fp;
+        dp = create_datapoint(curr->fp);
         add_point(root, dp);
         curr = curr->next;
     }
     
     return root;
+}
+
+/*  Frees the entire quadtree from a given `root` quadtree node.
+*/
+void free_quadtree(qtnode_t *root) {
+    // NEEDS IMPLEMENTATION
 }
 
 /*  Given a point `p` and a rectangle `r`, return `1` if point is in
@@ -77,7 +88,7 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
 */
 int in_rectangle(point2D_t *p, rectangle2D_t *r) {
     return (r->bl->x <= p->x && p->x < r->tr->x) &&
-           (r->bl->y <= p->y && p->y < r->tr->y)
+           (r->bl->y <= p->y && p->y < r->tr->y);
 }
 
 /*  Given two rectangles in any order, determine whether they overlap.
@@ -109,12 +120,15 @@ int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
 /*  Given a point `p` and rectangle `r`, return the quadrant of the
     rectangle that the point lies in.
 */
-qtnode_t *determine_quadrant(point2D_t *p, rectangle2D_t *r) {
-
+rectangle2D_t *determine_quadrant(point2D_t *p, rectangle2D_t *r) {
+    // NEEDS IMPLEMENTATION
+    rectangle2D_t *result;
+    result = r;
+    return result;
 }
 
 void add_point(qtnode_t *qt, datapoint_t *dp) {
-
+    // NEEDS IMPLEMENTATION
 }
 
 /* =============================================================================
