@@ -12,6 +12,7 @@
 #include "linkedlist.h"
 #include "readcsv.h"
 #include "stage.h"
+#include "quadtree.h"
 
 /*  This main function contains both stage 1 and stage 2.
 */
@@ -57,14 +58,18 @@ int main(int argc, char *argv[]) {
     } else if (stage == 3 || stage == 4) {
         // store all extra arguments specific to stage 3 and 4
         long double xbl, ybl, xtr, ytr;
-        xbl = strtold(argv[XBL_ARG_POS]);
-        ybl = strtold(argv[YBL_ARG_POS]);
-        xtr = strtold(argv[XTR_ARG_POS]);
-        ytr = strtold(argv[YTR_ARG_POS]);
+        char *ptr;
+        xbl = strtold(argv[XBL_ARG_POS], &ptr);
+        ybl = strtold(argv[YBL_ARG_POS], &ptr);
+        xtr = strtold(argv[XTR_ARG_POS], &ptr);
+        ytr = strtold(argv[YTR_ARG_POS], &ptr);
+        point2D_t *bl = create_point(xbl, ybl);
+        point2D_t *tr = create_point(xtr, ytr);
+        rectangle2D_t *region = create_rectangle(bl, tr);
         if (stage == 3) {
-            stage3(in, out, );
+            stage3(in, out, region);
         } else {
-            stage4(in, out, );
+            stage4(in, out, region);
         }
     }
     

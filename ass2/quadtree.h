@@ -7,7 +7,7 @@
 #define _QUADTREE_H_
 
 /* #includes ================================================================ */
-
+#include "data.h"
 
 /* structures =============================================================== */
 // point in 2D
@@ -42,7 +42,8 @@ struct qtnode {
 };
 
 /* function prototypes ====================================================== */
-
+point2D_t *create_point(long double x, long double y);
+rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr);
 
 #endif
 /* =============================================================================

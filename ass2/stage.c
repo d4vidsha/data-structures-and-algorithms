@@ -89,6 +89,14 @@ void stage2(FILE *in, FILE *out) {
     free_array(array);
 }
 
+void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
+
+}
+
+void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
+    
+}
+
 /* =============================================================================
    Written by David Sha.
    - Read line-by-line from stdin: https://stackoverflow.com/a/9206332/15444163
