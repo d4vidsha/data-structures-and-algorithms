@@ -74,17 +74,21 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
     assert(new);
     new->region = r;
     new->colour = WHITE;
-    new->quadrants = enum_quadrants();
+    new->datapoint = NULL;                                                      // is this necessary?
+    new->quadrants = NULL;
     return new;
 }
 
-/*  Enumerate quadrants by instantiating four blank quadtree nodes.
+/*  Enumerate quadrants by instantiating `MAX_CHILD_QTNODES` blank 
+    quadtree nodes.
 */
-qtnode_t **enum_quadrants() {
+qtnode_t **enum_quadrants(rectangle2D_t *r) {
     qtnode_t *A[MAX_CHILD_QTNODES];
+    rectangle2D_t **quadrant_rectangles = partition_rectangle(r);
     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-        A[i] = create_blank_qtnode();
+        A[i] = create_blank_qtnode(quadrant_rectangles[i]);
     }
+    return A;
 }
 
 /*  Create quadtree from a provided linked list.
@@ -228,8 +232,57 @@ point2D_t *determine_midpoint(rectangle2D_t *r) {
 }
 
 
-void add_point(qtnode_t *qt, datapoint_t *dp) {
-    // NEEDS IMPLEMENTATION
+void add_point(qtnode_t *node, datapoint_t *dp) {
+    // ensure that colours are valid
+    if (!is_valid_colour(node->colour)) {
+        fprintf(stderr, "ERROR: quadtree node is not a valid colour\n")
+        exit(EXIT_FAILURE);
+    }
+    
+    point2D_t *p = dp->start;
+
+    // if node is blank and point in rectangle, merge datapoint to node
+    if (node->colour == WHITE) {
+        if (in_rectangle(p, node->region)) {
+            attach_datapoint_to_qtnode(dp, node);
+        }
+    } else if (node->colour == BLACK) {
+        // if node is filled, split node and attach existing datapoint to
+        // correct quadrant
+        node->quadrants = enum_quadrants(node->region);
+        int quadrant = determine_quadrant(node->datapoint->start, node->region);
+        attach_datapoint_to_qtnode(node->datapoint, node->quadrants[quadrant]);
+        node->datapoint = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
+        node->colour = GREY;
+    }
+
+    if (node->colour == GREY) {
+        // if node is an internal node, traverse further down the quadtree
+        int quadrant = determine_quadrant(p, node->r);
+        add_point(node->quadrants[quadrant], dp);
+    }
+}
+
+void attach_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
+    if (node->colour == WHITE) {
+        node->datapoint = dp;
+        node->colour = BLACK;
+    } else if (node->colour == BLACK) {
+        fprintf(stderr, "ERROR: cannot attach datapoint to qtnode "
+                        "as the node is already filled");
+        exit(EXIT_FAILURE);
+    } else if (node->colour == GREY) {
+        fprintf(stderr, "ERROR: cannot attach datapoint to qtnode "
+                        "as the node is an internal node")
+        exit(EXIT_FAILURE);
+    } else {
+        fprintf(stderr, "ERROR: cannot attach datapoint to qtnode "
+                        "as the node is of an unknown colour")
+    }
+}
+
+int is_valid_colour(int colour) {
+    return colour == WHITE || colour == BLACK || colour == GREY
 }
 
 /* =============================================================================

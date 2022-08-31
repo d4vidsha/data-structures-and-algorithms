@@ -8,6 +8,7 @@
 
 /* #includes ================================================================ */
 #include "data.h"
+#include "quadtree.h"
 
 /* function prototypes ====================================================== */
 char *filename_strcpy(char *arg);
