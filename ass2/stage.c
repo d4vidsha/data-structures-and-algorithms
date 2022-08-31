@@ -90,6 +90,8 @@ void stage2(FILE *in, FILE *out) {
 }
 
 void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
+    // make copy of `region` for use later
+    rectangle2D_t *r = rectangle_cpy(region);
 
     // read footpath segments to a linked list
     list_t *list = create_empty_list();
@@ -97,9 +99,13 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
     build_list(in, list);
 
     // construct quadtree
-    qtnode_t *qt = create_quadtree(list, region);
+    qtnode_t *qt = create_quadtree(list, r);
+    
+    // free everything
     free_quadtree(qt);
 
+    // free_rectangle(r); // only necessary if not doing any quadtree stuff
+    free_list(list);
 }
 
 void stage4(FILE *in, FILE *out, rectangle2D_t *region) {

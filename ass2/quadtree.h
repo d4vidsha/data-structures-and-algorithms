@@ -37,7 +37,7 @@ struct datapoint {
 typedef struct qtnode qtnode_t;
 struct qtnode {
     rectangle2D_t *region;
-    int *colour;
+    int colour;
     datapoint_t *datapoint;
     qtnode_t **quadrants;
 };
@@ -48,10 +48,13 @@ void free_point(point2D_t *p);
 rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr);
 void free_rectangle(rectangle2D_t *r);
 void free_rectangles(rectangle2D_t **A, int n);
+datapoint_t *create_datapoint(footpath_segment_t *fp);
+void free_datapoint(datapoint_t *dp);
 qtnode_t *create_blank_qtnode(rectangle2D_t *r);
+void free_qtnode(qtnode_t *node);
 qtnode_t **enum_quadrants(rectangle2D_t *r);
 qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r);
-void free_quadtree(qtnode_t *root);
+void free_quadtree(qtnode_t *parent);
 int in_rectangle(point2D_t *p, rectangle2D_t *r);
 int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2);
 rectangle2D_t **partition_rectangle(rectangle2D_t *r);

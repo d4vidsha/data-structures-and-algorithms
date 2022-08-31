@@ -42,6 +42,18 @@ point2D_t *point_cpy(point2D_t *p) {
     return new;
 }
 
+/*  Copies a given rectangle struct to a new rectangle struct.
+*/
+rectangle2D_t *rectangle_cpy(rectangle2D_t *r) {
+    rectangle2D_t *new;
+    new = (rectangle2D_t *)malloc(sizeof(*new));
+    assert(new);
+    memcpy(new, r, sizeof(*new));
+    new->bl = point_cpy(r->bl);
+    new->tr = point_cpy(r->tr);
+    return new;
+}
+
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */

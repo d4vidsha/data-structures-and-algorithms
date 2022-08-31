@@ -66,11 +66,16 @@ int main(int argc, char *argv[]) {
         point2D_t *bl = create_point(xbl, ybl);
         point2D_t *tr = create_point(xtr, ytr);
         rectangle2D_t *region = create_rectangle(bl, tr);
+        free_point(bl);
+        free_point(tr);
         if (stage == 3) {
             stage3(in, out, region);
         } else {
             stage4(in, out, region);
         }
+        // note that `region` is free'd in the `stage3` and `stage4` functions
+        // so no need to `free_rectangle(region)`
+        free_rectangle(region);
     }
     
     // free and close everything
