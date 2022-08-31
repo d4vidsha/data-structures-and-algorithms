@@ -52,9 +52,10 @@
 #define INIT_ARRAY_SIZE 2        // initial array size
 
 // quadtree.c
-#define WHITE NULL               // white is empty node
+#define WHITE 0                  // white is empty node
 #define BLACK 1                  // black is filled node
-#define GREY 0                   // grey is internal node
+#define GREY 2                   // grey is internal node
+#define EMPTY -1                 // when used as an integer
 #define MAX_CHILD_QTNODES 4      // maximum number of child nodes of a quadtree
 
 /* structures =============================================================== */
