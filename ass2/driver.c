@@ -73,8 +73,6 @@ int main(int argc, char *argv[]) {
         } else {
             stage4(in, out, region);
         }
-        // note that `region` is free'd in the `stage3` and `stage4` functions
-        // so no need to `free_rectangle(region)`
         free_rectangle(region);
     }
     

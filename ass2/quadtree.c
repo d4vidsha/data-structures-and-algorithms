@@ -56,20 +56,19 @@ void free_rectangles(rectangle2D_t **A, int n) {
 
 /*  Create datapoint from given footpath segment `fp`.
 */
-datapoint_t *create_datapoint(footpath_segment_t *fp) {
+datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p) {
     datapoint_t *new;
     new = (datapoint_t *)malloc(sizeof(*new));
     assert(new);
     new->fp = footpath_segment_cpy(fp);
-    new->start = create_point(fp->start_lon, fp->start_lat);
-    new->end = create_point(fp->end_lon, fp->end_lat);
+    new->p = point_cpy(p);
     return new;
 }
 
 void free_datapoint(datapoint_t *dp) {
     free(dp->fp);
-    free_point(dp->start);
-    free_point(dp->end);
+    free_point(dp->p);
+    free(dp);
 }
 
 /*  Given a rectangle, create a blank quadtree node. A quadtree node is blank
@@ -89,6 +88,7 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
 
 void free_qtnode(qtnode_t *node) {
     free_rectangle(node->region);
+    free(node);
 }
 
 /*  Enumerate quadrants by instantiating `MAX_CHILD_QTNODES` blank 
@@ -111,11 +111,22 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
     qtnode_t *root = create_blank_qtnode(r);
 
     datapoint_t *dp;
+    point2D_t *fpp;
     node_t *curr;
     curr = list->head;
     while (curr) {
-        dp = create_datapoint(curr->fp);
+        printf("footpath_id: %d\n", curr->fp->footpath_id);
+
+        fpp = create_point(curr->fp->start_lon, curr->fp->start_lat);
+        dp = create_datapoint(curr->fp, fpp);
+        free_point(fpp);
         add_point(root, dp);
+
+        fpp = create_point(curr->fp->end_lon, curr->fp->end_lat);
+        dp = create_datapoint(curr->fp, fpp);
+        free_point(fpp);
+        add_point(root, dp);
+        
         curr = curr->next;
     }
     
@@ -130,9 +141,7 @@ void free_quadtree(qtnode_t *parent) {
     } else if (parent->colour == BLACK) {
         free_datapoint(parent->datapoint);
         free_qtnode(parent);
-    }
-    
-    if (parent->colour == GREY) {
+    } else if (parent->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
             free_quadtree(parent->quadrants[i]);
         }
@@ -257,7 +266,10 @@ int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
     rectangle.
 */
 point2D_t *create_midpoint(rectangle2D_t *r) {
-    return create_point((r->tr->x - r->bl->x)/2, (r->tr->y - r->bl->y)/2);
+    long double x, y;
+    x = (r->tr->x - r->bl->x)/2;
+    y = (r->tr->y - r->bl->y)/2;
+    return create_point(x, y);
 }
 
 
@@ -267,19 +279,17 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
         fprintf(stderr, "ERROR: quadtree node is not a valid colour\n");
         exit(EXIT_FAILURE);
     }
-    
-    point2D_t *p = dp->start;
 
     // if node is blank and point in rectangle, merge datapoint to node
     if (node->colour == WHITE) {
-        if (in_rectangle(p, node->region)) {
+        if (in_rectangle(dp->p, node->region)) {
             attach_datapoint_to_qtnode(dp, node);
         }
     } else if (node->colour == BLACK) {
         // if node is filled, split node and attach existing datapoint to
         // correct quadrant
         node->quadrants = enum_quadrants(node->region);
-        int quadrant = determine_quadrant(node->datapoint->start, node->region);
+        int quadrant = determine_quadrant(node->datapoint->p, node->region);
         attach_datapoint_to_qtnode(node->datapoint, node->quadrants[quadrant]);
         node->datapoint = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
         node->colour = GREY;
@@ -287,7 +297,7 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
 
     if (node->colour == GREY) {
         // if node is an internal node, traverse further down the quadtree
-        int quadrant = determine_quadrant(p, node->region);
+        int quadrant = determine_quadrant(dp->p, node->region);
         add_point(node->quadrants[quadrant], dp);
     }
 }

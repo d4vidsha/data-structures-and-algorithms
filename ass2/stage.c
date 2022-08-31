@@ -99,12 +99,26 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
     build_list(in, list);
 
     // construct quadtree
-    qtnode_t *qt = create_quadtree(list, r);
+    qtnode_t *root = create_quadtree(list, r);
     
     // free everything
-    free_quadtree(qt);
-
+    free_quadtree(root);
     // free_rectangle(r); // only necessary if not doing any quadtree stuff
+
+    // // test `determine_quadrant()`
+    // point2D_t *p, *p1, *p2;
+    // p = create_point(1.5, 0.5);
+    // p1 = create_point(0, 0);
+    // p2 = create_point(2, 2);
+    // rectangle2D_t *rect = create_rectangle(p1, p2);
+    // free_point(p1);
+    // free_point(p2);
+    // printf("determine_quadrant: %d\n", determine_quadrant(p, rect));
+    // free_point(p);
+    // free_rectangle(rect);
+
+
+
     free_list(list);
 }
 

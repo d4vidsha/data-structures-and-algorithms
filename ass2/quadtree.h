@@ -29,8 +29,7 @@ struct rectangle2D {
 typedef struct datapoint datapoint_t;
 struct datapoint {
     footpath_segment_t *fp;
-    point2D_t *start;
-    point2D_t *end;
+    point2D_t *p;
 };
 
 // quadtree node
@@ -48,7 +47,7 @@ void free_point(point2D_t *p);
 rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr);
 void free_rectangle(rectangle2D_t *r);
 void free_rectangles(rectangle2D_t **A, int n);
-datapoint_t *create_datapoint(footpath_segment_t *fp);
+datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p);
 void free_datapoint(datapoint_t *dp);
 qtnode_t *create_blank_qtnode(rectangle2D_t *r);
 void free_qtnode(qtnode_t *node);
