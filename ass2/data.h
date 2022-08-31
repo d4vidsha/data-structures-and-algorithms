@@ -55,6 +55,7 @@
 #define WHITE NULL               // white contains  0 datapoints
 #define BLACK 1                  // black contains  1 datapoint
 #define GREY 0                   // grey  contains >1 datapoints
+#define MAX_CHILD_QTNODES 4      // maximum number of child nodes of a quadtree
 
 /* structures =============================================================== */
 typedef struct footpath_segment footpath_segment_t;

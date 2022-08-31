@@ -22,13 +22,23 @@ char *filename_strcpy(char *arg) {
     return filename;
 }
 
-/*  Copies a `footpath_segment` struct to a new struct.
+/*  Copies a given `footpath_segment` struct to a new struct.
 */
 footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
     footpath_segment_t *new;
     new = (footpath_segment_t *)malloc(sizeof(*new));
     assert(new);
     memcpy(new, fp, sizeof(*new));
+    return new;
+}
+
+/* Copies a given point struct to a new point struct.
+*/
+point2D_t *point_cpy(point2D_t *p) {
+    point2D_t *new;
+    new = (point2D_t *)malloc(sizeof(*new));
+    assert(new);
+    memcpy(new, p, sizeof(*new));
     return new;
 }
 

@@ -20,15 +20,36 @@ point2D_t *create_point(long double x, long double y) {
     return new;
 }
 
-/*  Create rectangle given two points.
+void free_point(point2D_t *p) {
+    free(p);
+}
+
+/*  Create rectangle given two points. The points are copied and not
+    directly pointed to by the rectangle structure. This is done to 
+    make freeing simpler later on.
 */
 rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr) {
     rectangle2D_t *new;
     new = (rectangle2D_t *)malloc(sizeof(*new));
     assert(new);
-    new->bl = bl;
-    new->tr = tr;
+    new->bl = point_cpy(bl);
+    new->tr = point_cpy(tr);
     return new;
+}
+
+void free_rectangle(rectangle2D_t *r) {
+    free_point(r->bl);
+    free_point(r->tr);
+    free(r);
+}
+
+/*  Given an array of rectangles and its buddy variable `n`,
+    free all the rectangles.
+*/
+void free_rectangles(rectangle2D_t **A, int n) {
+    for (i = 0; i < n; i++) {
+        free_rectangle(A[i]);
+    }
 }
 
 /*  Create datapoint from given footpath segment `fp`.
@@ -53,7 +74,17 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
     assert(new);
     new->region = r;
     new->colour = WHITE;
+    new->quadrants = enum_quadrants();
     return new;
+}
+
+/*  Enumerate quadrants by instantiating four blank quadtree nodes.
+*/
+qtnode_t **enum_quadrants() {
+    qtnode_t *A[MAX_CHILD_QTNODES];
+    for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+        A[i] = create_blank_qtnode();
+    }
 }
 
 /*  Create quadtree from a provided linked list.
@@ -112,20 +143,90 @@ int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
         condition = TRUE;
     }
 
-    free(tl);
-    free(br);
+    free_point(tl);
+    free_point(br);
     return condition;
 }
 
-/*  Given a point `p` and rectangle `r`, return the quadrant of the
-    rectangle that the point lies in.
+/*  Given a rectangle `r`, return an array of length `MAX_CHILD_QTNODES`
+    containing the inner rectangle regions. Partitions equally to four 
+    rectangles.
+    
+    NOTE: This function should be altered alongside alterations to 
+    `MAX_CHILD_QTNODES`.
 */
-rectangle2D_t *determine_quadrant(point2D_t *p, rectangle2D_t *r) {
-    // NEEDS IMPLEMENTATION
-    rectangle2D_t *result;
-    result = r;
+rectangle2D_t **partition_rectangle(rectangle2D_t *r) {
+    rectangle2D_t *A[];
+
+    // find the midpoint for the rectangle
+    point2D_t *mp = determine_midpoint(r);
+
+    // create other required points, namely left, right, top and bottom of 
+    // original rectangle
+    point2D_t *left, *right, *top, *bottom;
+    left = create_point(r->bl->x, mp->y);
+    right = create_point(r->tr->x, mp->y);
+    top = create_point(mp->x, r->tr->y);
+    bottom = create_point(mp->x, r->bl->y);
+
+    // create quadrant rectangles
+    A[0] = create_rectangle(r->bl, mp);
+    A[1] = create_rectangle(left, top);
+    A[2] = create_rectangle(mp, r->tr);
+    A[3] = create_rectangle(bottom, right);
+
+    // free everything except the returning values
+    free_point(midpoint);
+    free_point(left);
+    free_point(right);
+    free_point(top);
+    free_point(bottom);
+
+    return A;
+}
+
+/*  Given a point `p` and rectangle `r`, return the quadrant of the
+    rectangle that the point lies in as an integer.
+    `0 == SW`
+    `1 == NW`
+    `2 == NE`
+    `3 == SE`
+
+    NOTE: If for any reason a point lies within two quadrants, only the 
+    first match will be returned in the order displayed above.
+*/
+int *determine_quadrant(point2D_t *p, rectangle2D_t *r) {
+    int result = NULL;
+    
+    rectangle2D_t **quadrants = partition_rectangle(r);
+
+    // check if point `p` in any of the quadrants
+    for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+        if (in_rectangle(p, quadrants[i])) {
+            result = i;
+            break;
+        }
+    }
+
+    // ensure a result was found, or else exit program
+    if (result == NULL) {
+        fprintf(stderr, "ERROR: point not in rectangle\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // free only what is malloc'd in this function
+    free_rectangles(quadrants, MAX_CHILD_QTNODES);
+
     return result;
 }
+
+/*  Given a rectangle `r`, create a new point which describes the middle of the
+    rectangle.
+*/
+point2D_t *determine_midpoint(rectangle2D_t *r) {
+    return create_point((r->tr->x - r->bl-x)/2, (r->tr->y - r->bl->y)/2);
+}
+
 
 void add_point(qtnode_t *qt, datapoint_t *dp) {
     // NEEDS IMPLEMENTATION
