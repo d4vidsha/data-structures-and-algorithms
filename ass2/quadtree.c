@@ -427,16 +427,16 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     find and return the datapoints in this range.
 */
 void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
-    if (rectangle_overlap(root->r, range) && root->colour == GREY) {
-        for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-            if (rectangle_overlap(root->quadrants[i]->r, range)) {
-                print_direction(i);
-                range_search_quadtree(res, root->quadrants[i], range);
-            }
-        }
+    if (rectangle_overlap(root->r, range)) {
+        return;
     }
 
-    if (root->colour == BLACK) {
+    if (root->colour == GREY) {
+        for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+            print_direction(i);
+            range_search_quadtree(res, root->quadrants[i], range);
+        }
+    } else if (root->colour == BLACK) {
         concat_dplls(res, root->dpll);
     }
 }
