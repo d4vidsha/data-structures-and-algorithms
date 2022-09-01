@@ -505,7 +505,7 @@ dpll_t *create_empty_dpll() {
 */
 dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot) {
     assert(head && foot);
-    list_t *new = create_empty_list();
+    dpll_t *new = create_empty_dpll();
     new->head = head;
     new->foot = foot;
     return new;
