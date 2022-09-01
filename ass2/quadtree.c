@@ -425,6 +425,23 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     }
 }
 
+/*  Given a root node of a quadtree and a `range` described by a rectangle,
+    find and return the datapoints in this range.
+*/
+void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
+    if (rectangle_overlap(root->r, range) && root->colour == GREY) {
+        for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+            if (rectangle_overlap(root->quadrants[i]->r, range)) {
+                range_search_quadtree(res, root->quadrants[i], range);
+            }
+        }
+    }
+
+    if (root->colour == BLACK) {
+        concat_dplls(res, root->dpll);
+    }
+}
+
 /*  Checks that the colour for a node is valid i.e. that it should be
     one of `WHITE`, `BLACK` or `GREY`. Returns 1 if valid, and 0 if not valid.
 */
@@ -546,6 +563,26 @@ dpll_t *dpll_append(dpll_t *list, datapoint_t *dp) {
     return list;
 }
 
+/*  Given two datapoint linked lists (a destination `dest` linked list and
+    a source `src` linked list), copy over `src` nodes into `dest`.
+    `src` is only read and not altered in any way.
+    `dest` is only written to by adding to the end the nodes from `src`.
+*/
+void concat_dplls(dpll_t *dest, dpll_t *src) {
+    // dpll_t *src_cpy = dpll_cpy(src);
+
+    // if (dest->foot == NULL) {
+    //     // nothing in `dest` list yet
+    //     dest->head = src_cpy->head;
+    //     dest->foot = src_cpy->foot;
+    // } else {
+    //     // append to `dest` list
+    //     dest->foot->next = src_cpy->head;
+    //     dest->foot = src_cpy->foot;
+    // }
+    // free(src_cpy);
+}
+
 void print_dpll(FILE *f, dpll_t *list) {
     assert(list);
     dpnode_t *curr;
@@ -565,12 +602,10 @@ void print_dpll(FILE *f, dpll_t *list) {
     - `3 == SE`
 */
 char *get_str_direction(int direction) {
-    char *directions[] = {"SW", "NW", "NE", "SE"};
-    
+    const char *directions[] = {SW, NW, NE, SE};
     char *str;
     str = (char *)malloc(sizeof(str) * 2 + NULLBYTE_LEN);
     assert(str);
-
     strcpy(str, directions[direction]);
     return str;
 }

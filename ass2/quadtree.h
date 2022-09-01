@@ -76,6 +76,7 @@ point2D_t *create_midpoint(rectangle2D_t *r);
 void add_point(qtnode_t *node, datapoint_t *dp);
 void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node);
 dpll_t *search_quadtree(qtnode_t *root, point2D_t *p);
+void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range);
 int is_valid_colour(int colour);
 void print_point(point2D_t *p, char *label);
 void print_rectangle(rectangle2D_t *r);
@@ -88,6 +89,7 @@ dpll_t *create_empty_dpll();
 dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot);
 void free_dpll(dpll_t *list);
 dpll_t *dpll_append(dpll_t *list, datapoint_t *dp);
+void concat_dplls(dpll_t *dest, dpll_t *src);
 void print_dpll(FILE *f, dpll_t *list);
 char *get_str_direction(int direction);
 

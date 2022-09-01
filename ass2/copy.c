@@ -48,9 +48,47 @@ rectangle2D_t *rectangle_cpy(rectangle2D_t *r) {
     rectangle2D_t *new;
     new = (rectangle2D_t *)malloc(sizeof(*new));
     assert(new);
-    memcpy(new, r, sizeof(*new));
+    // memcpy(new, r, sizeof(*new));
     new->bl = point_cpy(r->bl);
     new->tr = point_cpy(r->tr);
+    return new;
+}
+
+datapoint_t *datapoint_cpy(datapoint_t *dp) {
+    datapoint_t *new;
+    new = (datapoint_t *)malloc(sizeof(*new));
+    assert(new);
+    // memcpy(new, dp, sizeof(*new));
+    new->fp = footpath_segment_cpy(dp->fp);
+    new->p = point_cpy(dp->p);
+    return new;
+}
+
+dpnode_t *dpnode_cpy(dpnode_t *node) {
+    dpnode_t *new;
+    new = (dpnode_t *)malloc(sizeof(*new));
+    assert(new);
+    // memcpy(new, node, sizeof(*new));
+    new->dp = datapoint_cpy(node->dp);
+    if (node->next != NULL) {
+        new->next = dpnode_cpy(node->next);
+    } else {
+        new->next = NULL;
+    }
+    return new;
+}
+
+dpll_t *dpll_cpy(dpll_t *list) {
+    dpll_t *new;
+    new = (dpll_t *)malloc(sizeof(*new));
+    assert(new);
+    // memcpy(new, list, sizeof(*new));
+    new->head = dpnode_cpy(list->head);
+    dpnode_t *curr = new->head;
+    while (curr) {
+        curr = curr->next;
+    }
+    new->foot = curr;
     return new;
 }
 

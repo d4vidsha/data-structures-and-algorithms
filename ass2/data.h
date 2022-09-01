@@ -58,6 +58,10 @@
 #define GREY 2                   // grey is internal node
 #define EMPTY -1                 // when used as an integer
 #define MAX_CHILD_QTNODES 4      // maximum number of child nodes of a quadtree
+#define SW "SW"                  // south-west
+#define NW "NW"                  // north-west
+#define NE "NE"                  // north-east
+#define SE "SE"                  // south-east
 
 /* structures =============================================================== */
 typedef struct footpath_segment footpath_segment_t;

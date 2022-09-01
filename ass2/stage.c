@@ -108,8 +108,8 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
 
         // parse string to double
         double x, y;
-        char *ptr;
-        x = strtod(line, &ptr);
+        char *ptr = line;
+        x = strtod(ptr, &ptr);
         y = strtod(ptr, &ptr);
         point2D_t *point = create_point(x, y);
 
@@ -151,14 +151,20 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
 
         // parse string to double
         long double x, y;
-        char *ptr;
-        x = strtold(line, &ptr);
+        point2D_t *bl, *tr;
+        char *ptr = line;
+        x = strtold(ptr, &ptr);
         y = strtold(ptr, &ptr);
-        point2D_t *point = create_point(x, y);
+        bl = create_point(x, y);
+        x = strtold(ptr, &ptr);
+        y = strtold(ptr, &ptr);
+        tr = create_point(x, y);
+        rectangle2D_t *range = create_rectangle(bl, tr);
 
         // range search for all datapoints within range
         printf("%s -->", line);
-        dpll_t *results = range_search_quadtree(tree, point);
+        dpll_t *results = create_empty_dpll();
+        range_search_quadtree(results, tree, range);
 
         // print the results to `out` file
         fprintf(out, "%s\n", line);
@@ -168,7 +174,10 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
             print_dpll(out, results);
         }
 
-        free_point(point);
+        free_dpll(results);
+        free_point(bl);
+        free_point(tr);
+        free_rectangle(range);
     }
 
     // free everything
