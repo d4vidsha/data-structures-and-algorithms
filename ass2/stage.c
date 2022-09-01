@@ -120,13 +120,12 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
         // print the results to `out` file
         fprintf(out, "%s\n", line);
         if (results) {
-            quicksort_dpll(results);
+            // quicksort_dpll(results); // need to implement sorting algorithm
             print_dpll(out, results);
         }
 
         free_point(point);
     }
-
 
     // free everything
     free_quadtree(tree);
