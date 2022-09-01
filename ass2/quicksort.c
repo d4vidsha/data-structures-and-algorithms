@@ -197,7 +197,7 @@ int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
     int j = lo;
 
     while (j != hi) {
-        double cmp = cmp_column(col, j, pivot);
+        double cmp = cmp_column(col, A[j], A[pivot]);
 
         if (cmp < 0) {
             // j is less than pivot
