@@ -141,6 +141,12 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     skip_header_line(in);
     build_list(in, list);
 
+    // TESTING ARRAY SORTING
+    printf("Testing array sorting...\n");
+    array_t *array = convert_to_array(list);
+    print_array(stdout, array);
+    free_array(array);
+
     // construct quadtree from linked list
     qtnode_t *tree = create_quadtree(list, r);
 

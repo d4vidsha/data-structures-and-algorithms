@@ -166,56 +166,56 @@ array_t *convert_dpll_to_array(dpll_t *list) {
     return A;
 }
 
-void quicksort_array(array_t *A) {
-    assert(A);
-    int lo = 0;
-    int hi = A->n;
+// void quicksort_array(array_t *A) {
+//     assert(A);
+//     int lo = 0;
+//     int hi = A->n;
 
-    // there is only one element in this list, so it's sorted
-    if (lo == hi) {
-        return;
-    }
+//     // there is only one element in this list, so it's sorted
+//     if (lo == hi) {
+//         return;
+//     }
 
-    // find the pivot position
-    int pivot = partition_array(A->A, lo, hi);
+//     // find the pivot position
+//     int pivot = partition_array(A->A, lo, hi);
 
-    // quicksort upper segment
-    if (pivot != hi) {
-        quicksort_array(A);
-    }
+//     // quicksort upper segment
+//     if (pivot != hi) {
+//         quicksort_array(A);
+//     }
 
-    // quicksort lower segment
-    if (pivot != lo) {
-        quicksort_array(A);
-    }
+//     // quicksort lower segment
+//     if (pivot != lo) {
+//         quicksort_array(A);
+//     }
 
-}
+// }
 
-int partition_array(footpath_segment_t **A, int lo, int hi) {
-    int pivot = hi;
-    int i = lo;
-    int j = lo;
+// int partition_array(footpath_segment_t **A, int lo, int hi) {
+//     int pivot = hi;
+//     int i = lo;
+//     int j = lo;
 
-    while (j != hi) {
-        double cmp = cmp_footpath_id(j, pivot);
+//     while (j != hi) {
+//         double cmp = cmp_footpath_id(j, pivot);
 
-        if (cmp < 0) {
-            // j is less than pivot
-            swap_elem(A, i, j);
-            i++;
-        }
+//         if (cmp < 0) {
+//             // j is less than pivot
+//             swap_elem(A, i, j);
+//             i++;
+//         }
 
-        j++;
-    }
-    swap_elem(A, i, pivot);
-}
+//         j++;
+//     }
+//     swap_elem(A, i, pivot);
+// }
 
-void swap_elem(footpath_segment_t **A, int i, int j) {
-    footpath_segment_t *temp;
-    temp = A->fp[i];
-    A->fp[i] = A->fp[j];
-    A->fp[j] = temp;
-}
+// void swap_elem(footpath_segment_t **A, int i, int j) {
+//     footpath_segment_t *temp;
+//     temp = A[i];
+//     A[i] = A[j];
+//     A[j] = temp;
+// }
 
 /* =============================================================================
    Written by David Sha.

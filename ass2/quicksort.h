@@ -9,6 +9,7 @@
 /* #includes ================================================================ */
 #include "data.h"
 #include "linkedlist.h"
+#include "quadtree.h"
 
 /* function prototypes ====================================================== */
 void quicksort(list_t *list, int col);
@@ -23,7 +24,7 @@ int cmp_footpath_id(int n, int m);
 array_t *convert_dpll_to_array(dpll_t *list);
 void quicksort_array(array_t *A);
 int partition_array(array_t *A, int lo, int hi);
-void swap_elem(arrat_t *A, int i, int j);
+void swap_elem(footpath_segment_t **A, int i, int j);
 
 #endif
 /* =============================================================================
