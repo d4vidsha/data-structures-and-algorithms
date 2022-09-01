@@ -165,6 +165,7 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         printf("%s -->", line);
         dpll_t *results = create_empty_dpll();
         range_search_quadtree(results, tree, range);
+        printf("\n");
 
         // print the results to `out` file
         fprintf(out, "%s\n", line);

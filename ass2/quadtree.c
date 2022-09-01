@@ -405,9 +405,7 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     while (curr->colour == GREY) {
         quadrant = determine_quadrant(p, curr->r);
         curr = curr->quadrants[quadrant];
-        char *dir = get_str_direction(quadrant);
-        printf(" %s", dir);
-        free(dir);
+        print_direction(quadrant);
     }
     printf("\n");
 
@@ -432,6 +430,7 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
     if (rectangle_overlap(root->r, range) && root->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
             if (rectangle_overlap(root->quadrants[i]->r, range)) {
+                print_direction(i);
                 range_search_quadtree(res, root->quadrants[i], range);
             }
         }
@@ -440,6 +439,12 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
     if (root->colour == BLACK) {
         concat_dplls(res, root->dpll);
     }
+}
+
+void print_direction(int direction) {
+    char *str = get_str_direction(direction);
+    printf(" %s", str);
+    free(str);
 }
 
 /*  Checks that the colour for a node is valid i.e. that it should be

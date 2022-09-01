@@ -77,6 +77,7 @@ void add_point(qtnode_t *node, datapoint_t *dp);
 void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node);
 dpll_t *search_quadtree(qtnode_t *root, point2D_t *p);
 void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range);
+void print_direction(int direction);
 int is_valid_colour(int colour);
 void print_point(point2D_t *p, char *label);
 void print_rectangle(rectangle2D_t *r);
