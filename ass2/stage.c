@@ -145,6 +145,9 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     printf("Testing array sorting...\n");
     array_t *array = convert_to_array(list);
     print_array(stdout, array);
+    printf("Sorting...\n");
+    quicksort_array(COLUMN_INDEX_FPID, array, 0, array->n - 1);
+    print_array(stdout, array);
     free_array(array);
 
     // construct quadtree from linked list

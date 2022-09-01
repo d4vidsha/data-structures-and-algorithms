@@ -47,6 +47,7 @@
 
 // quicksort.c
 #define COLUMN_INDEX_ADDRESS 1   // address column index
+#define COLUMN_INDEX_FPID 2      // footpath_id column index
 
 // array.c
 #define INIT_ARRAY_SIZE 2        // initial array size

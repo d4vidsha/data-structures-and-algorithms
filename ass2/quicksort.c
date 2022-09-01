@@ -114,6 +114,8 @@ double cmp_column(int col, footpath_segment_t *n, footpath_segment_t *m) {
         cmp = cmp_grade1in(n->grade1in, m->grade1in);
     } else if (col == COLUMN_INDEX_ADDRESS) {
         cmp = cmp_address(n->address, m->address);
+    } else if (col == COLUMN_INDEX_FPID) {
+        cmp = cmp_footpath_id(n->footpath_id, m->footpath_id);
     } else {
         fprintf(stderr, "ERROR: no compare available for index %d\n", col);
         exit(EXIT_FAILURE);
@@ -166,56 +168,56 @@ array_t *convert_dpll_to_array(dpll_t *list) {
     return A;
 }
 
-// void quicksort_array(array_t *A) {
-//     assert(A);
-//     int lo = 0;
-//     int hi = A->n;
+void quicksort_array(int col, array_t *A, int lo, int hi) {
+    assert(A);
 
-//     // there is only one element in this list, so it's sorted
-//     if (lo == hi) {
-//         return;
-//     }
+    // there is only one element in this list, so it's sorted
+    if (lo == hi) {
+        return;
+    }
 
-//     // find the pivot position
-//     int pivot = partition_array(A->A, lo, hi);
+    // find the pivot position
+    int pivot = partition_array(col, A->A, lo, hi);
 
-//     // quicksort upper segment
-//     if (pivot != hi) {
-//         quicksort_array(A);
-//     }
+    // quicksort upper segment
+    if (pivot != hi) {
+        quicksort_array(col, A, pivot + 1, hi);
+    }
 
-//     // quicksort lower segment
-//     if (pivot != lo) {
-//         quicksort_array(A);
-//     }
+    // quicksort lower segment
+    if (pivot != lo) {
+        quicksort_array(col, A, lo, pivot - 1);
+    }
 
-// }
+}
 
-// int partition_array(footpath_segment_t **A, int lo, int hi) {
-//     int pivot = hi;
-//     int i = lo;
-//     int j = lo;
+int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
+    int pivot = hi;
+    int i = lo;
+    int j = lo;
 
-//     while (j != hi) {
-//         double cmp = cmp_footpath_id(j, pivot);
+    while (j != hi) {
+        double cmp = cmp_column(col, j, pivot);
 
-//         if (cmp < 0) {
-//             // j is less than pivot
-//             swap_elem(A, i, j);
-//             i++;
-//         }
+        if (cmp < 0) {
+            // j is less than pivot
+            swap_elem(A, i, j);
+            i++;
+        }
 
-//         j++;
-//     }
-//     swap_elem(A, i, pivot);
-// }
+        j++;
+    }
+    swap_elem(A, i, pivot);
+    
+    return pivot;
+}
 
-// void swap_elem(footpath_segment_t **A, int i, int j) {
-//     footpath_segment_t *temp;
-//     temp = A[i];
-//     A[i] = A[j];
-//     A[j] = temp;
-// }
+void swap_elem(footpath_segment_t **A, int i, int j) {
+    footpath_segment_t *temp;
+    temp = A[i];
+    A[i] = A[j];
+    A[j] = temp;
+}
 
 /* =============================================================================
    Written by David Sha.
