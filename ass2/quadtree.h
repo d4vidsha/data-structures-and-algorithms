@@ -62,6 +62,11 @@ point2D_t *create_midpoint(rectangle2D_t *r);
 void add_point(qtnode_t *node, datapoint_t *dp);
 void attach_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node);
 int is_valid_colour(int colour);
+void print_point(point2D_t *p, char *label);
+void print_rectangle(rectangle2D_t *r);
+void print_datapoint(datapoint_t *dp);
+void print_qtnode(qtnode_t *node);
+void print_quadrants(qtnode_t **A);
 
 #endif
 /* =============================================================================

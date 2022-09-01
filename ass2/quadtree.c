@@ -96,12 +96,13 @@ void free_qtnode(qtnode_t *node) {
 */
 qtnode_t **enum_quadrants(rectangle2D_t *r) {
     qtnode_t **A;
-    A = (qtnode_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);
+    A = (qtnode_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);                    // maybe problem
     assert(A);
     rectangle2D_t **quadrant_rectangles = partition_rectangle(r);
     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
         A[i] = create_blank_qtnode(quadrant_rectangles[i]);
     }
+    free(quadrant_rectangles);
     return A;
 }
 
@@ -197,7 +198,7 @@ int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
 */
 rectangle2D_t **partition_rectangle(rectangle2D_t *r) {
     rectangle2D_t **A;
-    A = (rectangle2D_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);
+    A = (rectangle2D_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);               // maybe problem
     assert(A);
 
     // find the midpoint for the rectangle
@@ -237,28 +238,50 @@ rectangle2D_t **partition_rectangle(rectangle2D_t *r) {
     NOTE: If for any reason a point lies within two quadrants, only the 
     first match will be returned in the order displayed above.
 */
-int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
-    int result = EMPTY;
+// int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
+//     int result = EMPTY;
     
-    rectangle2D_t **quadrants = partition_rectangle(r);
+//     rectangle2D_t **quadrants = partition_rectangle(r);
 
-    // check if point `p` in any of the quadrants
-    for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-        if (in_rectangle(p, quadrants[i])) {
-            result = i;
-            break;
-        }
-    }
+//     // check if point `p` in any of the quadrants
+//     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+//         if (in_rectangle(p, quadrants[i])) {
+//             result = i;
+//             break;
+//         }
+//     }
 
-    // ensure a result was found, or else exit program
-    if (result == EMPTY) {
+//     // ensure a result was found, or else exit program
+//     if (result == EMPTY) {
+//         fprintf(stderr, "ERROR: point not in rectangle\n");
+//         exit(EXIT_FAILURE);
+//     }
+
+//     // free only what is malloc'd in this function
+//     free_rectangles(quadrants, MAX_CHILD_QTNODES);
+
+//     return result;
+// }
+
+int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
+    int result;
+
+    point2D_t *mp = create_midpoint(r);
+
+    if (p->x <= mp->x && p->y < mp->y) {
+        result = 0;
+    } else if (p->x <= mp->x && p->y >= mp->y) {
+        result = 1;
+    } else if (p->x > mp->x && p->y >= mp->y) {
+        result = 2;
+    } else if (p->x > mp->x && p->y < mp->y) {
+        result = 3;
+    } else {
         fprintf(stderr, "ERROR: point not in rectangle\n");
         exit(EXIT_FAILURE);
     }
 
-    // free only what is malloc'd in this function
-    free_rectangles(quadrants, MAX_CHILD_QTNODES);
-
+    free_point(mp);
     return result;
 }
 
@@ -267,8 +290,8 @@ int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
 */
 point2D_t *create_midpoint(rectangle2D_t *r) {
     long double x, y;
-    x = (r->tr->x - r->bl->x)/2;
-    y = (r->tr->y - r->bl->y)/2;
+    x = r->bl->x + (r->tr->x - r->bl->x)/2;
+    y = r->bl->y + (r->tr->y - r->bl->y)/2;
     return create_point(x, y);
 }
 
@@ -284,12 +307,17 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
     if (node->colour == WHITE) {
         if (in_rectangle(dp->p, node->region)) {
             attach_datapoint_to_qtnode(dp, node);
+            printf("WHITE: Datapoint added\n");
         }
     } else if (node->colour == BLACK) {
         // if node is filled, split node and attach existing datapoint to
         // correct quadrant
         node->quadrants = enum_quadrants(node->region);
+        printf("BLACK: Creating quadrants\n");
+        print_quadrants(node->quadrants);
+        printf("\n");
         int quadrant = determine_quadrant(node->datapoint->p, node->region);
+        printf("BLACK: Moving existing datapoint to quadrant %d\n", quadrant);
         attach_datapoint_to_qtnode(node->datapoint, node->quadrants[quadrant]);
         node->datapoint = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
         node->colour = GREY;
@@ -298,6 +326,8 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
     if (node->colour == GREY) {
         // if node is an internal node, traverse further down the quadtree
         int quadrant = determine_quadrant(dp->p, node->region);
+        printf("GREY : Moving further down tree into quadrant %d\n", quadrant);
+        // exit(EXIT_FAILURE);
         add_point(node->quadrants[quadrant], dp);
     }
 }
@@ -323,6 +353,34 @@ void attach_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
 
 int is_valid_colour(int colour) {
     return colour == WHITE || colour == BLACK || colour == GREY;
+}
+
+void print_point(point2D_t *p, char *label) {
+    printf("%s: (%Lf, %Lf)\n", label, p->x, p->y);
+}
+
+void print_rectangle(rectangle2D_t *r) {
+    print_point(r->bl, "r->bl");
+    print_point(r->tr, "r->tr");
+}
+
+void print_datapoint(datapoint_t *dp) {
+    print_footpath_segment(stdout, dp->fp);
+    print_point(dp->p, "dp->p");
+}
+
+void print_qtnode(qtnode_t *node) {
+    print_rectangle(node->region);
+    if (node->datapoint) {
+        print_datapoint(node->datapoint);
+    }
+}
+
+void print_quadrants(qtnode_t **A) {
+    for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+        printf("Quadrant %d:\n", i);
+        print_qtnode(A[i]);
+    }
 }
 
 /* =============================================================================
