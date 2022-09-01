@@ -501,6 +501,16 @@ dpll_t *create_empty_dpll() {
     return list;
 }
 
+/*  Creates a linked list from a given `head` and `foot`.
+*/
+dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot) {
+    assert(head && foot);
+    list_t *new = create_empty_list();
+    new->head = head;
+    new->foot = foot;
+    return new;
+}
+
 /*  Free the list by freeing all nodes and its contents.
 */
 void free_dpll(dpll_t *list) {
@@ -537,13 +547,7 @@ dpll_t *dpll_append(dpll_t *list, datapoint_t *dp) {
 }
 
 void print_dpll(FILE *f, dpll_t *list) {
-    
-    // don't print anything if there is no list
-    if (list == NULL) {
-        return;
-    }
-
-    // otherwise print the list
+    assert(list);
     dpnode_t *curr;
     curr = list->head;
     while (curr) {

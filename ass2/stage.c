@@ -119,7 +119,10 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
 
         // print the results to `out` file
         fprintf(out, "%s\n", line);
-        print_dpll(out, results);
+        if (results) {
+            quicksort_dpll(results);
+            print_dpll(out, results);
+        }
 
         free_point(point);
     }
