@@ -578,22 +578,10 @@ void concat_dplls(dpll_t *dest, dpll_t *src) {
     dpnode_t *curr;
     curr = src->head;
     while (curr) {
-        dpll_append(dest, curr->dp);
+        datapoint_t *dp = datapoint_cpy(curr->dp);
+        dpll_append(dest, dp);
         curr = curr->next;
     }
-    
-    // dpll_t *src_cpy = dpll_cpy(src);
-
-    // if (dest->foot == NULL) {
-    //     // nothing in `dest` list yet so make `dest` = `src_cpy`
-    //     dest->head = src_cpy->head;
-    //     dest->foot = src_cpy->foot;
-    // } else {
-    //     // append to `dest` list
-    //     dest->foot->next = src_cpy->head;
-    //     dest->foot = src_cpy->foot;
-    // }
-    // free(src_cpy);
 }
 
 void print_dpll(FILE *f, dpll_t *list) {
