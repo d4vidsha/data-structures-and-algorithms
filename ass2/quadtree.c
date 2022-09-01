@@ -177,29 +177,30 @@ int in_rectangle(point2D_t *p, rectangle2D_t *r) {
 }
 
 /*  Given two rectangles in any order, determine whether they overlap.
-    More specifically, this analyses if any vertices of `r1` are in
-    the rectangle `r2`.
+    It is easier to check if they don't overlap, hence we check whether
+    (1) one rectangle is below bottom edge of other rectangle, or
+    (2) one rectangle is on left side of left edge of other rectangle
+
     Returns `TRUE` if rectangles overlap, `FALSE` otherwise.
+    See source/inspiration at bottom of file.
 */
 int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
-    int condition = FALSE;
+    return !(no_vertical_overlap(r1, r2) || no_vertical_overlap(r2, r1) ||
+             no_horizontal_overlap(r1, r2) || no_horizontal_overlap(r2, r1));
+}
 
-    // derive the four points of `r1`
-    point2D_t *bl, *tr, *tl, *br;
-    bl = r1->bl;
-    tr = r1->tr;
-    tl = create_point(bl->x, tr->y);
-    br = create_point(tr->x, bl->y);
+/*  Given two rectangles `r1` and `r2`, if the bottom side of `r1` is
+    greater than the top side of `r2`, return `1`. Otherwise, return `0`.
+*/
+int no_vertical_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
+    return r1->bl->y >= r2->tr->y;
+}
 
-    // check if any of those points in `r2`
-    if (in_rectangle(bl, r2) || in_rectangle(tr, r2) ||
-        in_rectangle(tl, r2) || in_rectangle(br, r2)) {
-        condition = TRUE;
-    }
-
-    free_point(tl);
-    free_point(br);
-    return condition;
+/*  Given two rectangles `r1` and `r2`, if the left side of `r1` is greater
+    the right side of `r2`, return `1`. Otherwise, return `0`.
+*/
+int no_horizontal_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
+    return r1->bl->x >= r2->tr->x;
 }
 
 /*  Given a rectangle `r`, return an array of length `MAX_CHILD_QTNODES`
@@ -427,6 +428,8 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     find and return the datapoints in this range.
 */
 void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
+    // printf("\n");
+    // print_rectangle(root->r);
     // if (!rectangle_overlap(root->r, range)) {
     //     printf("DROP: Range does not intersect with the given root.\n");
     //     return;
@@ -654,4 +657,6 @@ char *get_str_direction(int direction) {
 
 /* =============================================================================
    Written by David Sha.
+   - Rectangle overlap logic inspired by
+        https://www.geeksforgeeks.org/find-two-rectangles-overlap/
 ============================================================================= */

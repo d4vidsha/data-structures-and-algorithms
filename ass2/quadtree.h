@@ -70,6 +70,8 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r);
 void free_quadtree(qtnode_t *parent);
 int in_rectangle(point2D_t *p, rectangle2D_t *r);
 int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2);
+int no_vertical_overlap(rectangle2D_t *r1, rectangle2D_t *r2);
+int no_horizontal_overlap(rectangle2D_t *r1, rectangle2D_t *r2);
 rectangle2D_t **partition_rectangle(rectangle2D_t *r);
 int determine_quadrant(point2D_t *p, rectangle2D_t *r);
 point2D_t *create_midpoint(rectangle2D_t *r);
