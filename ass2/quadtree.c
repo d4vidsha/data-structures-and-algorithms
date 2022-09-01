@@ -427,21 +427,39 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     find and return the datapoints in this range.
 */
 void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
+    // if (!rectangle_overlap(root->r, range)) {
+    //     printf("DROP: Range does not intersect with the given root.\n");
+    //     return;
+    // }
+
     if (root->colour == WHITE) {
+        // printf("WHITE: Doing nothing.\n");
         return;
     } else if (root->colour == BLACK) {
+        // printf("BLACK: Adding datapoints from a qtnode.\n");
         dpnode_t *curr = root->dpll->head;
         while (curr) {
             if (in_rectangle(curr->dp->p, range)) {
                 datapoint_t *dp = datapoint_cpy(curr->dp);
                 dpll_append(res, dp);
+                // printf("BLACK: Added datapoint.\n");
+            } else {
+                // printf("BLACK: Did not add datapoint as not in range.\n");
             }
             curr = curr->next;
         }
+        // printf("BLACK: No more datapoints in qtnode.\n");
     } else if (root->colour == GREY) {
+        // printf("GREY: Scanning through child nodes.\n");
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-            if (rectangle_overlap(root->quadrants[i]->r, range)) {
+            if (rectangle_overlap(root->quadrants[i]->r, range) 
+                    && root->quadrants[i]->colour != WHITE) {
+                // printf("GREY: Rectangle overlap for quadrant %d.\n", i);
+                print_direction(i);
+                // printf("\n");
                 range_search_quadtree(res, root->quadrants[i], range);
+            } else {
+                // printf("GREY: No rectangle overlap for quadrant %d.\n", i);
             }
         }
     } else {
