@@ -104,7 +104,7 @@ void free_qtnode(qtnode_t *node) {
 */
 qtnode_t **enum_quadrants(rectangle2D_t *r) {
     qtnode_t **A;
-    A = (qtnode_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);                    // maybe problem
+    A = (qtnode_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);
     assert(A);
     rectangle2D_t **quadrant_rectangles = partition_rectangle(r);
     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
@@ -211,7 +211,7 @@ int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
 */
 rectangle2D_t **partition_rectangle(rectangle2D_t *r) {
     rectangle2D_t **A;
-    A = (rectangle2D_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);               // maybe problem
+    A = (rectangle2D_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);
     assert(A);
 
     // find the midpoint for the rectangle
@@ -574,6 +574,14 @@ dpll_t *dpll_append(dpll_t *list, datapoint_t *dp) {
     `dest` is only written to by adding to the end the nodes from `src`.
 */
 void concat_dplls(dpll_t *dest, dpll_t *src) {
+    assert(dest && src);
+    dpnode_t *curr;
+    curr = src->head;
+    while (curr) {
+        dpll_append(dest, curr->dp);
+        curr = curr->next;
+    }
+    
     // dpll_t *src_cpy = dpll_cpy(src);
 
     // if (dest->foot == NULL) {
