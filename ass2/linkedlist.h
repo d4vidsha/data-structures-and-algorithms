@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 2 (imported from Assignment 1)
    linkedlist.h :
-            = all related to linked lists
+            = all related to linked lists for the `footpath_segment_t` datatype
 ============================================================================= */
 #ifndef _LINKEDLIST_H_
 #define _LINKEDLIST_H_

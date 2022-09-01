@@ -85,9 +85,9 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
     qtnode_t *new;
     new = (qtnode_t *)malloc(sizeof(*new));
     assert(new);
-    new->region = r;
+    new->r = r;
     new->colour = WHITE;
-    new->datapoint = NULL;                                                      // is this necessary?
+    new->dp = NULL;                                                      // is this necessary?
     new->quadrants = NULL;
     return new;
 }
@@ -148,7 +148,7 @@ void free_quadtree(qtnode_t *parent) {
     if (parent->colour == WHITE) {
         free_qtnode(parent);
     } else if (parent->colour == BLACK) {
-        free_datapoint(parent->datapoint);
+        free_datapoint(parent->dp);
         free_qtnode(parent);
     } else if (parent->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {

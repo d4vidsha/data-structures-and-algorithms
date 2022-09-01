@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 2 (imported from Assignment 1)
    linkedlist.c :
-            = all related to linked lists
+            = all related to linked lists for the `footpath_segment_t` datatype
 ============================================================================= */
 #include <stdio.h>
 #include <stdlib.h>
