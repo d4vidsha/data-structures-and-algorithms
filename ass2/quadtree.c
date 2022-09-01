@@ -21,6 +21,8 @@ point2D_t *create_point(long double x, long double y) {
     return new;
 }
 
+/*  Frees the point.
+*/
 void free_point(point2D_t *p) {
     free(p);
 }
@@ -38,6 +40,8 @@ rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr) {
     return new;
 }
 
+/*  Frees the rectangle and it's points.
+*/
 void free_rectangle(rectangle2D_t *r) {
     free_point(r->bl);
     free_point(r->tr);
@@ -65,6 +69,8 @@ datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p) {
     return new;
 }
 
+/*  Frees the datapoint, `fp` data, and `p` point.
+*/
 void free_datapoint(datapoint_t *dp) {
     free(dp->fp);
     free_point(dp->p);
@@ -86,6 +92,8 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
     return new;
 }
 
+/*  Frees the node and the associated rectangle region.
+*/
 void free_qtnode(qtnode_t *node) {
     free_rectangle(node->region);
     free(node);
@@ -238,52 +246,57 @@ rectangle2D_t **partition_rectangle(rectangle2D_t *r) {
     NOTE: If for any reason a point lies within two quadrants, only the 
     first match will be returned in the order displayed above.
 */
-// int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
-//     int result = EMPTY;
-    
-//     rectangle2D_t **quadrants = partition_rectangle(r);
-
-//     // check if point `p` in any of the quadrants
-//     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-//         if (in_rectangle(p, quadrants[i])) {
-//             result = i;
-//             break;
-//         }
-//     }
-
-//     // ensure a result was found, or else exit program
-//     if (result == EMPTY) {
-//         fprintf(stderr, "ERROR: point not in rectangle\n");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     // free only what is malloc'd in this function
-//     free_rectangles(quadrants, MAX_CHILD_QTNODES);
-
-//     return result;
-// }
-
 int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
-    int result;
+    int result = EMPTY;
 
-    point2D_t *mp = create_midpoint(r);
+    if (is_rectangle_limit(r)) {
+        fprintf(stderr, "ERROR: reached rectangle limit\n");
+        exit(EXIT_FAILURE);
+    }
 
-    if (p->x <= mp->x && p->y < mp->y) {
-        result = 0;
-    } else if (p->x <= mp->x && p->y >= mp->y) {
-        result = 1;
-    } else if (p->x > mp->x && p->y >= mp->y) {
-        result = 2;
-    } else if (p->x > mp->x && p->y < mp->y) {
-        result = 3;
-    } else {
+    rectangle2D_t **quadrants = partition_rectangle(r);
+
+    // check if point `p` in any of the quadrants
+    for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+        if (in_rectangle(p, quadrants[i])) {
+            result = i;
+            break;
+        }
+    }
+
+    // ensure a result was found, or else exit program
+    if (result == EMPTY) {
         fprintf(stderr, "ERROR: point not in rectangle\n");
         exit(EXIT_FAILURE);
     }
 
-    free_point(mp);
+    // free only what is malloc'd in this function
+    free_rectangles(quadrants, MAX_CHILD_QTNODES);
+
     return result;
 }
+
+// int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
+//     int result;
+
+//     point2D_t *mp = create_midpoint(r);
+
+//     if (p->x <= mp->x && p->y < mp->y) {
+//         result = 0;
+//     } else if (p->x <= mp->x && p->y >= mp->y) {
+//         result = 1;
+//     } else if (p->x > mp->x && p->y >= mp->y) {
+//         result = 2;
+//     } else if (p->x > mp->x && p->y < mp->y) {
+//         result = 3;
+//     } else {
+//         fprintf(stderr, "ERROR: point not in rectangle\n");
+//         exit(EXIT_FAILURE);
+//     }
+
+//     free_point(mp);
+//     return result;
+// }
 
 /*  Given a rectangle `r`, create a new point which describes the middle of the
     rectangle.
@@ -295,7 +308,9 @@ point2D_t *create_midpoint(rectangle2D_t *r) {
     return create_point(x, y);
 }
 
-
+/*  Adds datapoint `dp` to quadtree starting from a parent `node` which could
+    be the root node of the quadtree. This function is recursively implemented.
+*/
 void add_point(qtnode_t *node, datapoint_t *dp) {
     // ensure that colours are valid
     if (!is_valid_colour(node->colour)) {
@@ -317,7 +332,7 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
         print_quadrants(node->quadrants);
         printf("\n");
         int quadrant = determine_quadrant(node->datapoint->p, node->region);
-        printf("BLACK: Moving existing datapoint to quadrant %d\n", quadrant);
+        printf("BLACK: Moving existing datapoint  to quadrant %d\n", quadrant);
         attach_datapoint_to_qtnode(node->datapoint, node->quadrants[quadrant]);
         node->datapoint = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
         node->colour = GREY;
@@ -327,48 +342,62 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
         // if node is an internal node, traverse further down the quadtree
         int quadrant = determine_quadrant(dp->p, node->region);
         printf("GREY : Moving further down tree into quadrant %d\n", quadrant);
-        // exit(EXIT_FAILURE);
         add_point(node->quadrants[quadrant], dp);
     }
 }
 
+/*  Given a datapoint `dp` and a `WHITE` coloured `node`, insert datapoint
+    into the node. If for any reason the colour of the node is not `WHITE`,
+    the function will exit the program with an error message.
+*/
 void attach_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     if (node->colour == WHITE) {
         node->datapoint = dp;
         node->colour = BLACK;
     } else if (node->colour == BLACK) {
-        fprintf(stderr, "ERROR: cannot attach datapoint to qtnode "
+        fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
                         "as the node is already filled");
         exit(EXIT_FAILURE);
     } else if (node->colour == GREY) {
-        fprintf(stderr, "ERROR: cannot attach datapoint to qtnode "
+        fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
                         "as the node is an internal node");
         exit(EXIT_FAILURE);
     } else {
-        fprintf(stderr, "ERROR: cannot attach datapoint to qtnode "
+        fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
                         "as the node is of an unknown colour");
         exit(EXIT_FAILURE);
     }
 }
 
+/*  Checks that the colour for a node is valid i.e. that it should be
+    one of `WHITE`, `BLACK` or `GREY`. Returns 1 if valid, and 0 if not valid.
+*/
 int is_valid_colour(int colour) {
     return colour == WHITE || colour == BLACK || colour == GREY;
 }
 
+/*  Prints the poin given a label/description for the point.
+*/
 void print_point(point2D_t *p, char *label) {
     printf("%s: (%Lf, %Lf)\n", label, p->x, p->y);
 }
 
+/*  Print the rectangle.
+*/
 void print_rectangle(rectangle2D_t *r) {
     print_point(r->bl, "r->bl");
     print_point(r->tr, "r->tr");
 }
 
+/*  Print the datapoint.
+*/
 void print_datapoint(datapoint_t *dp) {
     print_footpath_segment(stdout, dp->fp);
     print_point(dp->p, "dp->p");
 }
 
+/*  Print the quadtree node.
+*/
 void print_qtnode(qtnode_t *node) {
     print_rectangle(node->region);
     if (node->datapoint) {
@@ -376,11 +405,21 @@ void print_qtnode(qtnode_t *node) {
     }
 }
 
+/*  Print the quadrants of a quadtree node.
+*/
 void print_quadrants(qtnode_t **A) {
     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
         printf("Quadrant %d:\n", i);
         print_qtnode(A[i]);
     }
+}
+
+/*  A rectangle can only become so small before something unexpected happens.
+    This function checks whether the rectangle is still of a reasonable size,
+    i.e. that it does not reduce to the size of a point; no area.
+*/
+int is_rectangle_limit(rectangle2D_t *r) {
+    return r->bl->x == r->tr->x && r->bl->y == r->tr->y;
 }
 
 /* =============================================================================

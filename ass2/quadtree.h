@@ -67,6 +67,7 @@ void print_rectangle(rectangle2D_t *r);
 void print_datapoint(datapoint_t *dp);
 void print_qtnode(qtnode_t *node);
 void print_quadrants(qtnode_t **A);
+int is_rectangle_limit(rectangle2D_t *r);
 
 #endif
 /* =============================================================================
