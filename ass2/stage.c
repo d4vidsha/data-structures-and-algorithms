@@ -133,8 +133,47 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
 }
 
 void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
-    
+    // make copy of `region` for use later
+    rectangle2D_t *r = rectangle_cpy(region);
 
+    // read footpath segments to a linked list
+    list_t *list = create_empty_list();
+    skip_header_line(in);
+    build_list(in, list);
+
+    // construct quadtree from linked list
+    qtnode_t *tree = create_quadtree(list, r);
+
+    // process queries on the fly from `stdin`
+    char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0;      // removes "\n" from line
+
+        // parse string to double
+        long double x, y;
+        char *ptr;
+        x = strtold(line, &ptr);
+        y = strtold(ptr, &ptr);
+        point2D_t *point = create_point(x, y);
+
+        // range search for all datapoints within range
+        printf("%s -->", line);
+        dpll_t *results = range_search_quadtree(tree, point);
+
+        // print the results to `out` file
+        fprintf(out, "%s\n", line);
+        if (results) {
+            // quicksort_dpll(results); // need to implement sorting algorithm
+            // dedup_dpll(results); // need to implement deduplication algorithm
+            print_dpll(out, results);
+        }
+
+        free_point(point);
+    }
+
+    // free everything
+    free_quadtree(tree);
+    free_list(list);
 }
 
 /* =============================================================================
