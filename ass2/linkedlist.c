@@ -13,7 +13,7 @@
 
 /*  Creates an empty linked list.
 */
-list_t *create_empty_list(void) {
+list_t *create_empty_list() {
     list_t *list;
     list = (list_t *)malloc(sizeof(*list));
     assert(list);

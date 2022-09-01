@@ -32,12 +32,26 @@ struct datapoint {
     point2D_t *p;
 };
 
+// linked list node for storing datapoints
+typedef struct dpnode dpnode_t;
+struct dpnode {
+    datapoint_t *dp;
+    dpnode_t *next;
+};
+
+// linked list for storing datapoints
+typedef struct dpll dpll_t;
+struct dpll {
+    dpnode_t *head;
+    dpnode_t *foot;
+};
+
 // quadtree node
 typedef struct qtnode qtnode_t;
 struct qtnode {
     rectangle2D_t *r;
     int colour;
-    datapoint_t *dp;
+    dpll_t *dpll;
     qtnode_t **quadrants;
 };
 
@@ -69,6 +83,9 @@ void print_qtnode(qtnode_t *node);
 void print_quadrants(qtnode_t **A);
 int is_rectangle_limit(rectangle2D_t *r);
 int is_same_point(point2D_t *p1, point2D_t *p2);
+dpll_t *create_empty_dpll();
+void free_dpll(dpll_t *list);
+dpll_t *dpll_append(dpll_t *list, datapoint_t *dp);
 
 #endif
 /* =============================================================================

@@ -52,6 +52,7 @@
 #define INIT_ARRAY_SIZE 2        // initial array size
 
 // quadtree.c
+#define DEBUG 0                  // 1 to activate debug, 0 to deactivate
 #define WHITE 0                  // white is empty node
 #define BLACK 1                  // black is filled node
 #define GREY 2                   // grey is internal node

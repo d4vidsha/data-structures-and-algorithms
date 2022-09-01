@@ -87,7 +87,7 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
     assert(new);
     new->r = r;
     new->colour = WHITE;
-    new->dp = NULL;                                                      // is this necessary?
+    new->dpll = NULL;                                                      // is this necessary?
     new->quadrants = NULL;
     return new;
 }
@@ -124,13 +124,14 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
     node_t *curr;
     curr = list->head;
     while (curr) {
-        printf("footpath_id: %d\n", curr->fp->footpath_id);
 
+        // add start position of footpath to quadtree
         fpp = create_point(curr->fp->start_lon, curr->fp->start_lat);
         dp = create_datapoint(curr->fp, fpp);
         free_point(fpp);
         add_point(root, dp);
 
+        // add end position of footpath to quadtree
         fpp = create_point(curr->fp->end_lon, curr->fp->end_lat);
         dp = create_datapoint(curr->fp, fpp);
         free_point(fpp);
@@ -148,7 +149,7 @@ void free_quadtree(qtnode_t *parent) {
     if (parent->colour == WHITE) {
         free_qtnode(parent);
     } else if (parent->colour == BLACK) {
-        free_datapoint(parent->dp);
+        free_dpll(parent->dpll);
         free_qtnode(parent);
     } else if (parent->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
@@ -321,50 +322,63 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
     // if node is blank and point in rectangle, merge datapoint to node
     if (node->colour == WHITE) {
         if (in_rectangle(dp->p, node->r)) {
+            node->dpll = create_empty_dpll();
             add_datapoint_to_qtnode(dp, node);
-            printf("WHITE: Datapoint added\n");
+            if (DEBUG) {
+                printf("WHITE: Datapoint added\n");
+            }
         }
     } else if (node->colour == BLACK) {
-        // if node is filled
-        
         // if `dp` point is exactly the same as the filled node point,
         // append another datapoint to the node.
-        if (is_same_point(dp->p, node->dp->p)) {
+        if (is_same_point(dp->p, node->dpll->head->dp->p)) {
             add_datapoint_to_qtnode(dp, node);
-        }
+        } else {
+            // split nodes into respective quadrants
+            if (DEBUG) {
+                printf("BLACK: Creating quadrants\n");
+            }
+            node->quadrants = enum_quadrants(node->r);
 
-        // split node and attach existing datapoint to correct quadrant
-        node->quadrants = enum_quadrants(node->r);
-        printf("BLACK: Creating quadrants\n");
-        print_quadrants(node->quadrants);
-        printf("\n");
-        int quadrant = determine_quadrant(node->dp->p, node->r);
-        printf("BLACK: Moving existing datapoint  to quadrant %d\n", quadrant);
-        add_datapoint_to_qtnode(node->dp, node->quadrants[quadrant]);
-        node->dp = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
-        node->colour = GREY;
+            // move existing datapoints to correct quadrant node
+            int quadrant = determine_quadrant(node->dpll->head->dp->p, node->r);
+            if (DEBUG) {
+                printf("BLACK: Moving existing list of datapoints to "
+                       "quadrant %d\n", quadrant);
+            }
+            node->quadrants[quadrant]->dpll = node->dpll;
+            node->dpll = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
+            
+            // change colours of the two nodes edited,
+            // `WHITE` node becomes `BLACK` node and 
+            // `BLACK` node becomes `GREY` node
+            node->quadrants[quadrant]->colour = BLACK;
+            node->colour = GREY;
+        }
     }
 
     if (node->colour == GREY) {
         // if node is an internal node, traverse further down the quadtree
         int quadrant = determine_quadrant(dp->p, node->r);
-        printf("GREY : Moving further down tree into quadrant %d\n", quadrant);
+        if (DEBUG) {
+            printf("GREY : Moving further down tree into quadrant "
+                   "%d\n", quadrant);
+        }
         add_point(node->quadrants[quadrant], dp);
     }
 }
 
-/*  Given a datapoint `dp` and a `WHITE` coloured `node`, insert datapoint
-    into the node. If for any reason the colour of the node is not `WHITE`,
-    the function will exit the program with an error message.
+/*  Given a datapoint `dp` and a `WHITE` or `BLACK` coloured `node`, insert 
+    datapoint into the node. If for any reason the colour of the node is not 
+    `WHITE` or `BLACK`, the function will exit the program with an error 
+    message.
 */
 void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     if (node->colour == WHITE) {
-        node->dp = dp;
+        dpll_append(node->dpll, dp);
         node->colour = BLACK;
     } else if (node->colour == BLACK) {
-        fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
-                        "as the node is already filled");
-        exit(EXIT_FAILURE);
+        dpll_append(node->dpll, dp);
     } else if (node->colour == GREY) {
         fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
                         "as the node is an internal node");
@@ -407,8 +421,14 @@ void print_datapoint(datapoint_t *dp) {
 */
 void print_qtnode(qtnode_t *node) {
     print_rectangle(node->r);
-    if (node->dp) {
-        print_datapoint(node->dp);
+    if (node->dpll) {
+        printf("Datapoints:\n");
+        dpnode_t *curr;
+        curr = node->dpll->head;
+        while (curr) {
+            print_datapoint(curr->dp);
+            curr = curr->next;
+        }
     }
 }
 
@@ -434,6 +454,51 @@ int is_rectangle_limit(rectangle2D_t *r) {
 */
 int is_same_point(point2D_t *p1, point2D_t *p2) {
     return p1->x == p2->x && p1->y == p2->y;
+}
+
+/*  Creates an empty linked list of the datapoint type.
+*/
+dpll_t *create_empty_dpll() {
+    dpll_t *list;
+    list = (dpll_t *)malloc(sizeof(*list));
+    assert(list);
+    list->head = list->foot = NULL;
+    return list;
+}
+
+/*  Free the list by freeing all nodes and its contents.
+*/
+void free_dpll(dpll_t *list) {
+    assert(list);
+    dpnode_t *curr, *prev;
+    curr = list->head;
+    while (curr) {
+        prev = curr;
+        curr = curr->next;
+        free_datapoint(prev->dp);
+        free(prev);
+    }
+    free(list);
+}
+
+/*  Append `dp` to the datapoint `list` i.e. add to foot of linked list.
+*/
+dpll_t *dpll_append(dpll_t *list, datapoint_t *dp) {
+    assert(list);
+    assert(dp);
+    dpnode_t *new;
+    new = (dpnode_t *)malloc(sizeof(*new));
+    assert(new);
+    new->dp = dp;
+    new->next = NULL;
+    if (list->foot == NULL) {
+        /* this is the first insert into list */
+        list->head = list->foot = new;
+    } else {
+        list->foot->next = new;
+        list->foot = new;
+    }
+    return list;
 }
 
 /* =============================================================================
