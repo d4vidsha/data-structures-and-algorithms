@@ -95,7 +95,7 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
 /*  Frees the node and the associated rectangle region.
 */
 void free_qtnode(qtnode_t *node) {
-    free_rectangle(node->region);
+    free_rectangle(node->r);
     free(node);
 }
 
@@ -320,27 +320,34 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
 
     // if node is blank and point in rectangle, merge datapoint to node
     if (node->colour == WHITE) {
-        if (in_rectangle(dp->p, node->region)) {
-            attach_datapoint_to_qtnode(dp, node);
+        if (in_rectangle(dp->p, node->r)) {
+            add_datapoint_to_qtnode(dp, node);
             printf("WHITE: Datapoint added\n");
         }
     } else if (node->colour == BLACK) {
-        // if node is filled, split node and attach existing datapoint to
-        // correct quadrant
-        node->quadrants = enum_quadrants(node->region);
+        // if node is filled
+        
+        // if `dp` point is exactly the same as the filled node point,
+        // append another datapoint to the node.
+        if (is_same_point(dp->p, node->dp->p)) {
+            add_datapoint_to_qtnode(dp, node);
+        }
+
+        // split node and attach existing datapoint to correct quadrant
+        node->quadrants = enum_quadrants(node->r);
         printf("BLACK: Creating quadrants\n");
         print_quadrants(node->quadrants);
         printf("\n");
-        int quadrant = determine_quadrant(node->datapoint->p, node->region);
+        int quadrant = determine_quadrant(node->dp->p, node->r);
         printf("BLACK: Moving existing datapoint  to quadrant %d\n", quadrant);
-        attach_datapoint_to_qtnode(node->datapoint, node->quadrants[quadrant]);
-        node->datapoint = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
+        add_datapoint_to_qtnode(node->dp, node->quadrants[quadrant]);
+        node->dp = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
         node->colour = GREY;
     }
 
     if (node->colour == GREY) {
         // if node is an internal node, traverse further down the quadtree
-        int quadrant = determine_quadrant(dp->p, node->region);
+        int quadrant = determine_quadrant(dp->p, node->r);
         printf("GREY : Moving further down tree into quadrant %d\n", quadrant);
         add_point(node->quadrants[quadrant], dp);
     }
@@ -350,9 +357,9 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
     into the node. If for any reason the colour of the node is not `WHITE`,
     the function will exit the program with an error message.
 */
-void attach_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
+void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     if (node->colour == WHITE) {
-        node->datapoint = dp;
+        node->dp = dp;
         node->colour = BLACK;
     } else if (node->colour == BLACK) {
         fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
@@ -399,9 +406,9 @@ void print_datapoint(datapoint_t *dp) {
 /*  Print the quadtree node.
 */
 void print_qtnode(qtnode_t *node) {
-    print_rectangle(node->region);
-    if (node->datapoint) {
-        print_datapoint(node->datapoint);
+    print_rectangle(node->r);
+    if (node->dp) {
+        print_datapoint(node->dp);
     }
 }
 
@@ -419,7 +426,14 @@ void print_quadrants(qtnode_t **A) {
     i.e. that it does not reduce to the size of a point; no area.
 */
 int is_rectangle_limit(rectangle2D_t *r) {
-    return r->bl->x == r->tr->x && r->bl->y == r->tr->y;
+    return is_same_point(r->bl, r->tr);
+}
+
+/*  Given two points, check if they are the exact same two points.
+    Returns `1` if they are the exact same, and `0` otherwise.
+*/
+int is_same_point(point2D_t *p1, point2D_t *p2) {
+    return p1->x == p2->x && p1->y == p2->y;
 }
 
 /* =============================================================================

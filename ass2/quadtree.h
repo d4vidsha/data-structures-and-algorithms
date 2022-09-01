@@ -35,9 +35,9 @@ struct datapoint {
 // quadtree node
 typedef struct qtnode qtnode_t;
 struct qtnode {
-    rectangle2D_t *region;
+    rectangle2D_t *r;
     int colour;
-    datapoint_t *datapoint;
+    datapoint_t *dp;
     qtnode_t **quadrants;
 };
 
@@ -60,7 +60,7 @@ rectangle2D_t **partition_rectangle(rectangle2D_t *r);
 int determine_quadrant(point2D_t *p, rectangle2D_t *r);
 point2D_t *create_midpoint(rectangle2D_t *r);
 void add_point(qtnode_t *node, datapoint_t *dp);
-void attach_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node);
+void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node);
 int is_valid_colour(int colour);
 void print_point(point2D_t *p, char *label);
 void print_rectangle(rectangle2D_t *r);
@@ -68,6 +68,7 @@ void print_datapoint(datapoint_t *dp);
 void print_qtnode(qtnode_t *node);
 void print_quadrants(qtnode_t **A);
 int is_rectangle_limit(rectangle2D_t *r);
+int is_same_point(point2D_t *p1, point2D_t *p2);
 
 #endif
 /* =============================================================================
