@@ -406,7 +406,7 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
         quadrant = determine_quadrant(p, curr->r);
         curr = curr->quadrants[quadrant];
         char *dir = get_str_direction(quadrant);
-        printf("%s ", dir);
+        printf(" %s", dir);
         free(dir);
     }
     printf("\n");

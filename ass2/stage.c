@@ -114,7 +114,7 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
         point2D_t *point = create_point(x, y);
 
         // search for the point
-        printf("%s --> ", line);
+        printf("%s -->", line);
         dpll_t *results = search_quadtree(tree, point);
 
         // print the results to `out` file
