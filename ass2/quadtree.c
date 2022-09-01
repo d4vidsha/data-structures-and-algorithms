@@ -572,7 +572,7 @@ void concat_dplls(dpll_t *dest, dpll_t *src) {
     // dpll_t *src_cpy = dpll_cpy(src);
 
     // if (dest->foot == NULL) {
-    //     // nothing in `dest` list yet
+    //     // nothing in `dest` list yet so make `dest` = `src_cpy`
     //     dest->head = src_cpy->head;
     //     dest->foot = src_cpy->foot;
     // } else {
