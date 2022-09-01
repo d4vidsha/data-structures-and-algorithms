@@ -129,13 +129,17 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
         fpp = create_point(curr->fp->start_lon, curr->fp->start_lat);
         dp = create_datapoint(curr->fp, fpp);
         free_point(fpp);
-        add_point(root, dp);
+        if (in_rectangle(dp->p, root->r)) {
+            add_point(root, dp);
+        }
 
         // add end position of footpath to quadtree
         fpp = create_point(curr->fp->end_lon, curr->fp->end_lat);
         dp = create_datapoint(curr->fp, fpp);
         free_point(fpp);
-        add_point(root, dp);
+        if (in_rectangle(dp->p, root->r)) {
+            add_point(root, dp);
+        }
         
         curr = curr->next;
     }
@@ -390,6 +394,37 @@ void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     }
 }
 
+/*  Given a root node of a quadtree and a point (which should ideally lie
+    in the region of the root node), find the leaf node that contains this
+    point and return the datapoints associated with that leaf node.
+*/
+dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
+
+    qtnode_t *curr = root;
+    int quadrant;
+    while (curr->colour == GREY) {
+        quadrant = determine_quadrant(p, curr->r);
+        curr = curr->quadrants[quadrant];
+        char *dir = get_str_direction(quadrant);
+        printf("%s ", dir);
+        free(dir);
+    }
+    printf("\n");
+
+    // if `WHITE`, it will return `NULL` as specified by 
+    // `create_blank_qtnode()` and if `BLACK`, it will return
+    // the linked list of datapoints
+    if (curr->colour == WHITE) {
+        return NULL;
+    } else if (curr->colour == BLACK) {
+        return curr->dpll;
+    } else {
+        fprintf(stderr, "ERROR: while traversing quadtree, searching ended\n"
+                        "on a leaf node with an unknown colour");
+        exit(EXIT_FAILURE);
+    }
+}
+
 /*  Checks that the colour for a node is valid i.e. that it should be
     one of `WHITE`, `BLACK` or `GREY`. Returns 1 if valid, and 0 if not valid.
 */
@@ -502,13 +537,38 @@ dpll_t *dpll_append(dpll_t *list, datapoint_t *dp) {
 }
 
 void print_dpll(FILE *f, dpll_t *list) {
-    assert(list);
+    
+    // don't print anything if there is no list
+    if (list == NULL) {
+        return;
+    }
+
+    // otherwise print the list
     dpnode_t *curr;
     curr = list->head;
     while (curr) {
         print_footpath_segment(f, curr->dp->fp);
         curr = curr->next;
     }
+}
+
+/*  Given an integer between 0-3, return the direction as a string with
+    two characters.
+    Return values are:
+    - `0 == SW`
+    - `1 == NW`
+    - `2 == NE`
+    - `3 == SE`
+*/
+char *get_str_direction(int direction) {
+    char *directions[] = {"SW", "NW", "NE", "SE"};
+    
+    char *str;
+    str = (char *)malloc(sizeof(str) * 2 + NULLBYTE_LEN);
+    assert(str);
+
+    strcpy(str, directions[direction]);
+    return str;
 }
 
 /* =============================================================================
