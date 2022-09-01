@@ -24,7 +24,7 @@ void stage1(FILE *in, FILE *out) {
     skip_header_line(in);
     build_list(in, list);
 
-    // process queries on the fly
+    // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;      // removes "\n" from line
@@ -65,7 +65,7 @@ void stage2(FILE *in, FILE *out) {
     array_t *array = convert_to_array(list);
     free_list(list);
 
-    // process queries on the fly
+    // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;      // removes "\n" from line
@@ -98,27 +98,35 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
     skip_header_line(in);
     build_list(in, list);
 
-    // construct quadtree
-    qtnode_t *root = create_quadtree(list, r);
+    // construct quadtree from linked list
+    qtnode_t *tree = create_quadtree(list, r);
     
+    // process queries on the fly from `stdin`
+    char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0;      // removes "\n" from line
+
+        // parse string to double
+        double x, y;
+        char *ptr;
+        x = strtod(line, &ptr);
+        y = strtod(ptr, &ptr);
+        point = create_point(x, y);
+
+        // search for the point
+        printf("Searching for (%lf, %lf)", x, y);
+        dpll_t *results = search_quadtree(tree, point);
+
+        // print the results to `out` file
+        fprintf(out, "%s\n", line);
+        print_dpll(out, results);
+        
+        free_point(point);
+    }
+
+
     // free everything
-    free_quadtree(root);
-    // free_rectangle(r); // only necessary if not doing any quadtree stuff
-
-    // // test `determine_quadrant()`
-    // point2D_t *p, *p1, *p2;
-    // p = create_point(1.5, 0.5);
-    // p1 = create_point(0, 0);
-    // p2 = create_point(2, 2);
-    // rectangle2D_t *rect = create_rectangle(p1, p2);
-    // free_point(p1);
-    // free_point(p2);
-    // printf("determine_quadrant: %d\n", determine_quadrant(p, rect));
-    // free_point(p);
-    // free_rectangle(rect);
-
-
-
+    free_quadtree(tree);
     free_list(list);
 }
 

@@ -501,6 +501,16 @@ dpll_t *dpll_append(dpll_t *list, datapoint_t *dp) {
     return list;
 }
 
+void print_dpll(FILE *f, dpll_t *list) {
+    assert(list);
+    dpnode_t *curr;
+    curr = list->head;
+    while (curr) {
+        print_footpath_segment(f, curr->dp->fp);
+        curr = curr->next;
+    }
+}
+
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */

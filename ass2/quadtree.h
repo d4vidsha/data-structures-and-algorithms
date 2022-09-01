@@ -86,6 +86,7 @@ int is_same_point(point2D_t *p1, point2D_t *p2);
 dpll_t *create_empty_dpll();
 void free_dpll(dpll_t *list);
 dpll_t *dpll_append(dpll_t *list, datapoint_t *dp);
+void print_dpll(FILE *f, dpll_t *list);
 
 #endif
 /* =============================================================================
