@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 2 (imported from Assignment 1)
+   Project: Assignment 2 (altered from Assignment 1)
    quicksort.h :
             = all related to quicksort
 ============================================================================= */
@@ -18,6 +18,8 @@ node_t *get_prev_node(node_t *start, node_t *node);
 double cmp_column(int col, footpath_segment_t *n, footpath_segment_t *m);
 double cmp_grade1in(double n, double m);
 int cmp_address(char *n, char *m);
+int convert_dpll_to_array();
+void quicksort_dp_array();
 
 #endif
 /* =============================================================================

@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 2 (imported from Assignment 1)
+   Project: Assignment 2 (altered from Assignment 1)
    quicksort.c :
             = all related to quicksort
 ============================================================================= */
@@ -141,6 +141,8 @@ double cmp_grade1in(double n, double m) {
 int cmp_address(char *n, char *m) {
     return strcmp(n, m);
 }
+
+
 
 /* =============================================================================
    Written by David Sha.
