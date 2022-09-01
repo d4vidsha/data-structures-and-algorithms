@@ -18,8 +18,12 @@ node_t *get_prev_node(node_t *start, node_t *node);
 double cmp_column(int col, footpath_segment_t *n, footpath_segment_t *m);
 double cmp_grade1in(double n, double m);
 int cmp_address(char *n, char *m);
-int convert_dpll_to_array();
-void quicksort_dp_array();
+int cmp_footpath_id(int n, int m);
+
+array_t *convert_dpll_to_array(dpll_t *list);
+void quicksort_array(array_t *A);
+int partition_array(array_t *A, int lo, int hi);
+void swap_elem(arrat_t *A, int i, int j);
 
 #endif
 /* =============================================================================
