@@ -15,6 +15,7 @@
 #include "quicksort.h"
 #include "search.h"
 #include "array.h"
+#include "convert.h"
 
 /*  Stage 1 of project.
 */

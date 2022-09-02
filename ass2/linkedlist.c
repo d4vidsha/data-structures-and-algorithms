@@ -133,22 +133,6 @@ void build_list(FILE *f, list_t *list) {
     }
 }
 
-/*  Converts linked list to a normal `node_t` array. Also indirectly returns
-    the buddy variable of associated array.
-*/
-array_t *convert_to_array(int type, list_t *list) {
-    assert(list);
-    array_t *A = create_array();
-    node_t *curr;
-    curr = list->head;
-    while (curr) {
-        append_to_array(type, A, curr->fp);
-        curr = curr->next;
-    }
-    shrink_array(A);
-    return A;
-}
-
 /* =============================================================================
    Written by David Sha.
    - Implementation of linked list structs inspired by Artem Polyvyanyy from

@@ -159,24 +159,6 @@ int cmp_footpath_id(int n, int m) {
     return n - m;
 }
 
-/*  Create a new array from the datapoint linked list. If the `type` is
-    `HOLLOW`, only a shell of the array is created which points to the
-    original data in the linked list. If the `type` is `NOT_HOLLOW`, a
-    new array is created and the data is copied from the linked list.
-    Returns the new array.
-*/
-array_t *convert_dpll_to_array(int type, dpll_t *list) {
-    assert(list);
-    array_t *A = create_array();
-    dpnode_t *curr = list->head;
-    while (curr) {
-        append_to_array(type, A, curr->dp->fp);
-        curr = curr->next;
-    }
-    shrink_array(A);
-    return A;
-}
-
 /*  Given a column to sort by `col`, an array `A`, the start index `lo`,
     and the end index `hi`, sort the array using quicksort.
 */
@@ -240,19 +222,6 @@ void check_array_sorted(int col, array_t *A) {
             exit(EXIT_FAILURE);
         }
     }
-}
-
-/*  Given an array `A` and the type, either `HOLLOW` or `NOT_HOLLOW`,
-    convert the array to a linked list.
-*/
-list_t *convert_array_to_list(int type, array_t *A) {
-    assert(A);
-    list_t *list = create_empty_list();
-    int i;
-    for (i = 0; i < A->n; i++) {
-        list = append(type, list, A->A[i]);
-    }
-    return list;
 }
 
 /* =============================================================================

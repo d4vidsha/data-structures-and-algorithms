@@ -82,8 +82,4 @@ void print_grade1in(FILE *f, list_t *list) {
 
 /* =============================================================================
    Written by David Sha.
-   - Implementation of linked list structs inspired by Artem Polyvyanyy from
-     ass2-soln-2020.c.
-   - Implementation of linked list functions inspired by Alistair Moffat
-     from "Programming, Problem Solving, and Abstraction with C".
 ============================================================================= */
