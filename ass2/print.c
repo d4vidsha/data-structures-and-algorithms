@@ -80,6 +80,76 @@ void print_grade1in(FILE *f, list_t *list) {
     }
 }
 
+/*  Prints the poin given a label/description for the point.
+*/
+void print_point(point2D_t *p, char *label) {
+    assert(p);
+    printf("%s: (%Lf, %Lf)\n", label, p->x, p->y);
+}
+
+/*  Print the rectangle.
+*/
+void print_rectangle(rectangle2D_t *r) {
+    assert(r);
+    print_point(r->bl, "r->bl");
+    print_point(r->tr, "r->tr");
+}
+
+/*  Print the datapoint.
+*/
+void print_datapoint(datapoint_t *dp) {
+    assert(dp);
+    print_footpath_segment(stdout, dp->fp);
+    print_point(dp->p, "dp->p");
+}
+
+/*  Print the quadtree node.
+*/
+void print_qtnode(qtnode_t *node) {
+    assert(node);
+    print_rectangle(node->r);
+    if (node->dpll) {
+        printf("Datapoints:\n");
+        dpnode_t *curr;
+        curr = node->dpll->head;
+        while (curr) {
+            print_datapoint(curr->dp);
+            curr = curr->next;
+        }
+    }
+}
+
+/*  Print the quadrants of a quadtree node.
+*/
+void print_quadrants(qtnode_t **A) {
+    assert(A);
+    for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
+        printf("Quadrant %d:\n", i);
+        print_qtnode(A[i]);
+    }
+}
+
+/*  Given a file `f` and a dpll `list`, print the contents of the list
+    to the file.
+*/
+void print_dpll(FILE *f, dpll_t *list) {
+    assert(list);
+    dpnode_t *curr;
+    curr = list->head;
+    while (curr) {
+        print_footpath_segment(f, curr->dp->fp);
+        curr = curr->next;
+    }
+}
+
+/*  Given an integer direction, print the direction in words.
+*/
+void print_direction(int direction) {
+    char *str = get_str_direction(direction);
+    printf(" %s", str);
+    free(str);
+}
+
 /* =============================================================================
    Written by David Sha.
 ============================================================================= */

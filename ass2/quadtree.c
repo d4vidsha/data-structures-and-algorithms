@@ -85,6 +85,73 @@ void free_datapoint(datapoint_t *dp) {
     free(dp);
 }
 
+/*  Creates an empty linked list of the datapoint type.
+*/
+dpll_t *create_empty_dpll() {
+    dpll_t *list;
+    list = (dpll_t *)malloc(sizeof(*list));
+    assert(list);
+    list->head = list->foot = NULL;
+    return list;
+}
+
+/*  Creates a linked list from a given `head` and `foot`.
+*/
+dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot) {
+    assert(head && foot);
+    dpll_t *new = create_empty_dpll();
+    new->head = head;
+    new->foot = foot;
+    return new;
+}
+
+/*  Free the list by freeing all nodes and its contents. If the `dpll`
+    is hollow, don't free datapoints.
+*/
+void free_dpll(int type, dpll_t *list) {
+    assert(list);
+    dpnode_t *curr, *prev;
+    curr = list->head;
+    while (curr) {
+        prev = curr;
+        curr = curr->next;
+        if (type == HOLLOW) {
+            // do nothing
+        } else if (type == NOT_HOLLOW) {
+            free_datapoint(prev->dp);
+        } else {
+            exit_failure_type(type);
+        }
+        free(prev);
+    }
+    free(list);
+}
+
+/*  Append `dp` to the datapoint `list` i.e. add to foot of linked list.
+*/
+dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
+    assert(list && dp);
+    dpnode_t *new;
+    new = (dpnode_t *)malloc(sizeof(*new));
+    assert(new);
+    if (type == HOLLOW) {
+        new->dp = dp;
+    } else if (type == NOT_HOLLOW) {
+        new->dp = datapoint_cpy(dp);
+    } else {
+        exit_failure_type(type);
+    }
+    new->next = NULL;
+    if (list->foot == NULL) {
+        /* this is the first insert into list */
+        list->head = list->foot = new;
+    } else {
+        list->foot->next = new;
+        list->foot = new;
+    }
+    return list;
+}
+
 /*  Given a rectangle, create a blank quadtree node. A quadtree node is blank
     when (1) contains no datapoints and
          (2) colour is `WHITE`
@@ -464,68 +531,11 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
     }
 }
 
-/*  Given an integer direction, print the direction in words.
-*/
-void print_direction(int direction) {
-    char *str = get_str_direction(direction);
-    printf(" %s", str);
-    free(str);
-}
-
 /*  Checks that the colour for a node is valid i.e. that it should be
     one of `WHITE`, `BLACK` or `GREY`. Returns 1 if valid, and 0 if not valid.
 */
 int is_valid_colour(int colour) {
     return colour == WHITE || colour == BLACK || colour == GREY;
-}
-
-/*  Prints the poin given a label/description for the point.
-*/
-void print_point(point2D_t *p, char *label) {
-    assert(p);
-    printf("%s: (%Lf, %Lf)\n", label, p->x, p->y);
-}
-
-/*  Print the rectangle.
-*/
-void print_rectangle(rectangle2D_t *r) {
-    assert(r);
-    print_point(r->bl, "r->bl");
-    print_point(r->tr, "r->tr");
-}
-
-/*  Print the datapoint.
-*/
-void print_datapoint(datapoint_t *dp) {
-    assert(dp);
-    print_footpath_segment(stdout, dp->fp);
-    print_point(dp->p, "dp->p");
-}
-
-/*  Print the quadtree node.
-*/
-void print_qtnode(qtnode_t *node) {
-    assert(node);
-    print_rectangle(node->r);
-    if (node->dpll) {
-        printf("Datapoints:\n");
-        dpnode_t *curr;
-        curr = node->dpll->head;
-        while (curr) {
-            print_datapoint(curr->dp);
-            curr = curr->next;
-        }
-    }
-}
-
-/*  Print the quadrants of a quadtree node.
-*/
-void print_quadrants(qtnode_t **A) {
-    assert(A);
-    for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-        printf("Quadrant %d:\n", i);
-        print_qtnode(A[i]);
-    }
 }
 
 /*  A rectangle can only become so small before something unexpected happens.
@@ -543,86 +553,6 @@ int is_rectangle_limit(rectangle2D_t *r) {
 int is_same_point(point2D_t *p1, point2D_t *p2) {
     assert(p1 && p2);
     return p1->x == p2->x && p1->y == p2->y;
-}
-
-/*  Creates an empty linked list of the datapoint type.
-*/
-dpll_t *create_empty_dpll() {
-    dpll_t *list;
-    list = (dpll_t *)malloc(sizeof(*list));
-    assert(list);
-    list->head = list->foot = NULL;
-    return list;
-}
-
-/*  Creates a linked list from a given `head` and `foot`.
-*/
-dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot) {
-    assert(head && foot);
-    dpll_t *new = create_empty_dpll();
-    new->head = head;
-    new->foot = foot;
-    return new;
-}
-
-/*  Free the list by freeing all nodes and its contents. If the `dpll`
-    is hollow, don't free datapoints.
-*/
-void free_dpll(int type, dpll_t *list) {
-    assert(list);
-    dpnode_t *curr, *prev;
-    curr = list->head;
-    while (curr) {
-        prev = curr;
-        curr = curr->next;
-        if (type == HOLLOW) {
-            // do nothing
-        } else if (type == NOT_HOLLOW) {
-            free_datapoint(prev->dp);
-        } else {
-            exit_failure_type(type);
-        }
-        free(prev);
-    }
-    free(list);
-}
-
-/*  Append `dp` to the datapoint `list` i.e. add to foot of linked list.
-*/
-dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
-    assert(list && dp);
-    dpnode_t *new;
-    new = (dpnode_t *)malloc(sizeof(*new));
-    assert(new);
-    if (type == HOLLOW) {
-        new->dp = dp;
-    } else if (type == NOT_HOLLOW) {
-        new->dp = datapoint_cpy(dp);
-    } else {
-        exit_failure_type(type);
-    }
-    new->next = NULL;
-    if (list->foot == NULL) {
-        /* this is the first insert into list */
-        list->head = list->foot = new;
-    } else {
-        list->foot->next = new;
-        list->foot = new;
-    }
-    return list;
-}
-
-/*  Given a file `f` and a dpll `list`, print the contents of the list
-    to the file.
-*/
-void print_dpll(FILE *f, dpll_t *list) {
-    assert(list);
-    dpnode_t *curr;
-    curr = list->head;
-    while (curr) {
-        print_footpath_segment(f, curr->dp->fp);
-        curr = curr->next;
-    }
 }
 
 /*  Given an integer between 0-3, return the direction as a string with
