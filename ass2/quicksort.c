@@ -226,6 +226,27 @@ list_t *convert_array_to_list(int type, array_t *A) {
     return list;
 }
 
+/*  Given a list, a node to remove `curr` and a node to point to `prev`,
+    remove `curr` from the list.
+*/
+void remove_node(int type, list_t *list, node_t *prev, node_t *curr) {
+    assert(list);
+    assert(prev);
+    assert(curr);
+    if (curr->next == NULL) {
+        list->foot = prev;
+    }
+    prev->next = curr->next;
+    if (type == HOLLOW) {
+        // do nothing
+    } else if (type == NOT_HOLLOW) {
+        free(curr->fp);
+    } else {
+        exit_failure_type(type);
+    }
+    free(curr);
+}
+
 /* =============================================================================
    Written by David Sha.
    - Implementation of quicksort inspired by;

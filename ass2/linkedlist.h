@@ -37,6 +37,7 @@ void print_list(FILE *f, list_t *list);
 void print_array(FILE *f, array_t *A);
 void print_grade1in(FILE *f, list_t *list);
 array_t *convert_to_array(int type, list_t *list);
+void remove_node(int type, list_t *list, node_t *prev, node_t *curr);
 
 #endif
 /* =============================================================================
