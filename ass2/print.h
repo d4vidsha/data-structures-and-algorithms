@@ -23,6 +23,7 @@ void print_qtnode(qtnode_t *node);
 void print_quadrants(qtnode_t **A);
 void print_dpll(FILE *f, dpll_t *list);
 void print_direction(int direction);
+void print_man(FILE *f);
 
 #endif
 /* =============================================================================

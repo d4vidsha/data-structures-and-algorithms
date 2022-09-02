@@ -13,6 +13,7 @@
 #include "readcsv.h"
 #include "stage.h"
 #include "quadtree.h"
+#include "print.h"
 
 /*  This main function contains both stage 1 and stage 2.
 */
@@ -100,21 +101,6 @@ int main(int argc, char *argv[]) {
     fclose(out);
 
     return EXIT_SUCCESS;
-}
-
-/*  Prints the manual which contains usage examples to a file `f`. `f` is used
-    mainly for `stderr`.
-*/
-void print_man(FILE *f) {
-    fprintf(f,
-        "USAGE:\n"
-        "Argument examples for stages 1-4\n"
-        " - 1 dataset.csv output.txt\n"
-        " - 2 dataset.csv output.txt\n"
-        " - 3 dataset.csv output.txt 144.9375 -37.8750 145.0000 -37.6875\n"
-        " - 4 dataset.csv output.txt 144.9375 -37.8750 145.0000 -37.6875\n"
-    );
-
 }
 
 /*  Checks if number of arguments `num_args` equals `argc`. Prints important

@@ -7,7 +7,6 @@
 #define _DRIVER_H_
 
 /* function prototypes ====================================================== */
-void print_man(FILE *f);
 int num_args_match(int num_args, int argc);
 void exit_failure_with_man();
 
