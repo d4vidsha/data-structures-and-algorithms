@@ -41,14 +41,20 @@ int is_empty_list(list_t *list) {
 
 /*  Free the list by freeing all nodes and its contents.
 */
-void free_list(list_t *list) {
+void free_list(int type, list_t *list) {
     assert(list);
     node_t *curr, *prev;
     curr = list->head;
     while (curr) {
         prev = curr;
         curr = curr->next;
-        free(prev->fp);
+        if (type == HOLLOW) {
+            // do nothing
+        } else if (type == NOT_HOLLOW) {
+            free(prev->fp);
+        } else {
+            exit_failure_type(type);
+        }
         free(prev);
     }
     free(list);
@@ -75,13 +81,19 @@ list_t *prepend(list_t *list, footpath_segment_t *fp) {
 
 /*  Append to the list i.e. add to foot of linked list.
 */
-list_t *append(list_t *list, footpath_segment_t *fp) {
+list_t *append(int type, list_t *list, footpath_segment_t *fp) {
     assert(list);
     assert(fp);
     node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
-    new->fp = fp;
+    if (type == HOLLOW) {
+        new->fp = fp;
+    } else if (type == NOT_HOLLOW) {
+        new->fp = footpath_segment_cpy(fp);
+    } else {
+        exit_failure_type(type);
+    }
     new->next = NULL;
     if (list->foot == NULL) {
         /* this is the first insert into list */
@@ -116,7 +128,9 @@ void build_list(FILE *f, list_t *list) {
     while ((c = fgetc(f)) != EOF) {
         ungetc(c, f);
         fp = footpath_read_line(f);
-        list = append(list, fp);
+        // `HOLLOW` here refers to adding the `fp` as a pointer to the list
+        // `NOT_HOLLOW` would duplicate `fp` which we don't need
+        list = append(HOLLOW, list, fp);
     }
 }
 

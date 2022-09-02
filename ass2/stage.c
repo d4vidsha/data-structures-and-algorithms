@@ -44,9 +44,9 @@ void stage1(FILE *in, FILE *out) {
             printf("%s --> %s\n", line, NOTFOUND);
         }
 
-        free_list(result_list);
+        free_list(NOT_HOLLOW, result_list);
     }
-    free_list(list);
+    free_list(NOT_HOLLOW, list);
 }
 
 /*  Stage 2 of project.
@@ -63,7 +63,7 @@ void stage2(FILE *in, FILE *out) {
 
     // convert linked list to array and remove linked list
     array_t *array = convert_to_array(NOT_HOLLOW, list);
-    free_list(list);
+    free_list(NOT_HOLLOW, list);
 
     // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -129,7 +129,7 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
 
     // free everything
     free_quadtree(tree);
-    free_list(list);
+    free_list(NOT_HOLLOW, list);
 }
 
 void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
@@ -152,7 +152,7 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     // and the data copied from linked list are of type `footpath_segment_t`
     // which was manipulated to generate `datapoint_t` datatype for the 
     // quadtree.
-    free_list(list);
+    free_list(NOT_HOLLOW, list);
 
     // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -183,12 +183,13 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         fprintf(out, "%s\n", line);
         if (results) {
             array_t *resarr = convert_dpll_to_array(HOLLOW, results);
-            // quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
-            // list_t *reslist = convert_array_to_list(resarr);
+            quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
+            check_array_sorted(COLUMN_INDEX_FPID, resarr);
+            list_t *reslist = convert_array_to_list(HOLLOW, resarr);
             free_array(HOLLOW, resarr);
             // // dedup_list(results);
             // print_list(out, reslist);
-            // free_hollow_list(reslist);
+            free_list(HOLLOW, reslist);
         }
 
         free_dpll(HOLLOW, results);

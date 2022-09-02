@@ -216,12 +216,12 @@ void check_array_sorted(int col, array_t *A) {
     }
 }
 
-list_t *convert_array_to_list(array_t *A) {
+list_t *convert_array_to_list(int type, array_t *A) {
     assert(A);
     list_t *list = create_empty_list();
     int i;
     for (i = 0; i < A->n; i++) {
-        list = append(list, A->A[i]);
+        list = append(type, list, A->A[i]);
     }
     return list;
 }

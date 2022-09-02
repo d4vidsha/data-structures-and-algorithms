@@ -24,9 +24,7 @@ list_t *find_addresses(char *address, list_t *list) {
         int result = strcmp(address, curr->fp->address);
         if (result == 0) {
             // addresses are exactly the same
-            footpath_segment_t *fp = footpath_segment_cpy(curr->fp);
-            // fp = curr->fp;   is insufficient as only assigns pointer
-            new = append(new, fp);
+            new = append(NOT_HOLLOW, new, curr->fp);
         }
         curr = curr->next;
     }
@@ -81,8 +79,7 @@ list_t *linearsearch(double value, list_t *list) {
 
         // we are guaranteed at least one footpath segment appears
         if (diff == smallest_diff) {
-            footpath_segment_t *fp = footpath_segment_cpy(curr->fp);
-            result_list = append(result_list, fp);
+            result_list = append(NOT_HOLLOW, result_list, curr->fp);
         }
 
         curr = curr->next;
