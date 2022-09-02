@@ -26,9 +26,15 @@ array_t *create_array() {
 
 /*  Free the array.
 */
-void free_array(array_t *A) {
-    for (int i = 0; i < A->n; i++) {
-        free(A->A[i]);
+void free_array(int type, array_t *A) {
+    if (type == HOLLOW) {
+        // do nothing
+    } else if (type == NOT_HOLLOW) {
+        for (int i = 0; i < A->n; i++) {
+            free(A->A[i]);
+        }
+    } else {
+        exit_failure_type(type);
     }
     free(A->A);
     free(A);
