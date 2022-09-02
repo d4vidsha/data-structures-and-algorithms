@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "array.h"
 #include "readcsv.h"
+#include "print.h"
 
 /*  Create an empty array.
 */

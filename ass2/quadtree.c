@@ -10,6 +10,7 @@
 #include "quadtree.h"
 #include "copy.h"
 #include "quicksort.h"
+#include "print.h"
 
 /*  Create point given an x and y coordinate.
 */

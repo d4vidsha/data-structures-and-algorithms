@@ -8,6 +8,7 @@
 #include <string.h>
 #include <assert.h>
 #include "stage.h"
+#include "print.h"
 #include "linkedlist.h"
 #include "readcsv.h"
 #include "data.h"
