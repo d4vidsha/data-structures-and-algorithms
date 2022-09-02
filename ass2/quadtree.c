@@ -659,7 +659,9 @@ void dedup_list(int type, int col, list_t *list) {
 
         double cmp = cmp_column(col, prev->fp, curr->fp);
         if (cmp == 0) {
-            remove_node(type, list, curr, prev);
+            // remove_node(type, list, curr, prev);
+            printf("Removed duplicate");
+            print_footpath_segment(stdout, curr->fp);
             curr = prev->next;
         } else {
             prev = curr;
