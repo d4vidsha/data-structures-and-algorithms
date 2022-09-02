@@ -153,7 +153,7 @@ void free_quadtree(qtnode_t *parent) {
     if (parent->colour == WHITE) {
         free_qtnode(parent);
     } else if (parent->colour == BLACK) {
-        free_dpll(parent->dpll, FALSE);
+        free_dpll(NOT_HOLLOW, parent->dpll);
         free_qtnode(parent);
     } else if (parent->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
@@ -429,11 +429,6 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
 */
 void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
     // printf("\n");
-    // print_rectangle(root->r);
-    // if (!rectangle_overlap(root->r, range)) {
-    //     printf("DROP: Range does not intersect with the given root.\n");
-    //     return;
-    // }
 
     if (root->colour == WHITE) {
         // printf("WHITE: Doing nothing.\n");
@@ -470,19 +465,6 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
                         "ended\n on a leaf node with an unknown colour");
         exit(EXIT_FAILURE);
     }
-
-    // if (rectangle_overlap(root->r, range)) {
-    //     return;
-    // }
-
-    // if (root->colour == GREY) {
-    //     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-    //         print_direction(i);
-    //         range_search_quadtree(res, root->quadrants[i], range);
-    //     }
-    // } else if (root->colour == BLACK) {
-    //     concat_dplls(res, root->dpll);
-    // }
 }
 
 void print_direction(int direction) {
@@ -580,7 +562,7 @@ dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot) {
 /*  Free the list by freeing all nodes and its contents. If the `dpll`
     is hollow, don't free datapoints.
 */
-void free_dpll(dpll_t *list, int type) {
+void free_dpll(int type, dpll_t *list) {
     assert(list);
     dpnode_t *curr, *prev;
     curr = list->head;

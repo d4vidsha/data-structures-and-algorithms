@@ -90,7 +90,7 @@ int is_rectangle_limit(rectangle2D_t *r);
 int is_same_point(point2D_t *p1, point2D_t *p2);
 dpll_t *create_empty_dpll();
 dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot);
-void free_dpll(dpll_t *list, int is_hollow);
+void free_dpll(int type, dpll_t *list);
 dpll_t *dpll_append(dpll_t *list, datapoint_t *dp);
 void concat_dplls(dpll_t *dest, dpll_t *src);
 void print_dpll(FILE *f, dpll_t *list);

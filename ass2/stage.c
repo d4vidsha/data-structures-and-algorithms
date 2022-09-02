@@ -191,7 +191,7 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
             // free_hollow_list(reslist);
         }
 
-        free_dpll(results, HOLLOW);
+        free_dpll(HOLLOW, results);
         free_point(bl);
         free_point(tr);
         free_rectangle(range);
