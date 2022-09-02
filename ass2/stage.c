@@ -190,7 +190,7 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
             // deduplicate results
             list_t *reslist = convert_array_to_list(HOLLOW, resarr);
             free_array(HOLLOW, resarr);
-            dedup_list(HOLLOW, COLUMN_INDEX_FPID, reslist);
+            // dedup_list(HOLLOW, COLUMN_INDEX_FPID, reslist);
 
             // finally print results
             print_list(out, reslist);

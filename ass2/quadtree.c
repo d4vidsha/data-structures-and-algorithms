@@ -194,14 +194,14 @@ int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
     greater than the top side of `r2`, return `1`. Otherwise, return `0`.
 */
 int no_vertical_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
-    return r1->bl->y >= r2->tr->y;
+    return r1->bl->y > r2->tr->y;
 }
 
 /*  Given two rectangles `r1` and `r2`, if the left side of `r1` is greater
     the right side of `r2`, return `1`. Otherwise, return `0`.
 */
 int no_horizontal_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
-    return r1->bl->x >= r2->tr->x;
+    return r1->bl->x > r2->tr->x;
 }
 
 /*  Given a rectangle `r`, return an array of length `MAX_CHILD_QTNODES`
