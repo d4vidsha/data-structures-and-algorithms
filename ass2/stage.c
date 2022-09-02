@@ -120,10 +120,17 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
         // print the results to `out` file
         fprintf(out, "%s\n", line);
         if (results) {
-            // quicksort_dpll(results); // need to implement sorting algorithm
-            print_dpll(out, results);
+            // sort results
+            array_t *resarr = convert_dpll_to_array(HOLLOW, results);
+            quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
+            check_array_sorted(COLUMN_INDEX_FPID, resarr);
+            
+            // print results
+            print_array(out, resarr);
+            free_array(HOLLOW, resarr);
         }
 
+        free_dpll(HOLLOW, results);
         free_point(point);
     }
 
