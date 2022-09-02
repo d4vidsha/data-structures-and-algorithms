@@ -206,7 +206,7 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
             free_array(HOLLOW, resarr);
 
             // finally print results
-            print_distinct_list(out, reslist);
+            print_distinct_list(out, COLUMN_INDEX_FPID, reslist);
             free_list(HOLLOW, reslist);
         }
 

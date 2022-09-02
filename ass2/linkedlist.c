@@ -10,6 +10,7 @@
 #include "linkedlist.h"
 #include "readcsv.h"
 #include "array.h"
+#include "quicksort.h"
 
 /*  Creates an empty linked list.
 */
@@ -170,8 +171,20 @@ void print_list(FILE *f, list_t *list) {
     }
 }
 
+/*  Given a sorted list, print the list ignoring duplicates.
+*/
 void print_distinct_list(FILE *f, int col, list_t *list) {
-    
+    assert(list);
+    node_t *curr;
+    curr = list->head;
+    while (curr->next) {
+        double cmp = cmp_column(col, curr->fp, curr->next->fp);
+        if (cmp != 0) {
+            print_footpath_segment(f, curr->fp);
+        }
+        curr = curr->next;
+    }
+    print_footpath_segment(f, curr->fp);
 }
 
 /*  UNUSED FUNCTION IN IMPLEMENTATION
