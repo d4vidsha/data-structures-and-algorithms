@@ -12,6 +12,10 @@
 
 /* #defines ================================================================= */
 
+// attribute of data useful when moving/freeing data from structures
+#define HOLLOW 1                 // data is fully copied (usually with `memcpy`)
+#define NOT_HOLLOW 0             // data is only pointed to
+
 // readcsv.c
 #define COMMA ','
 #define DOUBLEQUOTE '"'

@@ -165,7 +165,6 @@ array_t *convert_dpll_to_array(dpll_t *list) {
         curr = curr->next;
     }
     shrink_array(A);
-    free_dpll(list);
     return A;
 }
 
@@ -226,7 +225,6 @@ list_t *convert_array_to_list(array_t *A) {
     for (i = 0; i < A->n; i++) {
         list = append(list, A->A[i]);
     }
-    free_array(A);
     return list;
 }
 

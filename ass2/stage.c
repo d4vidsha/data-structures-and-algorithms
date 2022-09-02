@@ -141,14 +141,18 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     skip_header_line(in);
     build_list(in, list);
 
-    // // TESTING ARRAY SORTING
-    // array_t *array = convert_to_array(list);
-    // quicksort_array(COLUMN_INDEX_FPID, array, 0, array->n - 1);
-    // check_array_sorted(COLUMN_INDEX_FPID, array);
-    // free_array(array);
-
-    // construct quadtree from linked list
+    // construct quadtree from linked list copying over all data from
+    // linked list
     qtnode_t *tree = create_quadtree(list, r);
+
+    // free list containing all its data
+    // Note that quadtree is still usable as the data was completely copied
+    // from linked list. We call a copy "hollow" when only the pointers to
+    // the data are copied. In this case, `create_quadtree()` is not hollow,
+    // and the data copied from linked list are of type `footpath_segment_t`
+    // which was manipulated to generate `datapoint_t` datatype for the 
+    // quadtree.
+    free_list(list);
 
     // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -167,7 +171,9 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         tr = create_point(x, y);
         rectangle2D_t *range = create_rectangle(bl, tr);
 
-        // range search for all datapoints within range
+        // range search for all datapoints within range with `results`
+        // being a hollow dpll i.e. list only has pointers to data from
+        // the quadtree
         printf("%s -->", line);
         dpll_t *results = create_empty_dpll();
         range_search_quadtree(results, tree, range);
@@ -176,24 +182,23 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         // print the results to `out` file
         fprintf(out, "%s\n", line);
         if (results) {
-            // quicksort_dpll(results); // need to implement sorting algorithm
-            // dedup_dpll(results); // need to implement deduplication algorithm
-            array_t *resarr = convert_dpll_to_array(results);
-            quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
-            list_t *reslist = convert_array_to_list(resarr);
-            // dedup_list(results);
-            print_list(out, reslist);
+            // array_t *resarr = convert_dpll_to_array(results);
+            // quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
+            // list_t *reslist = convert_array_to_list(resarr);
+            // free_hollow_array(resarr);
+            // // dedup_list(results);
+            // print_list(out, reslist);
+            // free_hollow_list(reslist);
         }
 
-        free_dpll(results);
+        free_dpll(results, HOLLOW);
         free_point(bl);
         free_point(tr);
         free_rectangle(range);
     }
 
-    // free everything
+    // free everything else
     free_quadtree(tree);
-    free_list(list);
 }
 
 /* =============================================================================

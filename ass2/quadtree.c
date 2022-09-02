@@ -153,7 +153,7 @@ void free_quadtree(qtnode_t *parent) {
     if (parent->colour == WHITE) {
         free_qtnode(parent);
     } else if (parent->colour == BLACK) {
-        free_dpll(parent->dpll);
+        free_dpll(parent->dpll, FALSE);
         free_qtnode(parent);
     } else if (parent->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
@@ -443,8 +443,8 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
         dpnode_t *curr = root->dpll->head;
         while (curr) {
             if (in_rectangle(curr->dp->p, range)) {
-                datapoint_t *dp = datapoint_cpy(curr->dp);
-                dpll_append(res, dp);
+                // datapoint_t *dp = datapoint_cpy(curr->dp);
+                dpll_append(res, curr->dp);
                 // printf("BLACK: Added datapoint.\n");
             } else {
                 // printf("BLACK: Did not add datapoint as not in range.\n");
@@ -577,16 +577,19 @@ dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot) {
     return new;
 }
 
-/*  Free the list by freeing all nodes and its contents.
+/*  Free the list by freeing all nodes and its contents. If the `dpll`
+    is hollow, don't free datapoints.
 */
-void free_dpll(dpll_t *list) {
+void free_dpll(dpll_t *list, int type) {
     assert(list);
     dpnode_t *curr, *prev;
     curr = list->head;
     while (curr) {
         prev = curr;
         curr = curr->next;
-        free_datapoint(prev->dp);
+        if (type == NOT_HOLLOW) {
+            free_datapoint(prev->dp);
+        }
         free(prev);
     }
     free(list);
