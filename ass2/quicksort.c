@@ -15,6 +15,7 @@
     See details of sources on the very bottom of this module.
 */
 void quicksort(list_t *list, int col) {
+    assert(list);
     node_t *low = list->head;
     node_t *high = list->foot;
 
@@ -52,6 +53,7 @@ void quicksort(list_t *list, int col) {
     `i` is the index of smaller element, and `j` is the traversing index.
 */
 node_t *partition(node_t *low, node_t *high, int col) {
+    assert(low && high);
     node_t *pivot = high;
     node_t *i = low;
     node_t *j = low;
@@ -79,6 +81,7 @@ node_t *partition(node_t *low, node_t *high, int col) {
     themselves.
 */
 void swap(node_t *n1, node_t *n2) {
+    assert(n1 && n2);
     footpath_segment_t *temp;
     temp = n1->fp;
     n1->fp = n2->fp;
@@ -88,6 +91,7 @@ void swap(node_t *n1, node_t *n2) {
 /*  Given a node in linked list, find the previous node and return it.
 */
 node_t *get_prev_node(node_t *start, node_t *node) {
+    assert(start && node);
     node_t *curr, *prev = NULL;
     curr = start;
     while (curr) {
@@ -108,6 +112,7 @@ node_t *get_prev_node(node_t *start, node_t *node) {
     - [ > 0] `n` is larger than `m`
 */
 double cmp_column(int col, footpath_segment_t *n, footpath_segment_t *m) {
+    assert(n && m);
     double cmp;
     // choose what to compare
     if (col == COLUMN_INDEX_GRADE1IN) {
@@ -194,6 +199,7 @@ void quicksort_array(int col, array_t *A, int lo, int hi) {
     Returns the pivot index.
 */
 int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
+    assert(A);
     int i, j;
     footpath_segment_t *pivot = A[hi];
 
@@ -213,6 +219,7 @@ int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
 /*  Swaps two elements in an array.
 */
 void swap_elem(footpath_segment_t **A, int i, int j) {
+    assert(A);
     footpath_segment_t *temp;
     temp = A[i];
     A[i] = A[j];
@@ -223,6 +230,7 @@ void swap_elem(footpath_segment_t **A, int i, int j) {
    is sorted. If it is not sorted, print an error message and exit.
 */
 void check_array_sorted(int col, array_t *A) {
+    assert(A);
     int i;
     for (i = 0; i < A->n - 1; i++) {
         double cmp = cmp_column(col, A->A[i], A->A[i + 1]);

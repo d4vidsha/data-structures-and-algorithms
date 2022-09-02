@@ -25,6 +25,7 @@ point2D_t *create_point(long double x, long double y) {
 /*  Frees the point.
 */
 void free_point(point2D_t *p) {
+    assert(p);
     free(p);
 }
 
@@ -33,6 +34,7 @@ void free_point(point2D_t *p) {
     make freeing simpler later on.
 */
 rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr) {
+    assert(bl && tr);
     rectangle2D_t *new;
     new = (rectangle2D_t *)malloc(sizeof(*new));
     assert(new);
@@ -44,6 +46,7 @@ rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr) {
 /*  Frees the rectangle and it's points.
 */
 void free_rectangle(rectangle2D_t *r) {
+    assert(r);
     free_point(r->bl);
     free_point(r->tr);
     free(r);
@@ -53,6 +56,7 @@ void free_rectangle(rectangle2D_t *r) {
     free all the rectangles and the array itself.
 */
 void free_rectangles(rectangle2D_t **A, int n) {
+    assert(A);
     for (int i = 0; i < n; i++) {
         free_rectangle(A[i]);
     }
@@ -62,6 +66,7 @@ void free_rectangles(rectangle2D_t **A, int n) {
 /*  Create datapoint from given footpath segment `fp`.
 */
 datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p) {
+    assert(fp && p);
     datapoint_t *new;
     new = (datapoint_t *)malloc(sizeof(*new));
     assert(new);
@@ -73,6 +78,7 @@ datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p) {
 /*  Frees the datapoint, `fp` data, and `p` point.
 */
 void free_datapoint(datapoint_t *dp) {
+    assert(dp);
     free(dp->fp);
     free_point(dp->p);
     free(dp);
@@ -83,6 +89,7 @@ void free_datapoint(datapoint_t *dp) {
          (2) colour is `WHITE`
 */
 qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
+    assert(r);
     qtnode_t *new;
     new = (qtnode_t *)malloc(sizeof(*new));
     assert(new);
@@ -96,6 +103,7 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
 /*  Frees the node and the associated rectangle region.
 */
 void free_qtnode(qtnode_t *node) {
+    assert(node);
     free_rectangle(node->r);
     free(node);
 }
@@ -104,6 +112,7 @@ void free_qtnode(qtnode_t *node) {
     quadtree nodes.
 */
 qtnode_t **enum_quadrants(rectangle2D_t *r) {
+    assert(r);
     qtnode_t **A;
     A = (qtnode_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);
     assert(A);
@@ -118,6 +127,7 @@ qtnode_t **enum_quadrants(rectangle2D_t *r) {
 /*  Create quadtree from a provided linked list and rectangular region.
 */
 qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
+    assert(list && r);
     qtnode_t *root = create_blank_qtnode(r);
 
     datapoint_t *dp;
@@ -152,6 +162,7 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
     frees all child nodes, and then the root node.
 */
 void free_quadtree(qtnode_t *parent) {
+    assert(parent);
     if (parent->colour == WHITE) {
         free_qtnode(parent);
     } else if (parent->colour == BLACK) {
@@ -174,6 +185,7 @@ void free_quadtree(qtnode_t *parent) {
     but not on the top or left boundary.
 */
 int in_rectangle(point2D_t *p, rectangle2D_t *r) {
+    assert(p && r);
     return (r->bl->x <= p->x && p->x < r->tr->x) &&
            (r->bl->y <= p->y && p->y < r->tr->y);
 }
@@ -187,6 +199,7 @@ int in_rectangle(point2D_t *p, rectangle2D_t *r) {
     See source/inspiration at bottom of file.
 */
 int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
+    assert(r1 && r2);
     return !(no_vertical_overlap(r1, r2) || no_vertical_overlap(r2, r1) ||
              no_horizontal_overlap(r1, r2) || no_horizontal_overlap(r2, r1));
 }
@@ -195,6 +208,7 @@ int rectangle_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
     greater than the top side of `r2`, return `1`. Otherwise, return `0`.
 */
 int no_vertical_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
+    assert(r1 && r2);
     return r1->bl->y > r2->tr->y;
 }
 
@@ -202,6 +216,7 @@ int no_vertical_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
     the right side of `r2`, return `1`. Otherwise, return `0`.
 */
 int no_horizontal_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
+    assert(r1 && r2);
     return r1->bl->x > r2->tr->x;
 }
 
@@ -213,6 +228,7 @@ int no_horizontal_overlap(rectangle2D_t *r1, rectangle2D_t *r2) {
     `MAX_CHILD_QTNODES`.
 */
 rectangle2D_t **partition_rectangle(rectangle2D_t *r) {
+    assert(r);
     rectangle2D_t **A;
     A = (rectangle2D_t **)malloc(sizeof(*A) * MAX_CHILD_QTNODES);
     assert(A);
@@ -255,6 +271,7 @@ rectangle2D_t **partition_rectangle(rectangle2D_t *r) {
     first match will be returned in the order displayed above.
 */
 int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
+    assert(p && r);
     int result = EMPTY;
 
     if (is_rectangle_limit(r)) {
@@ -288,6 +305,7 @@ int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
     rectangle.
 */
 point2D_t *create_midpoint(rectangle2D_t *r) {
+    assert(r);
     long double x, y;
     x = r->bl->x + (r->tr->x - r->bl->x)/2;
     y = r->bl->y + (r->tr->y - r->bl->y)/2;
@@ -298,6 +316,7 @@ point2D_t *create_midpoint(rectangle2D_t *r) {
     be the root node of the quadtree. This function is recursively implemented.
 */
 void add_point(qtnode_t *node, datapoint_t *dp) {
+    assert(node && dp);
     // ensure that colours are valid
     if (!is_valid_colour(node->colour)) {
         fprintf(stderr, "ERROR: quadtree node is not a valid colour\n");
@@ -359,6 +378,7 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
     message.
 */
 void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
+    assert(dp && node);
     if (node->colour == WHITE) {
         dpll_append(HOLLOW, node->dpll, dp);
         node->colour = BLACK;
@@ -380,6 +400,7 @@ void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     point and return the datapoints associated with that leaf node.
 */
 dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
+    assert(root && p);
 
     qtnode_t *curr = root;
     int quadrant;
@@ -408,6 +429,7 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     find and return the datapoints in this range.
 */
 void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
+    assert(res && root && range);
 
     if (root->colour == WHITE) {
         // do nothing
@@ -459,12 +481,14 @@ int is_valid_colour(int colour) {
 /*  Prints the poin given a label/description for the point.
 */
 void print_point(point2D_t *p, char *label) {
+    assert(p);
     printf("%s: (%Lf, %Lf)\n", label, p->x, p->y);
 }
 
 /*  Print the rectangle.
 */
 void print_rectangle(rectangle2D_t *r) {
+    assert(r);
     print_point(r->bl, "r->bl");
     print_point(r->tr, "r->tr");
 }
@@ -472,6 +496,7 @@ void print_rectangle(rectangle2D_t *r) {
 /*  Print the datapoint.
 */
 void print_datapoint(datapoint_t *dp) {
+    assert(dp);
     print_footpath_segment(stdout, dp->fp);
     print_point(dp->p, "dp->p");
 }
@@ -479,6 +504,7 @@ void print_datapoint(datapoint_t *dp) {
 /*  Print the quadtree node.
 */
 void print_qtnode(qtnode_t *node) {
+    assert(node);
     print_rectangle(node->r);
     if (node->dpll) {
         printf("Datapoints:\n");
@@ -494,6 +520,7 @@ void print_qtnode(qtnode_t *node) {
 /*  Print the quadrants of a quadtree node.
 */
 void print_quadrants(qtnode_t **A) {
+    assert(A);
     for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
         printf("Quadrant %d:\n", i);
         print_qtnode(A[i]);
@@ -505,6 +532,7 @@ void print_quadrants(qtnode_t **A) {
     i.e. that it does not reduce to the size of a point; no area.
 */
 int is_rectangle_limit(rectangle2D_t *r) {
+    assert(r);
     return is_same_point(r->bl, r->tr);
 }
 
@@ -512,6 +540,7 @@ int is_rectangle_limit(rectangle2D_t *r) {
     Returns `1` if they are the exact same, and `0` otherwise.
 */
 int is_same_point(point2D_t *p1, point2D_t *p2) {
+    assert(p1 && p2);
     return p1->x == p2->x && p1->y == p2->y;
 }
 
@@ -560,8 +589,7 @@ void free_dpll(int type, dpll_t *list) {
 /*  Append `dp` to the datapoint `list` i.e. add to foot of linked list.
 */
 dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
-    assert(list);
-    assert(dp);
+    assert(list && dp);
     dpnode_t *new;
     new = (dpnode_t *)malloc(sizeof(*new));
     assert(new);

@@ -25,6 +25,7 @@ char *filename_strcpy(char *arg) {
 /*  Copies a given `footpath_segment` struct to a new struct.
 */
 footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
+    assert(fp);
     footpath_segment_t *new;
     new = (footpath_segment_t *)malloc(sizeof(*new));
     assert(new);
@@ -35,6 +36,7 @@ footpath_segment_t *footpath_segment_cpy(footpath_segment_t *fp) {
 /*  Copies a given point struct to a new point struct.
 */
 point2D_t *point_cpy(point2D_t *p) {
+    assert(p);
     point2D_t *new;
     new = (point2D_t *)malloc(sizeof(*new));
     assert(new);
@@ -45,6 +47,7 @@ point2D_t *point_cpy(point2D_t *p) {
 /*  Copies a given rectangle struct to a new rectangle struct.
 */
 rectangle2D_t *rectangle_cpy(rectangle2D_t *r) {
+    assert(r);
     rectangle2D_t *new;
     new = (rectangle2D_t *)malloc(sizeof(*new));
     assert(new);
@@ -56,6 +59,7 @@ rectangle2D_t *rectangle_cpy(rectangle2D_t *r) {
 /*  Copies a given datapoint struct to a new datapoint struct.
 */
 datapoint_t *datapoint_cpy(datapoint_t *dp) {
+    assert(dp);
     datapoint_t *new;
     new = (datapoint_t *)malloc(sizeof(*new));
     assert(new);
@@ -67,6 +71,7 @@ datapoint_t *datapoint_cpy(datapoint_t *dp) {
 /*  Copies a given datapoint node struct to a new datapoint node struct.
 */
 dpnode_t *dpnode_cpy(dpnode_t *node) {
+    assert(node);
     dpnode_t *new;
     new = (dpnode_t *)malloc(sizeof(*new));
     assert(new);
@@ -82,6 +87,7 @@ dpnode_t *dpnode_cpy(dpnode_t *node) {
 /*  Copies a given datapoint list struct to a new datapoint list struct.
 */
 dpll_t *dpll_cpy(dpll_t *list) {
+    assert(list);
     dpll_t *new;
     new = (dpll_t *)malloc(sizeof(*new));
     assert(new);

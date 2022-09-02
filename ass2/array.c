@@ -56,6 +56,7 @@ void shrink_array(array_t *A) {
 /*  Ensure that there is enough space for inserting into the array.
 */
 void ensure_insert_to_array(array_t *A) {
+    assert(A);
     if (A->n == A->size) {
         A->size *= 2;
         A->A = (footpath_segment_t **)realloc(A->A, sizeof(*(A->A)) * A->size);
@@ -66,6 +67,7 @@ void ensure_insert_to_array(array_t *A) {
 /*  Append footpath segment to array.
 */
 void append_to_array(int type, array_t *A, footpath_segment_t *fp) {
+    assert(A && fp);
     ensure_insert_to_array(A);
     if (type == HOLLOW) {
         A->A[A->n] = fp;

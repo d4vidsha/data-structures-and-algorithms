@@ -65,8 +65,7 @@ void free_list(int type, list_t *list) {
     Prepend to the list i.e. add to head of linked list.
 */
 list_t *prepend(list_t *list, footpath_segment_t *fp) {
-    assert(list);
-    assert(fp);
+    assert(list && fp);
     node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
@@ -83,8 +82,7 @@ list_t *prepend(list_t *list, footpath_segment_t *fp) {
 /*  Append to the list i.e. add to foot of linked list.
 */
 list_t *append(int type, list_t *list, footpath_segment_t *fp) {
-    assert(list);
-    assert(fp);
+    assert(list && fp);
     node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
@@ -139,6 +137,7 @@ void build_list(FILE *f, list_t *list) {
     file `f`.
 */
 void print_footpath_segment(FILE *f, footpath_segment_t *fp) {
+    assert(fp);
     fprintf(f, "--> ");
     fprintf(f, "footpath_id: %d || ", fp->footpath_id);
     fprintf(f, "address: %s || ", fp->address);
