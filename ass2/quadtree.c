@@ -380,10 +380,10 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
 */
 void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     if (node->colour == WHITE) {
-        dpll_append(node->dpll, dp);
+        dpll_append(HOLLOW, node->dpll, dp);
         node->colour = BLACK;
     } else if (node->colour == BLACK) {
-        dpll_append(node->dpll, dp);
+        dpll_append(HOLLOW, node->dpll, dp);
     } else if (node->colour == GREY) {
         fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
                         "as the node is an internal node");
@@ -439,7 +439,7 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
         while (curr) {
             if (in_rectangle(curr->dp->p, range)) {
                 // datapoint_t *dp = datapoint_cpy(curr->dp);
-                dpll_append(res, curr->dp);
+                dpll_append(HOLLOW, res, curr->dp);
                 // printf("BLACK: Added datapoint.\n");
             } else {
                 // printf("BLACK: Did not add datapoint as not in range.\n");
@@ -569,8 +569,14 @@ void free_dpll(int type, dpll_t *list) {
     while (curr) {
         prev = curr;
         curr = curr->next;
-        if (type == NOT_HOLLOW) {
+        if (type == HOLLOW) {
+            // do nothing
+        } else if (type == NOT_HOLLOW) {
             free_datapoint(prev->dp);
+        } else {
+            fprintf(stderr, "ERROR: type unknown, is either `HOLLOW` or "
+                            "`NOT_HOLLOW`\n");
+            exit(EXIT_FAILURE);
         }
         free(prev);
     }
@@ -579,13 +585,21 @@ void free_dpll(int type, dpll_t *list) {
 
 /*  Append `dp` to the datapoint `list` i.e. add to foot of linked list.
 */
-dpll_t *dpll_append(dpll_t *list, datapoint_t *dp) {
+dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
     assert(list);
     assert(dp);
     dpnode_t *new;
     new = (dpnode_t *)malloc(sizeof(*new));
     assert(new);
-    new->dp = dp;
+    if (type == HOLLOW) {
+        new->dp = dp;
+    } else if (type == NOT_HOLLOW) {
+        new->dp = datapoint_cpy(dp);
+    } else {
+        fprintf(stderr, "ERROR: type unknown, is either `HOLLOW` or "
+                        "`NOT_HOLLOW`\n");
+        exit(EXIT_FAILURE);
+    }
     new->next = NULL;
     if (list->foot == NULL) {
         /* this is the first insert into list */
@@ -607,8 +621,8 @@ void concat_dplls(dpll_t *dest, dpll_t *src) {
     dpnode_t *curr;
     curr = src->head;
     while (curr) {
-        datapoint_t *dp = datapoint_cpy(curr->dp);
-        dpll_append(dest, dp);
+        // datapoint_t *dp = datapoint_cpy(curr->dp);
+        dpll_append(NOT_HOLLOW, dest, curr->dp);
         curr = curr->next;
     }
 }
