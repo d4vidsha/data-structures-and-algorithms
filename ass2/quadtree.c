@@ -640,6 +640,10 @@ void exit_failure_type(int type) {
     exit(EXIT_FAILURE);
 }
 
+void dedup_list(int col, list_t *list) {
+    
+}
+
 /* =============================================================================
    Written by David Sha.
    - Rectangle overlap logic inspired by

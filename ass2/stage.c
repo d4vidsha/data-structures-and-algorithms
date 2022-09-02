@@ -182,13 +182,18 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         // print the results to `out` file
         fprintf(out, "%s\n", line);
         if (results) {
+            // sort results
             array_t *resarr = convert_dpll_to_array(HOLLOW, results);
             quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
             check_array_sorted(COLUMN_INDEX_FPID, resarr);
+            
+            // deduplicate results
             list_t *reslist = convert_array_to_list(HOLLOW, resarr);
             free_array(HOLLOW, resarr);
-            // // dedup_list(results);
-            // print_list(out, reslist);
+            dedup_list(COLUMN_INDEX_FPID, reslist);
+
+            // finally print results
+            print_list(out, reslist);
             free_list(HOLLOW, reslist);
         }
 
