@@ -47,14 +47,22 @@ int main(int argc, char *argv[]) {
     // access files
     FILE *in = fopen(in_file, "r");
     assert(in);
+    free(in_file);
     FILE *out = fopen(out_file, "w");
     assert(out);
+	free(out_file);
+
+    // read footpath segments to a linked list
+    list_t *list = create_empty_list();
+    skip_header_line(in);
+    build_list(in, list);
+    fclose(in);
 
     // choose which stage to run, knowing that there can only be four stages
     if (stage == 1) {
-        stage1(in, out);
+        stage1(out, list);
     } else if (stage == 2) {
-        stage2(in, out);
+        stage2(out, list);
     } else if (stage == 3 || stage == 4) {
         // store all extra arguments specific to stage 3 and 4
         long double xbl, ybl, xtr, ytr;
@@ -68,19 +76,28 @@ int main(int argc, char *argv[]) {
         rectangle2D_t *region = create_rectangle(bl, tr);
         free_point(bl);
         free_point(tr);
+
+        // construct quadtree from linked list copying over all data from
+        // linked list
+        qtnode_t *tree = create_quadtree(list, region);
+
+        // free list containing all the footpath segments data
+        // note that it does not affect the data stored in the quadtree
+        free_list(NOT_HOLLOW, list);
+
+        // query on the fly from `stdin`
         if (stage == 3) {
-            stage3(in, out, region);
+            stage3(out, tree);
         } else {
-            stage4(in, out, region);
+            stage4(out, tree);
         }
-        free_rectangle(region);
+
+        // free everything else
+        free_quadtree(tree);
     }
     
-    // free and close everything
-    fclose(in);
+    // free and close everything else
     fclose(out);
-    free(in_file);
-	free(out_file);
 
     return EXIT_SUCCESS;
 }

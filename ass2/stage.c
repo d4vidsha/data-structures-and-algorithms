@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 2 (altered from Assignment 1)
    stage.c :
-            = the stages of the project
+            = the stages of the project which processes queries on the fly
 ============================================================================= */
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,12 +19,7 @@
 
 /*  Stage 1 of project.
 */
-void stage1(FILE *in, FILE *out) {
-
-    // read footpath segments to a linked list
-    list_t *list = create_empty_list();
-    skip_header_line(in);
-    build_list(in, list);
+void stage1(FILE *out, list_t *list) {
 
     // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -53,14 +48,11 @@ void stage1(FILE *in, FILE *out) {
 
 /*  Stage 2 of project.
 */
-void stage2(FILE *in, FILE *out) {
-
-    // read footpath segments to a linked list
-    list_t *list = create_empty_list();
-    skip_header_line(in);
-    build_list(in, list);
+void stage2(FILE *out, list_t *list) {
 
     // sort linked list from lowest to highest by the given column index
+    // note that there is a better function to sort data
+    // see `quicksort_array()` for more details.
     quicksort(list, COLUMN_INDEX_GRADE1IN);
 
     // convert linked list to array and remove linked list
@@ -93,26 +85,7 @@ void stage2(FILE *in, FILE *out) {
 
 /*  Stage 3 of project.
 */
-void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
-    // make copy of `region` for use later
-    rectangle2D_t *r = rectangle_cpy(region);
-
-    // read footpath segments to a linked list
-    list_t *list = create_empty_list();
-    skip_header_line(in);
-    build_list(in, list);
-
-    // construct quadtree from linked list
-    qtnode_t *tree = create_quadtree(list, r);
-    
-    // free list containing all its data
-    // Note that quadtree is still usable as the data was completely copied
-    // from linked list. We call a copy "hollow" when only the pointers to
-    // the data are copied. In this case, `create_quadtree()` is not hollow,
-    // and the data copied from linked list are of type `footpath_segment_t`
-    // which was manipulated to generate `datapoint_t` datatype for the 
-    // quadtree.
-    free_list(NOT_HOLLOW, list);
+void stage3(FILE *out, qtnode_t *tree) {
 
     // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -145,34 +118,11 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
         }
         free_point(point);
     }
-
-    // free everything
-    free_quadtree(tree);
 }
 
 /*  Stage 4 of project.
 */
-void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
-    // make copy of `region` for use later
-    rectangle2D_t *r = rectangle_cpy(region);
-
-    // read footpath segments to a linked list
-    list_t *list = create_empty_list();
-    skip_header_line(in);
-    build_list(in, list);
-
-    // construct quadtree from linked list copying over all data from
-    // linked list
-    qtnode_t *tree = create_quadtree(list, r);
-
-    // free list containing all its data
-    // Note that quadtree is still usable as the data was completely copied
-    // from linked list. We call a copy "hollow" when only the pointers to
-    // the data are copied. In this case, `create_quadtree()` is not hollow,
-    // and the data copied from linked list are of type `footpath_segment_t`
-    // which was manipulated to generate `datapoint_t` datatype for the 
-    // quadtree.
-    free_list(NOT_HOLLOW, list);
+void stage4(FILE *out, qtnode_t *tree) {
 
     // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -190,6 +140,8 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         y = strtold(ptr, &ptr);
         tr = create_point(x, y);
         rectangle2D_t *range = create_rectangle(bl, tr);
+        free_point(bl);
+        free_point(tr);
 
         // range search for all datapoints within range with `results`
         // being a hollow `dpll` i.e. list only has pointers to data from
@@ -197,33 +149,26 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         printf("%s -->", line);
         dpll_t *results = create_empty_dpll();
         range_search_quadtree(results, tree, range);
+        free_rectangle(range);
         printf("\n");
 
-        // print the results to `out` file
+        // initiate printing the results to `out` file
         fprintf(out, "%s\n", line);
-        if (results) {
-            // sort results
-            array_t *resarr = convert_dpll_to_array(HOLLOW, results);
-            quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
-            check_array_sorted(COLUMN_INDEX_FPID, resarr);
-            
-            // deduplicate results
-            list_t *reslist = convert_array_to_list(HOLLOW, resarr);
-            free_array(HOLLOW, resarr);
 
-            // finally print results
-            print_distinct_list(out, COLUMN_INDEX_FPID, reslist);
-            free_list(HOLLOW, reslist);
-        }
-
+        // sort results
+        array_t *resarr = convert_dpll_to_array(HOLLOW, results);
         free_dpll(HOLLOW, results);
-        free_point(bl);
-        free_point(tr);
-        free_rectangle(range);
-    }
+        quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
+        check_array_sorted(COLUMN_INDEX_FPID, resarr);
+        
+        // deduplicate results
+        list_t *reslist = convert_array_to_list(HOLLOW, resarr);
+        free_array(HOLLOW, resarr);
 
-    // free everything else
-    free_quadtree(tree);
+        // finally print results
+        print_distinct_list(out, COLUMN_INDEX_FPID, reslist);
+        free_list(HOLLOW, reslist);
+    }
 }
 
 /* =============================================================================
