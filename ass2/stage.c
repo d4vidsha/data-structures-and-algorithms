@@ -62,7 +62,7 @@ void stage2(FILE *in, FILE *out) {
     quicksort(list, COLUMN_INDEX_GRADE1IN);
 
     // convert linked list to array and remove linked list
-    array_t *array = convert_to_array(list);
+    array_t *array = convert_to_array(NOT_HOLLOW, list);
     free_list(list);
 
     // process queries on the fly from `stdin`

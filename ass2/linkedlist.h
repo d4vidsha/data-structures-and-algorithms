@@ -36,7 +36,7 @@ void print_footpath_segment(FILE *f, footpath_segment_t *fp);
 void print_list(FILE *f, list_t *list);
 void print_array(FILE *f, array_t *A);
 void print_grade1in(FILE *f, list_t *list);
-array_t *convert_to_array(list_t *list);
+array_t *convert_to_array(int type, list_t *list);
 
 #endif
 /* =============================================================================

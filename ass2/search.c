@@ -128,8 +128,7 @@ array_t *binarysearch(double val, array_t *A) {
         if (smallest_diff == diff) {
             // reached section of array where value closest matches
             // the array elements
-            footpath_segment_t *fp = footpath_segment_cpy(A->A[mid]);
-            append_to_array(results, fp);
+            append_to_array(NOT_HOLLOW, results, A->A[mid]);
             break;
         } else if (val > A->A[mid]->grade1in) {
             lo = mid + 1;

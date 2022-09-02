@@ -94,6 +94,7 @@ void free_dpll(int type, dpll_t *list);
 dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp);
 void print_dpll(FILE *f, dpll_t *list);
 char *get_str_direction(int direction);
+void exit_failure_type(int type);
 
 #endif
 /* =============================================================================

@@ -57,9 +57,15 @@ void ensure_insert_to_array(array_t *A) {
 
 /*  Append footpath segment to array.
 */
-void append_to_array(array_t *A, footpath_segment_t *fp) {
+void append_to_array(int type, array_t *A, footpath_segment_t *fp) {
     ensure_insert_to_array(A);
-    A->A[A->n] = fp;
+    if (type == HOLLOW) {
+        A->A[A->n] = fp;
+    } else if (type == NOT_HOLLOW) {
+        A->A[A->n] = footpath_segment_cpy(fp);
+    } else {
+        exit_failure_type(type);
+    }
     (A->n)++;
 }
 

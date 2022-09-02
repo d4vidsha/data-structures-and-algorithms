@@ -22,7 +22,7 @@ array_t *create_array();
 void free_array(array_t *A);
 void shrink_array(array_t *A);
 void ensure_insert_to_array(array_t *A);
-void append_to_array(array_t *A, footpath_segment_t *fp);
+void append_to_array(int type, array_t *A, footpath_segment_t *fp);
 void print_array(FILE *f, array_t *A);
 
 #endif

@@ -574,9 +574,7 @@ void free_dpll(int type, dpll_t *list) {
         } else if (type == NOT_HOLLOW) {
             free_datapoint(prev->dp);
         } else {
-            fprintf(stderr, "ERROR: type unknown, is either `HOLLOW` or "
-                            "`NOT_HOLLOW`\n");
-            exit(EXIT_FAILURE);
+            exit_failure_type(type);
         }
         free(prev);
     }
@@ -596,9 +594,7 @@ dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
     } else if (type == NOT_HOLLOW) {
         new->dp = datapoint_cpy(dp);
     } else {
-        fprintf(stderr, "ERROR: type unknown, is either `HOLLOW` or "
-                        "`NOT_HOLLOW`\n");
-        exit(EXIT_FAILURE);
+        exit_failure_type(type);
     }
     new->next = NULL;
     if (list->foot == NULL) {
@@ -636,6 +632,12 @@ char *get_str_direction(int direction) {
     assert(str);
     strcpy(str, directions[direction]);
     return str;
+}
+
+void exit_failure_type(int type) {
+    fprintf(stderr, "ERROR: type unknown named %d, is either `HOLLOW` or "
+                    "`NOT_HOLLOW`\n", type);
+    exit(EXIT_FAILURE);
 }
 
 /* =============================================================================

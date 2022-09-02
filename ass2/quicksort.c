@@ -154,14 +154,12 @@ int cmp_footpath_id(int n, int m) {
     return n - m;
 }
 
-array_t *convert_dpll_to_array(dpll_t *list) {
+array_t *convert_dpll_to_array(int type, dpll_t *list) {
     assert(list);
     array_t *A = create_array();
-    footpath_segment_t *fp;
     dpnode_t *curr = list->head;
     while (curr) {
-        fp = footpath_segment_cpy(curr->dp->fp);
-        append_to_array(A, fp);
+        append_to_array(type, A, curr->dp->fp);
         curr = curr->next;
     }
     shrink_array(A);

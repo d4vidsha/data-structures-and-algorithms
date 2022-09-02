@@ -174,14 +174,13 @@ void print_grade1in(FILE *f, list_t *list) {
 /*  Converts linked list to a normal `node_t` array. Also indirectly returns
     the buddy variable of associated array.
 */
-array_t *convert_to_array(list_t *list) {
+array_t *convert_to_array(int type, list_t *list) {
     assert(list);
     array_t *A = create_array();
     node_t *curr;
     curr = list->head;
     while (curr) {
-        footpath_segment_t *fp = footpath_segment_cpy(curr->fp);
-        append_to_array(A, fp);
+        append_to_array(type, A, curr->fp);
         curr = curr->next;
     }
     shrink_array(A);

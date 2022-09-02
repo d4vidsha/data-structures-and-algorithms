@@ -21,7 +21,7 @@ double cmp_grade1in(double n, double m);
 int cmp_address(char *n, char *m);
 int cmp_footpath_id(int n, int m);
 
-array_t *convert_dpll_to_array(dpll_t *list);
+array_t *convert_dpll_to_array(int type, dpll_t *list);
 void quicksort_array(int col, array_t *A, int lo, int hi);
 int partition_array(int col, footpath_segment_t **A, int lo, int hi);
 void swap_elem(footpath_segment_t **A, int i, int j);
