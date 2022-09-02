@@ -170,46 +170,33 @@ array_t *convert_dpll_to_array(dpll_t *list) {
 
 void quicksort_array(int col, array_t *A, int lo, int hi) {
     assert(A);
+    int pivot;
 
     // there is only one element in this list, so it's sorted
-    if (lo == hi) {
+    if (lo < hi) {
+        pivot = partition_array(col, A->A, lo, hi);
+    } else {
         return;
     }
-
-    // find the pivot position
-    int pivot = partition_array(col, A->A, lo, hi);
-
-    // quicksort upper segment
-    if (pivot != hi) {
-        quicksort_array(col, A, pivot + 1, hi);
-    }
-
-    // quicksort lower segment
-    if (pivot != lo) {
-        quicksort_array(col, A, lo, pivot - 1);
-    }
-
+    quicksort_array(col, A, lo, pivot - 1);
+    quicksort_array(col, A, pivot + 1, hi);
 }
 
 int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
-    int pivot = hi;
-    int i = lo;
-    int j = lo;
+    int i, j;
+    footpath_segment_t *pivot = A[hi];
 
-    while (j != hi) {
-        double cmp = cmp_column(col, A[j], A[pivot]);
+    i = lo - 1;
 
+    for (j = lo; j < hi; j++) {
+        double cmp = cmp_column(col, A[j], pivot);
         if (cmp < 0) {
-            // j is less than pivot
-            swap_elem(A, i, j);
             i++;
+            swap_elem(A, i, j);
         }
-
-        j++;
     }
-    swap_elem(A, i, pivot);
-    
-    return pivot;
+    swap_elem(A, i + 1, hi);
+    return i + 1;
 }
 
 void swap_elem(footpath_segment_t **A, int i, int j) {
@@ -217,6 +204,18 @@ void swap_elem(footpath_segment_t **A, int i, int j) {
     temp = A[i];
     A[i] = A[j];
     A[j] = temp;
+}
+
+void check_array_sorted(int col, array_t *A) {
+    int i;
+    for (i = 0; i < A->n - 1; i++) {
+        double cmp = cmp_column(col, A->A[i], A->A[i + 1]);
+        if (cmp > 0) {
+            printf("ERROR: array is not sorted at index %d suggesting "
+                   "something is wrong with the sorting algorithm\n", i);
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 /* =============================================================================

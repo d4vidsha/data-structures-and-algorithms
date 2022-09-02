@@ -142,11 +142,9 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     build_list(in, list);
 
     // TESTING ARRAY SORTING
-    printf("Testing array sorting...\n");
     array_t *array = convert_to_array(list);
-    print_array(stdout, array);
-    printf("Sorting...\n");
     quicksort_array(COLUMN_INDEX_FPID, array, 0, array->n - 1);
+    check_array_sorted(COLUMN_INDEX_FPID, array);
     print_array(stdout, array);
     free_array(array);
 
