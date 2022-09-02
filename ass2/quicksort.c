@@ -165,6 +165,7 @@ array_t *convert_dpll_to_array(dpll_t *list) {
         curr = curr->next;
     }
     shrink_array(A);
+    free_dpll(list);
     return A;
 }
 
@@ -216,6 +217,17 @@ void check_array_sorted(int col, array_t *A) {
             exit(EXIT_FAILURE);
         }
     }
+}
+
+list_t *convert_array_to_list(array_t *A) {
+    assert(A);
+    list_t *list = create_empty_list();
+    int i;
+    for (i = 0; i < A->n; i++) {
+        list = append(list, A->A[i]);
+    }
+    free_array(A);
+    return list;
 }
 
 /* =============================================================================

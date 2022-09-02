@@ -26,6 +26,7 @@ void quicksort_array(int col, array_t *A, int lo, int hi);
 int partition_array(int col, footpath_segment_t **A, int lo, int hi);
 void swap_elem(footpath_segment_t **A, int i, int j);
 void check_array_sorted(int col, array_t *A);
+list_t *convert_array_to_list(array_t *A);
 
 #endif
 /* =============================================================================

@@ -141,12 +141,11 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     skip_header_line(in);
     build_list(in, list);
 
-    // TESTING ARRAY SORTING
-    array_t *array = convert_to_array(list);
-    quicksort_array(COLUMN_INDEX_FPID, array, 0, array->n - 1);
-    check_array_sorted(COLUMN_INDEX_FPID, array);
-    print_array(stdout, array);
-    free_array(array);
+    // // TESTING ARRAY SORTING
+    // array_t *array = convert_to_array(list);
+    // quicksort_array(COLUMN_INDEX_FPID, array, 0, array->n - 1);
+    // check_array_sorted(COLUMN_INDEX_FPID, array);
+    // free_array(array);
 
     // construct quadtree from linked list
     qtnode_t *tree = create_quadtree(list, r);
@@ -179,7 +178,11 @@ void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
         if (results) {
             // quicksort_dpll(results); // need to implement sorting algorithm
             // dedup_dpll(results); // need to implement deduplication algorithm
-            print_dpll(out, results);
+            array_t *resarr = convert_dpll_to_array(results);
+            quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
+            list_t *reslist = convert_array_to_list(resarr);
+            // dedup_list(results);
+            print_list(out, reslist);
         }
 
         free_dpll(results);
