@@ -92,7 +92,6 @@ dpll_t *create_empty_dpll();
 dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot);
 void free_dpll(int type, dpll_t *list);
 dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp);
-void concat_dplls(dpll_t *dest, dpll_t *src);
 void print_dpll(FILE *f, dpll_t *list);
 char *get_str_direction(int direction);
 

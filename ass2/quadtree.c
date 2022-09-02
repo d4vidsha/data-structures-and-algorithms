@@ -611,22 +611,6 @@ dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
     return list;
 }
 
-/*  Given two datapoint linked lists (a destination `dest` linked list and
-    a source `src` linked list), copy over `src` nodes into `dest`.
-    `src` is only read and not altered in any way.
-    `dest` is only written to by adding to the end the nodes from `src`.
-*/
-void concat_dplls(dpll_t *dest, dpll_t *src) {
-    assert(dest && src);
-    dpnode_t *curr;
-    curr = src->head;
-    while (curr) {
-        // datapoint_t *dp = datapoint_cpy(curr->dp);
-        dpll_append(NOT_HOLLOW, dest, curr->dp);
-        curr = curr->next;
-    }
-}
-
 void print_dpll(FILE *f, dpll_t *list) {
     assert(list);
     dpnode_t *curr;
