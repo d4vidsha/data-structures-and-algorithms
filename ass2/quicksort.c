@@ -154,6 +154,12 @@ int cmp_footpath_id(int n, int m) {
     return n - m;
 }
 
+/*  Create a new array from the datapoint linked list. If the `type` is
+    `HOLLOW`, only a shell of the array is created which points to the
+    original data in the linked list. If the `type` is `NOT_HOLLOW`, a
+    new array is created and the data is copied from the linked list.
+    Returns the new array.
+*/
 array_t *convert_dpll_to_array(int type, dpll_t *list) {
     assert(list);
     array_t *A = create_array();
@@ -166,6 +172,9 @@ array_t *convert_dpll_to_array(int type, dpll_t *list) {
     return A;
 }
 
+/*  Given a column to sort by `col`, an array `A`, the start index `lo`,
+    and the end index `hi`, sort the array using quicksort.
+*/
 void quicksort_array(int col, array_t *A, int lo, int hi) {
     assert(A);
     int pivot;
@@ -180,6 +189,10 @@ void quicksort_array(int col, array_t *A, int lo, int hi) {
     quicksort_array(col, A, pivot + 1, hi);
 }
 
+/*  Given a column to sort by `col`, an array `A`, the start index `lo`,
+    and the end index `hi`, partition the array using quicksort.
+    Returns the pivot index.
+*/
 int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
     int i, j;
     footpath_segment_t *pivot = A[hi];
@@ -197,6 +210,8 @@ int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
     return i + 1;
 }
 
+/*  Swaps two elements in an array.
+*/
 void swap_elem(footpath_segment_t **A, int i, int j) {
     footpath_segment_t *temp;
     temp = A[i];
@@ -204,6 +219,9 @@ void swap_elem(footpath_segment_t **A, int i, int j) {
     A[j] = temp;
 }
 
+/* Given a column to sort by `col`, an array `A`, ensure that the array
+   is sorted. If it is not sorted, print an error message and exit.
+*/
 void check_array_sorted(int col, array_t *A) {
     int i;
     for (i = 0; i < A->n - 1; i++) {
@@ -216,6 +234,9 @@ void check_array_sorted(int col, array_t *A) {
     }
 }
 
+/*  Given an array `A` and the type, either `HOLLOW` or `NOT_HOLLOW`,
+    convert the array to a linked list.
+*/
 list_t *convert_array_to_list(int type, array_t *A) {
     assert(A);
     list_t *list = create_empty_list();

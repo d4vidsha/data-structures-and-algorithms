@@ -148,7 +148,8 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
     return root;
 }
 
-/*  Frees the entire quadtree from a given `root` quadtree node.
+/*  Frees the entire quadtree from a given `root` quadtree node. Recursively
+    frees all child nodes, and then the root node.
 */
 void free_quadtree(qtnode_t *parent) {
     if (parent->colour == WHITE) {
@@ -283,28 +284,6 @@ int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
     return result;
 }
 
-// int determine_quadrant(point2D_t *p, rectangle2D_t *r) {
-//     int result;
-
-//     point2D_t *mp = create_midpoint(r);
-
-//     if (p->x <= mp->x && p->y < mp->y) {
-//         result = 0;
-//     } else if (p->x <= mp->x && p->y >= mp->y) {
-//         result = 1;
-//     } else if (p->x > mp->x && p->y >= mp->y) {
-//         result = 2;
-//     } else if (p->x > mp->x && p->y < mp->y) {
-//         result = 3;
-//     } else {
-//         fprintf(stderr, "ERROR: point not in rectangle\n");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     free_point(mp);
-//     return result;
-// }
-
 /*  Given a rectangle `r`, create a new point which describes the middle of the
     rectangle.
 */
@@ -353,7 +332,7 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
                        "quadrant %d\n", quadrant);
             }
             node->quadrants[quadrant]->dpll = node->dpll;
-            node->dpll = NULL;                                                 // maybe not necessary if we also want to know what the first node datapoint was
+            node->dpll = NULL;                                                 
             
             // change colours of the two nodes edited,
             // `WHITE` node becomes `BLACK` node and 
@@ -429,38 +408,32 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     find and return the datapoints in this range.
 */
 void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
-    // printf("\n");
 
     if (root->colour == WHITE) {
-        // printf("WHITE: Doing nothing.\n");
+        // do nothing
         return;
+
     } else if (root->colour == BLACK) {
-        // printf("BLACK: Adding datapoints from a qtnode.\n");
+        // add datapoints from a `qtnode` to the result list
         dpnode_t *curr = root->dpll->head;
         while (curr) {
             if (in_rectangle(curr->dp->p, range)) {
-                // datapoint_t *dp = datapoint_cpy(curr->dp);
                 dpll_append(HOLLOW, res, curr->dp);
-                // printf("BLACK: Added datapoint.\n");
-            } else {
-                // printf("BLACK: Did not add datapoint as not in range.\n");
             }
             curr = curr->next;
         }
-        // printf("BLACK: No more datapoints in qtnode.\n");
+
     } else if (root->colour == GREY) {
-        // printf("GREY: Scanning through child nodes.\n");
+        // scanning through child nodes
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
             if (rectangle_overlap(root->quadrants[i]->r, range) 
                     && root->quadrants[i]->colour != WHITE) {
-                // printf("GREY: Rectangle overlap for quadrant %d.\n", i);
+                // rectangle overlap
                 print_direction(i);
-                // printf("\n");
                 range_search_quadtree(res, root->quadrants[i], range);
-            } else {
-                // printf("GREY: No rectangle overlap for quadrant %d.\n", i);
             }
         }
+
     } else {
         fprintf(stderr, "ERROR: while traversing quadtree, range searching "
                         "ended\n on a leaf node with an unknown colour");
@@ -468,6 +441,8 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
     }
 }
 
+/*  Given an integer direction, print the direction in words.
+*/
 void print_direction(int direction) {
     char *str = get_str_direction(direction);
     printf(" %s", str);
@@ -608,6 +583,9 @@ dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
     return list;
 }
 
+/*  Given a file `f` and a dpll `list`, print the contents of the list
+    to the file.
+*/
 void print_dpll(FILE *f, dpll_t *list) {
     assert(list);
     dpnode_t *curr;
@@ -635,6 +613,9 @@ char *get_str_direction(int direction) {
     return str;
 }
 
+/*  Given the type which is neither `HOLLOW` nor `NOT_HOLLOW`, exit with
+    a failure message.
+*/
 void exit_failure_type(int type) {
     fprintf(stderr, "ERROR: type unknown named %d, is either `HOLLOW` or "
                     "`NOT_HOLLOW`\n", type);

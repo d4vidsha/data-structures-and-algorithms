@@ -89,6 +89,8 @@ void stage2(FILE *in, FILE *out) {
     free_array(NOT_HOLLOW, array);
 }
 
+/*  Stage 3 of project.
+*/
 void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
     // make copy of `region` for use later
     rectangle2D_t *r = rectangle_cpy(region);
@@ -146,6 +148,8 @@ void stage3(FILE *in, FILE *out, rectangle2D_t *region) {
     free_quadtree(tree);
 }
 
+/*  Stage 4 of project.
+*/
 void stage4(FILE *in, FILE *out, rectangle2D_t *region) {
     // make copy of `region` for use later
     rectangle2D_t *r = rectangle_cpy(region);

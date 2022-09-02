@@ -1,7 +1,7 @@
 /* =============================================================================
-   Project: Assignment 2 (imported from Assignment 1)
+   Project: Assignment 2 (altered from Assignment 1)
    array.h :
-            = all related to arrays
+            = all related to footpath segment arrays
 ============================================================================= */
 #ifndef _ARRAY_H_
 #define _ARRAY_H_

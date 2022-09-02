@@ -135,6 +135,9 @@ void build_list(FILE *f, list_t *list) {
     }
 }
 
+/*  Print the footpath segment in a specific format into the provided 
+    file `f`.
+*/
 void print_footpath_segment(FILE *f, footpath_segment_t *fp) {
     fprintf(f, "--> ");
     fprintf(f, "footpath_id: %d || ", fp->footpath_id);

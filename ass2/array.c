@@ -1,7 +1,7 @@
 /* =============================================================================
-   Project: Assignment 2 (imported from Assignment 1)
+   Project: Assignment 2 (altered from Assignment 1)
    array.c :
-            = all related to arrays
+            = all related to footpath segment arrays
 ============================================================================= */
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +27,7 @@ array_t *create_array() {
 /*  Free the array.
 */
 void free_array(int type, array_t *A) {
+    assert(A);
     if (type == HOLLOW) {
         // do nothing
     } else if (type == NOT_HOLLOW) {
@@ -43,6 +44,7 @@ void free_array(int type, array_t *A) {
 /*  Shrink the array size to the number of elements.
 */
 void shrink_array(array_t *A) {
+    assert(A);
     if (A->size != A->n) {
         // new size should at least be `INIT_ARRAY_SIZE`
         A->size = (A->n > INIT_ARRAY_SIZE) ? A->n : INIT_ARRAY_SIZE;
