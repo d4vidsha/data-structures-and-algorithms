@@ -641,51 +641,6 @@ void exit_failure_type(int type) {
     exit(EXIT_FAILURE);
 }
 
-/*  Given a column to deduplicate by, and a linked list of footpath segments,
-    indirectly return a linked list of footpath segments with duplicates 
-    removed.
-*/
-void dedup_list(int type, int col, list_t *list) {
-    assert(list);
-    node_t *curr, *prev;
-    curr = list->head;
-    while (curr) {
-        prev = curr;
-        curr = curr->next;
-        
-        if (curr == NULL) {
-            break;
-        }
-
-        double cmp = cmp_column(col, prev->fp, curr->fp);
-        if (cmp == 0) {
-            // remove_node(type, list, curr, prev);
-            printf("Removed duplicate");
-            print_footpath_segment(stdout, curr->fp);
-            curr = prev->next;
-        } else {
-            prev = curr;
-            curr = curr->next;
-        }
-    }
-
-    // assert(list);
-    // node_t *curr, *prev;
-    // prev = list->head;
-    // curr = prev->next;
-    // while (curr) {
-    //     double cmp = cmp_column(col, prev->fp, curr->fp);
-    //     if (cmp == 0) {
-    //         // remove `curr` from list
-    //         remove_node(type, list, curr, prev);
-    //         curr = prev->next;
-    //     } else {
-    //         prev = curr;
-    //         curr = curr->next;
-    //     }
-    // }
-}
-
 /* =============================================================================
    Written by David Sha.
    - Rectangle overlap logic inspired by

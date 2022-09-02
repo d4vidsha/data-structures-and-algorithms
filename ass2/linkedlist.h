@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 2 (imported from Assignment 1)
+   Project: Assignment 2 (altered from Assignment 1)
    linkedlist.h :
             = all related to linked lists for the `footpath_segment_t` datatype
 ============================================================================= */
@@ -37,7 +37,6 @@ void print_list(FILE *f, list_t *list);
 void print_array(FILE *f, array_t *A);
 void print_grade1in(FILE *f, list_t *list);
 array_t *convert_to_array(int type, list_t *list);
-void remove_node(int type, list_t *list, node_t *prev, node_t *curr);
 
 #endif
 /* =============================================================================

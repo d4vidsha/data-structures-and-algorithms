@@ -1,5 +1,5 @@
 /* =============================================================================
-   Project: Assignment 2 (imported from Assignment 1)
+   Project: Assignment 2 (altered from Assignment 1)
    linkedlist.c :
             = all related to linked lists for the `footpath_segment_t` datatype
 ============================================================================= */
@@ -168,6 +168,10 @@ void print_list(FILE *f, list_t *list) {
         print_footpath_segment(f, curr->fp);
         curr = curr->next;
     }
+}
+
+void print_distinct_list(FILE *f, int col, list_t *list) {
+    
 }
 
 /*  UNUSED FUNCTION IN IMPLEMENTATION
