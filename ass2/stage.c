@@ -17,7 +17,8 @@
 #include "array.h"
 #include "convert.h"
 
-/*  Stage 1 of project.
+/*  Stage 1 of project. Finds the footpath segments by address and
+    prints them to the provided file `out`.
 */
 void stage1(FILE *out, list_t *list) {
 
@@ -46,7 +47,8 @@ void stage1(FILE *out, list_t *list) {
     free_list(NOT_HOLLOW, list);
 }
 
-/*  Stage 2 of project.
+/*  Stage 2 of project. Finds the closeest footpath segments by `grade1in` 
+    and prints them to the provided file `out`.
 */
 void stage2(FILE *out, list_t *list) {
 
@@ -83,7 +85,9 @@ void stage2(FILE *out, list_t *list) {
     free_array(NOT_HOLLOW, array);
 }
 
-/*  Stage 3 of project.
+/*  Stage 3 of project. Given coordinate queries from `stdin` of format
+    `x y`, find the footpath segments that are in the quadtree node
+    specified by the coordinate and prints them to the provided file `out`.
 */
 void stage3(FILE *out, qtnode_t *tree) {
 
@@ -92,7 +96,7 @@ void stage3(FILE *out, qtnode_t *tree) {
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;      // removes "\n" from line
 
-        // parse string to double
+        // parse string to double from `x y` to the point (x, y)
         double x, y;
         char *ptr = line;
         x = strtod(ptr, &ptr);
@@ -104,8 +108,11 @@ void stage3(FILE *out, qtnode_t *tree) {
         printf("%s -->", line);
         dpll_t *results = search_quadtree(tree, point);
 
-        // print the results to `out` file
+        // print the query to `out` file
         fprintf(out, "%s\n", line);
+
+        // results could be `NULL` if no footpath segments are found, 
+        // in which case we don't do anything
         if (results) {
             // sort results
             array_t *resarr = convert_dpll_to_array(HOLLOW, results);
@@ -120,7 +127,9 @@ void stage3(FILE *out, qtnode_t *tree) {
     }
 }
 
-/*  Stage 4 of project.
+/*  Stage 4 of project. Given coordinate queries from `stdin` of format
+    `x1 y1 x2 y2`, find the footpath segments that are within the range
+    (x1, y1), (x2, y2) and prints them to the provided file `out`.
 */
 void stage4(FILE *out, qtnode_t *tree) {
 
@@ -129,7 +138,8 @@ void stage4(FILE *out, qtnode_t *tree) {
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;      // removes "\n" from line
 
-        // parse string to double
+        // parse string to double from format `x1 y1 x2 y2` to the
+        // rectangle range ((x1, y1), (x2, y2))
         long double x, y;
         point2D_t *bl, *tr;
         char *ptr = line;
@@ -155,17 +165,17 @@ void stage4(FILE *out, qtnode_t *tree) {
         // initiate printing the results to `out` file
         fprintf(out, "%s\n", line);
 
-        // sort results
+        // convert to an array and then sort the array
         array_t *resarr = convert_dpll_to_array(HOLLOW, results);
         free_dpll(HOLLOW, results);
         quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
         check_array_sorted(COLUMN_INDEX_FPID, resarr);
         
-        // deduplicate results
+        // convert array to a linked list so that we can print it
         list_t *reslist = convert_array_to_list(HOLLOW, resarr);
         free_array(HOLLOW, resarr);
 
-        // finally print results
+        // finally print only distinct results to `out` file
         print_distinct_list(out, COLUMN_INDEX_FPID, reslist);
         free_list(HOLLOW, reslist);
     }
