@@ -470,6 +470,13 @@ void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
 dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     assert(root && p);
 
+    // ensure the search point is within the root node's rectangle
+    if (!in_rectangle(p, root->r)) {
+        fprintf(stderr, "ERROR: search point not in root node's rectangle\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // traverse down the quadtree until a leaf node is found
     qtnode_t *curr = root;
     int quadrant;
     while (curr->colour == GREY) {
