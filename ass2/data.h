@@ -12,7 +12,9 @@
 
 /* #defines ================================================================= */
 
-// attribute of data useful when moving/freeing data from structures
+// A data struct is `"hollow" if it has no data of its own, but points to
+// other data in some other structure. A data struct is "not hollow" if it
+// has its own data and is not a pointer to data from another structure.
 #define HOLLOW 1                 // data is fully copied (usually with `memcpy`)
 #define NOT_HOLLOW 0             // data is only pointed to
 
