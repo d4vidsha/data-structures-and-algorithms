@@ -183,6 +183,8 @@ void quicksort_array(int col, array_t *A, int lo, int hi) {
 int partition_array(int col, footpath_segment_t **A, int lo, int hi) {
     assert(A);
     int i, j;
+
+    // let the pivot be the last element
     footpath_segment_t *pivot = A[hi];
 
     i = lo - 1;
