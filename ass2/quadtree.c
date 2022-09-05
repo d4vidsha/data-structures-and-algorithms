@@ -163,7 +163,7 @@ qtnode_t *create_blank_qtnode(rectangle2D_t *r) {
     assert(new);
     new->r = r;
     new->colour = WHITE;
-    new->dpll = NULL;                                                      // is this necessary?
+    new->dpll = NULL;
     new->quadrants = NULL;
     return new;
 }
