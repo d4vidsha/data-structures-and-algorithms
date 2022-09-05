@@ -65,18 +65,8 @@ int main(int argc, char *argv[]) {
     } else if (stage == 2) {
         stage2(out, list);
     } else if (stage == 3 || stage == 4) {
-        // store all extra arguments specific to stage 3 and 4
-        long double xbl, ybl, xtr, ytr;
-        char *ptr;
-        xbl = strtold(argv[XBL_ARG_POS], &ptr);
-        ybl = strtold(argv[YBL_ARG_POS], &ptr);
-        xtr = strtold(argv[XTR_ARG_POS], &ptr);
-        ytr = strtold(argv[YTR_ARG_POS], &ptr);
-        point2D_t *bl = create_point(xbl, ybl);
-        point2D_t *tr = create_point(xtr, ytr);
-        rectangle2D_t *region = create_rectangle(bl, tr);
-        free_point(bl);
-        free_point(tr);
+        // store extra arguments into a region specific to stage 3 and 4
+        rectangle2D_t *region = parse_rectangle(argv);
 
         // construct quadtree from linked list copying over all data from
         // linked list
@@ -123,6 +113,25 @@ int num_args_match(int num_args, int argc) {
 void exit_failure_with_man() {
     print_man(stderr);
     exit(EXIT_FAILURE);
+}
+
+/*  Given the input arguments from command line, return the region
+    specified by the input arguments.
+*/
+rectangle2D_t *parse_rectangle(char *argv[]) {
+    rectangle2D_t *new;
+    long double xbl, ybl, xtr, ytr;
+    char *ptr;
+    xbl = strtold(argv[XBL_ARG_POS], &ptr);
+    ybl = strtold(argv[YBL_ARG_POS], &ptr);
+    xtr = strtold(argv[XTR_ARG_POS], &ptr);
+    ytr = strtold(argv[YTR_ARG_POS], &ptr);
+    point2D_t *bl = create_point(xbl, ybl);
+    point2D_t *tr = create_point(xtr, ytr);
+    new = create_rectangle(bl, tr);
+    free_point(bl);
+    free_point(tr);
+    return new;
 }
 
 /* =============================================================================
