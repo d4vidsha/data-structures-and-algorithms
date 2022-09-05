@@ -66,13 +66,19 @@ void free_rectangles(rectangle2D_t **A, int n) {
 
 /*  Create datapoint from given footpath segment `fp`.
 */
-datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p) {
+datapoint_t *create_datapoint(int type, footpath_segment_t *fp, point2D_t *p) {
     assert(fp && p);
     datapoint_t *new;
     new = (datapoint_t *)malloc(sizeof(*new));
     assert(new);
-    new->fp = footpath_segment_cpy(fp);
-    new->p = point_cpy(p);
+    if (type == HOLLOW) {
+        new->fp = fp;
+        new->p = p;
+    } else if (type == NOT_HOLLOW) {
+        new->fp = footpath_segment_cpy(fp);
+        new->p = point_cpy(p);
+    }
+
     return new;
 }
 
@@ -80,7 +86,6 @@ datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p) {
 */
 void free_datapoint(datapoint_t *dp) {
     assert(dp);
-    free(dp->fp);
     free_point(dp->p);
     free(dp);
 }
@@ -206,16 +211,14 @@ qtnode_t *create_quadtree(list_t *list, rectangle2D_t *r) {
 
         // add start position of footpath to quadtree
         fpp = create_point(curr->fp->start_lon, curr->fp->start_lat);
-        dp = create_datapoint(curr->fp, fpp);
-        free_point(fpp);
+        dp = create_datapoint(HOLLOW, curr->fp, fpp);
         if (in_rectangle(dp->p, root->r)) {
             add_point(root, dp);
         }
 
         // add end position of footpath to quadtree
         fpp = create_point(curr->fp->end_lon, curr->fp->end_lat);
-        dp = create_datapoint(curr->fp, fpp);
-        free_point(fpp);
+        dp = create_datapoint(HOLLOW, curr->fp, fpp);
         if (in_rectangle(dp->p, root->r)) {
             add_point(root, dp);
         }
@@ -234,7 +237,7 @@ void free_quadtree(qtnode_t *parent) {
     if (parent->colour == WHITE) {
         free_qtnode(parent);
     } else if (parent->colour == BLACK) {
-        free_dpll(NOT_HOLLOW, parent->dpll);
+        free_dpll(HOLLOW, parent->dpll);
         free_qtnode(parent);
     } else if (parent->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {

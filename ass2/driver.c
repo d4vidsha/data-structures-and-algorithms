@@ -72,10 +72,6 @@ int main(int argc, char *argv[]) {
         // linked list
         qtnode_t *tree = create_quadtree(list, region);
 
-        // free list containing all the footpath segments data
-        // note that it does not affect the data stored in the quadtree
-        free_list(NOT_HOLLOW, list);
-
         // query on the fly from `stdin`
         if (stage == 3) {
             stage3(out, tree);
@@ -88,6 +84,7 @@ int main(int argc, char *argv[]) {
     }
     
     // free and close everything else
+    free_list(NOT_HOLLOW, list);
     fclose(out);
 
     return EXIT_SUCCESS;
