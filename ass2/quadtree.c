@@ -600,6 +600,27 @@ void exit_failure_type(int type) {
     exit(EXIT_FAILURE);
 }
 
+/*  Given a string `s`, return a rectangle. The string should be in the
+    format `x1 y1 x2 y2` where `x1` and `y1` are the bottom left coordinates
+    and `x2` and `y2` are the top right coordinates.
+*/
+rectangle2D_t *get_rectangle(char *s) {
+    assert(s);
+    long double x, y;
+    point2D_t *bl, *tr;
+    char *ptr = s;
+    x = strtold(ptr, &ptr);
+    y = strtold(ptr, &ptr);
+    bl = create_point(x, y);
+    x = strtold(ptr, &ptr);
+    y = strtold(ptr, &ptr);
+    tr = create_point(x, y);
+    rectangle2D_t *r = create_rectangle(bl, tr);
+    free_point(bl);
+    free_point(tr);
+    return r;
+}
+
 /* =============================================================================
    Written by David Sha.
    - Rectangle overlap logic inspired by

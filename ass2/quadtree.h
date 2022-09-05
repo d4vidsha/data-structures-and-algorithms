@@ -92,6 +92,7 @@ int is_rectangle_limit(rectangle2D_t *r);
 int is_same_point(point2D_t *p1, point2D_t *p2);
 char *get_str_direction(int direction);
 void exit_failure_type(int type);
+rectangle2D_t *get_rectangle(char *s);
 
 #endif
 /* =============================================================================

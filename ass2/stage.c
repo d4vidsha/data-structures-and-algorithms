@@ -140,18 +140,7 @@ void stage4(FILE *out, qtnode_t *tree) {
 
         // parse string to double from format `x1 y1 x2 y2` to the
         // rectangle range ((x1, y1), (x2, y2))
-        long double x, y;
-        point2D_t *bl, *tr;
-        char *ptr = line;
-        x = strtold(ptr, &ptr);
-        y = strtold(ptr, &ptr);
-        bl = create_point(x, y);
-        x = strtold(ptr, &ptr);
-        y = strtold(ptr, &ptr);
-        tr = create_point(x, y);
-        rectangle2D_t *range = create_rectangle(bl, tr);
-        free_point(bl);
-        free_point(tr);
+        rectangle2D_t *range = get_rectangle(line);
 
         // range search for all datapoints within range with `results`
         // being a hollow `dpll` i.e. list only has pointers to data from
