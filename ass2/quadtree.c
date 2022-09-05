@@ -500,10 +500,22 @@ dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
     }
 }
 
-/*  Given a root node of a quadtree and a `range` described by a rectangle,
-    find and return the datapoints in this range.
+/*  Given a root node of a quadtree and a rectangule range, find all the 
+    datapoints that lie within the rectangle range and return them in a 
+    datapoint linked list.
 */
-void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
+dpll_t *range_search_quadtree(qtnode_t *root, rectangle2D_t *range) {
+    dpll_t *results = create_empty_dpll();
+    _range_search_quadtree(results, root, range);
+    return results;
+}
+
+/*  Given a root node of a quadtree and a `range` described by a rectangle,
+    find and return the datapoints in this range to `res`. This is a 
+    recursive helper function, hence the underscore at the start of the
+    function name.
+*/
+void _range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
     assert(res && root && range);
 
     if (root->colour == WHITE) {
@@ -527,7 +539,7 @@ void range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
                     && root->quadrants[i]->colour != WHITE) {
                 // rectangle overlap
                 print_direction(i);
-                range_search_quadtree(res, root->quadrants[i], range);
+                _range_search_quadtree(res, root->quadrants[i], range);
             }
         }
 

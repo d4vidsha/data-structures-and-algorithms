@@ -157,8 +157,7 @@ void stage4(FILE *out, qtnode_t *tree) {
         // being a hollow `dpll` i.e. list only has pointers to data from
         // the quadtree
         printf("%s -->", line);
-        dpll_t *results = create_empty_dpll();
-        range_search_quadtree(results, tree, range);
+        dpll_t *results = range_search_quadtree(tree, range);
         free_rectangle(range);
         printf("\n");
 
