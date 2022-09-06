@@ -11,6 +11,7 @@
 #include "copy.h"
 #include "quicksort.h"
 #include "print.h"
+#include "readcsv.h"
 
 /*  Create point given an x and y coordinate.
 */
@@ -80,7 +81,7 @@ datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p) {
 */
 void free_datapoint(datapoint_t *dp) {
     assert(dp);
-    free(dp->fp);
+    free_footpath(dp->fp);
     free_point(dp->p);
     free(dp);
 }

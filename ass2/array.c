@@ -33,7 +33,7 @@ void free_array(int type, array_t *A) {
         // do nothing
     } else if (type == NOT_HOLLOW) {
         for (int i = 0; i < A->n; i++) {
-            free(A->A[i]);
+            free_footpath(A->A[i]);
         }
     } else {
         exit_failure_type(type);

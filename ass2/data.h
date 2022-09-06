@@ -75,9 +75,9 @@
 typedef struct footpath_segment footpath_segment_t;
 struct footpath_segment {
     int footpath_id;
-    char address[MAX_STR_LEN + NULLBYTE_LEN];
-    char clue_sa[MAX_STR_LEN + NULLBYTE_LEN];
-    char asset_type[MAX_STR_LEN + NULLBYTE_LEN];
+    char *address;
+    char *clue_sa;
+    char *asset_type;
     double deltaz;
     double distance;
     double grade1in;
@@ -85,7 +85,7 @@ struct footpath_segment {
     int mccid_int;
     double rlmax;
     double rlmin;
-    char segside[MAX_STR_LEN + NULLBYTE_LEN];
+    char *segside;
     int statusid;
     int streetid;
     int street_group;

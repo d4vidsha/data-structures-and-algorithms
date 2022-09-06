@@ -52,7 +52,7 @@ void free_list(int type, list_t *list) {
         if (type == HOLLOW) {
             // do nothing
         } else if (type == NOT_HOLLOW) {
-            free(prev->fp);
+            free_footpath(prev->fp);
         } else {
             exit_failure_type(type);
         }

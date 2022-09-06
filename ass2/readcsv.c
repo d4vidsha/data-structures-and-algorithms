@@ -85,6 +85,14 @@ void skip_header_line(FILE *f) {
     while(fgetc(f) != NEWLINE);
 }
 
+char *get_strdup(FILE *f) {
+    char str[MAX_STR_LEN + NULLBYTE_LEN];
+    get_str(f, str);
+    char *strduped = strdup(str);
+    assert(strduped);
+    return strduped;
+}
+
 /*  Given a filename `f`, read a row into `fp` of type `footpath_segment_t`.
     Returns the pointer to malloc'd `fp`.
 */
@@ -93,9 +101,9 @@ footpath_segment_t *footpath_read_line(FILE *f) {
     fp = (footpath_segment_t *)malloc(sizeof(*fp));
     assert(fp);
     fp->footpath_id = get_int(f);
-    get_str(f, fp->address);
-    get_str(f, fp->clue_sa);
-    get_str(f, fp->asset_type);
+    fp->address = get_strdup(f);
+    fp->clue_sa = get_strdup(f);
+    fp->asset_type = get_strdup(f);
     fp->deltaz = get_double(f);
     fp->distance = get_double(f);
     fp->grade1in = get_double(f);
@@ -103,7 +111,7 @@ footpath_segment_t *footpath_read_line(FILE *f) {
     fp->mccid_int = get_int(f);
     fp->rlmax = get_double(f);
     fp->rlmin = get_double(f);
-    get_str(f, fp->segside);
+    fp->segside = get_strdup(f);
     fp->statusid = get_int(f);
     fp->streetid = get_int(f);
     fp->street_group = get_int(f);
@@ -112,6 +120,14 @@ footpath_segment_t *footpath_read_line(FILE *f) {
     fp->end_lat = get_double(f);
     fp->end_lon = get_double(f);
     return fp;
+}
+
+void free_footpath(footpath_segment_t *fp) {
+    free(fp->address);
+    free(fp->clue_sa);
+    free(fp->asset_type);
+    free(fp->segside);
+    free(fp);
 }
 
 /* =============================================================================
