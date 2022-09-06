@@ -62,7 +62,7 @@ void free_point(point2D_t *p);
 rectangle2D_t *create_rectangle(point2D_t *bl, point2D_t *tr);
 void free_rectangle(rectangle2D_t *r);
 void free_rectangles(rectangle2D_t **A, int n);
-datapoint_t *create_datapoint(int type, footpath_segment_t *fp, point2D_t *p);
+datapoint_t *create_datapoint(footpath_segment_t *fp, point2D_t *p);
 void free_datapoint(datapoint_t *dp);
 dpll_t *create_empty_dpll();
 dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot);
