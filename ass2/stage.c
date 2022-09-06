@@ -159,12 +159,13 @@ void stage4(FILE *out, qtnode_t *tree) {
         quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
         check_array_sorted(COLUMN_INDEX_FPID, resarr);
         
-        // convert array to a linked list so that we can print it
+        // convert array to a linked list so that we can remove duplicates
         list_t *reslist = convert_array_to_list(HOLLOW, resarr);
         free_array(HOLLOW, resarr);
+        reslist = remove_duplicates(COLUMN_INDEX_FPID, reslist);
 
-        // finally print only distinct results to `out` file
-        print_distinct_list(out, COLUMN_INDEX_FPID, reslist);
+        // finally print results to `out` file
+        print_list(out, reslist);
         free_list(HOLLOW, reslist);
     }
 }

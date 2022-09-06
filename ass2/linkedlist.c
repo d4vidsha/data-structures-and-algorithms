@@ -133,6 +133,27 @@ void build_list(FILE *f, list_t *list) {
     }
 }
 
+/*  Given a sorted list, return a new list but with no duplicate
+    footpath segments. The other list gets free'd. The footpath segment
+    data is `HOLLOW` copied.
+*/
+list_t *remove_duplicates(int col, list_t *list) {
+    assert(list);
+    list_t *results = create_empty_list();
+    node_t *curr;
+    curr = list->head;
+    while (curr->next) {
+        double cmp = cmp_column(col, curr->fp, curr->next->fp);
+        if (cmp != 0) {
+            append(HOLLOW, results, curr->fp);
+        }
+        curr = curr->next;
+    }
+    append(HOLLOW, results, curr->fp);
+    free_list(HOLLOW, list);
+    return results;
+}
+
 /* =============================================================================
    Written by David Sha.
    - Implementation of linked list structs inspired by Artem Polyvyanyy from
