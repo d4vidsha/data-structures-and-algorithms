@@ -106,7 +106,7 @@ dpll_t *create_dpll(dpnode_t *head, dpnode_t *foot) {
 }
 
 /*  Free the list by freeing all nodes and its contents. If the `dpll`
-    is hollow, don't free datapoints.
+    is `SHALLOW`, don't free datapoints.
 */
 void free_dpll(int type, dpll_t *list) {
     assert(list);
@@ -115,9 +115,9 @@ void free_dpll(int type, dpll_t *list) {
     while (curr) {
         prev = curr;
         curr = curr->next;
-        if (type == HOLLOW) {
+        if (type == SHALLOW) {
             // do nothing
-        } else if (type == NOT_HOLLOW) {
+        } else if (type == DEEP) {
             free_datapoint(prev->dp);
         } else {
             exit_failure_type(type);
@@ -134,9 +134,9 @@ dpll_t *dpll_append(int type, dpll_t *list, datapoint_t *dp) {
     dpnode_t *new;
     new = (dpnode_t *)malloc(sizeof(*new));
     assert(new);
-    if (type == HOLLOW) {
+    if (type == SHALLOW) {
         new->dp = dp;
-    } else if (type == NOT_HOLLOW) {
+    } else if (type == DEEP) {
         new->dp = datapoint_cpy(dp);
     } else {
         exit_failure_type(type);
@@ -234,7 +234,7 @@ void free_quadtree(qtnode_t *parent) {
     if (parent->colour == WHITE) {
         free_qtnode(parent);
     } else if (parent->colour == BLACK) {
-        free_dpll(NOT_HOLLOW, parent->dpll);
+        free_dpll(DEEP, parent->dpll);
         free_qtnode(parent);
     } else if (parent->colour == GREY) {
         for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
@@ -448,10 +448,10 @@ void add_point(qtnode_t *node, datapoint_t *dp) {
 void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     assert(dp && node);
     if (node->colour == WHITE) {
-        dpll_append(HOLLOW, node->dpll, dp);
+        dpll_append(SHALLOW, node->dpll, dp);
         node->colour = BLACK;
     } else if (node->colour == BLACK) {
-        dpll_append(HOLLOW, node->dpll, dp);
+        dpll_append(SHALLOW, node->dpll, dp);
     } else if (node->colour == GREY) {
         fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
                         "as the node is an internal node");
@@ -527,7 +527,7 @@ void _range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
         dpnode_t *curr = root->dpll->head;
         while (curr) {
             if (in_rectangle(curr->dp->p, range)) {
-                dpll_append(HOLLOW, res, curr->dp);
+                dpll_append(SHALLOW, res, curr->dp);
             }
             curr = curr->next;
         }
@@ -591,12 +591,12 @@ char *get_str_direction(int direction) {
     return str;
 }
 
-/*  Given the type which is neither `HOLLOW` nor `NOT_HOLLOW`, exit with
+/*  Given the type which is neither `SHALLOW` nor `DEEP`, exit with
     a failure message.
 */
 void exit_failure_type(int type) {
-    fprintf(stderr, "ERROR: type unknown named %d, is either `HOLLOW` or "
-                    "`NOT_HOLLOW`\n", type);
+    fprintf(stderr, "ERROR: type unknown named %d, is either `SHALLOW` or "
+                    "`DEEP`\n", type);
     exit(EXIT_FAILURE);
 }
 

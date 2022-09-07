@@ -49,9 +49,9 @@ void free_list(int type, list_t *list) {
     while (curr) {
         prev = curr;
         curr = curr->next;
-        if (type == HOLLOW) {
+        if (type == SHALLOW) {
             // do nothing
-        } else if (type == NOT_HOLLOW) {
+        } else if (type == DEEP) {
             free(prev->fp);
         } else {
             exit_failure_type(type);
@@ -86,9 +86,9 @@ list_t *append(int type, list_t *list, footpath_segment_t *fp) {
     node_t *new;
     new = (node_t *)malloc(sizeof(*new));
     assert(new);
-    if (type == HOLLOW) {
+    if (type == SHALLOW) {
         new->fp = fp;
-    } else if (type == NOT_HOLLOW) {
+    } else if (type == DEEP) {
         new->fp = footpath_segment_cpy(fp);
     } else {
         exit_failure_type(type);
@@ -127,15 +127,15 @@ void build_list(FILE *f, list_t *list) {
     while ((c = fgetc(f)) != EOF) {
         ungetc(c, f);
         fp = footpath_read_line(f);
-        // `HOLLOW` here refers to adding the `fp` as a pointer to the list
-        // `NOT_HOLLOW` would duplicate `fp` which we don't need
-        list = append(HOLLOW, list, fp);
+        // `SHALLOW` here refers to adding the `fp` as a pointer to the list
+        // `DEEP` would duplicate `fp` which we don't need
+        list = append(SHALLOW, list, fp);
     }
 }
 
 /*  Given a sorted list, return a new list but with no duplicate
     footpath segments. The other list gets free'd. The footpath segment
-    data is `HOLLOW` copied.
+    data is `SHALLOW` copied.
 */
 list_t *remove_duplicates(int col, list_t *list) {
     assert(list);
@@ -145,12 +145,12 @@ list_t *remove_duplicates(int col, list_t *list) {
     while (curr->next) {
         double cmp = cmp_column(col, curr->fp, curr->next->fp);
         if (cmp != 0) {
-            append(HOLLOW, results, curr->fp);
+            append(SHALLOW, results, curr->fp);
         }
         curr = curr->next;
     }
-    append(HOLLOW, results, curr->fp);
-    free_list(HOLLOW, list);
+    append(SHALLOW, results, curr->fp);
+    free_list(SHALLOW, list);
     return results;
 }
 

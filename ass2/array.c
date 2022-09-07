@@ -29,9 +29,9 @@ array_t *create_array() {
 */
 void free_array(int type, array_t *A) {
     assert(A);
-    if (type == HOLLOW) {
+    if (type == SHALLOW) {
         // do nothing
-    } else if (type == NOT_HOLLOW) {
+    } else if (type == DEEP) {
         for (int i = 0; i < A->n; i++) {
             free(A->A[i]);
         }
@@ -70,9 +70,9 @@ void ensure_insert_to_array(array_t *A) {
 void append_to_array(int type, array_t *A, footpath_segment_t *fp) {
     assert(A && fp);
     ensure_insert_to_array(A);
-    if (type == HOLLOW) {
+    if (type == SHALLOW) {
         A->A[A->n] = fp;
-    } else if (type == NOT_HOLLOW) {
+    } else if (type == DEEP) {
         A->A[A->n] = footpath_segment_cpy(fp);
     } else {
         exit_failure_type(type);

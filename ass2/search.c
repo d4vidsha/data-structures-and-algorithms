@@ -24,7 +24,7 @@ list_t *find_addresses(char *address, list_t *list) {
         int result = strcmp(address, curr->fp->address);
         if (result == 0) {
             // addresses are exactly the same
-            new = append(NOT_HOLLOW, new, curr->fp);
+            new = append(DEEP, new, curr->fp);
         }
         curr = curr->next;
     }
@@ -79,7 +79,7 @@ list_t *linearsearch(double value, list_t *list) {
 
         // we are guaranteed at least one footpath segment appears
         if (diff == smallest_diff) {
-            result_list = append(NOT_HOLLOW, result_list, curr->fp);
+            result_list = append(DEEP, result_list, curr->fp);
         }
 
         curr = curr->next;
@@ -125,7 +125,7 @@ array_t *binarysearch(double val, array_t *A) {
         if (smallest_diff == diff) {
             // reached section of array where value closest matches
             // the array elements
-            append_to_array(NOT_HOLLOW, results, A->A[mid]);
+            append_to_array(DEEP, results, A->A[mid]);
             break;
         } else if (val > A->A[mid]->grade1in) {
             lo = mid + 1;

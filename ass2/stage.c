@@ -42,9 +42,9 @@ void stage1(FILE *out, list_t *list) {
             printf("%s --> %s\n", line, NOTFOUND);
         }
 
-        free_list(NOT_HOLLOW, result_list);
+        free_list(DEEP, result_list);
     }
-    free_list(NOT_HOLLOW, list);
+    free_list(DEEP, list);
 }
 
 /*  Stage 2 of project. Finds the closeest footpath segments by `grade1in` 
@@ -58,8 +58,8 @@ void stage2(FILE *out, list_t *list) {
     quicksort(list, COLUMN_INDEX_GRADE1IN);
 
     // convert linked list to array and remove linked list
-    array_t *array = convert_to_array(NOT_HOLLOW, list);
-    free_list(NOT_HOLLOW, list);
+    array_t *array = convert_to_array(DEEP, list);
+    free_list(DEEP, list);
 
     // process queries on the fly from `stdin`
     char line[MAX_STR_LEN + NEWLINE_LEN + NULLBYTE_LEN];
@@ -80,9 +80,9 @@ void stage2(FILE *out, list_t *list) {
         // print to `stdout`
         printf("%s --> %.1lf\n", line, results->A[0]->grade1in);
         
-        free_array(NOT_HOLLOW, results);
+        free_array(DEEP, results);
     }
-    free_array(NOT_HOLLOW, array);
+    free_array(DEEP, array);
 }
 
 /*  Stage 3 of project. Given coordinate queries from `stdin` of format
@@ -115,13 +115,13 @@ void stage3(FILE *out, qtnode_t *tree) {
         // in which case we don't do anything
         if (results) {
             // sort results
-            array_t *resarr = convert_dpll_to_array(HOLLOW, results);
+            array_t *resarr = convert_dpll_to_array(SHALLOW, results);
             quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
             check_array_sorted(COLUMN_INDEX_FPID, resarr);
             
             // print results
             print_array(out, resarr);
-            free_array(HOLLOW, resarr);
+            free_array(SHALLOW, resarr);
         }
         free_point(point);
     }
@@ -143,7 +143,7 @@ void stage4(FILE *out, qtnode_t *tree) {
         rectangle2D_t *range = get_rectangle(line);
 
         // range search for all datapoints within range with `results`
-        // being a hollow `dpll` i.e. list only has pointers to data from
+        // being a `SHALLOW` `dpll` i.e. list only has pointers to data from
         // the quadtree
         printf("%s -->", line);
         dpll_t *results = range_search_quadtree(tree, range);
@@ -154,19 +154,19 @@ void stage4(FILE *out, qtnode_t *tree) {
         fprintf(out, "%s\n", line);
 
         // convert to an array and then sort the array
-        array_t *resarr = convert_dpll_to_array(HOLLOW, results);
-        free_dpll(HOLLOW, results);
+        array_t *resarr = convert_dpll_to_array(SHALLOW, results);
+        free_dpll(SHALLOW, results);
         quicksort_array(COLUMN_INDEX_FPID, resarr, 0, resarr->n - 1);
         check_array_sorted(COLUMN_INDEX_FPID, resarr);
         
         // convert array to a linked list so that we can remove duplicates
-        list_t *reslist = convert_array_to_list(HOLLOW, resarr);
-        free_array(HOLLOW, resarr);
+        list_t *reslist = convert_array_to_list(SHALLOW, resarr);
+        free_array(SHALLOW, resarr);
         reslist = remove_duplicates(COLUMN_INDEX_FPID, reslist);
 
         // finally print results to `out` file
         print_list(out, reslist);
-        free_list(HOLLOW, reslist);
+        free_list(SHALLOW, reslist);
     }
 }
 

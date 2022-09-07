@@ -12,12 +12,12 @@
 
 /* #defines ================================================================= */
 
-// A data struct is "hollow" if it has no data of its own, but points to
+// A data struct is "shallow" if it has no data of its own, but points to
 // other data either in some other structure or from some other malloc'd
-// area. A data struct is "not hollow" if it has its own data and is not 
+// area. A data struct is "deep" if it has its own data and is not 
 // a pointer to data from another structure.
-#define HOLLOW 1                 // data is only pointed to
-#define NOT_HOLLOW 0             // data is fully copied (usually with `memcpy`)
+#define DEEP 1                   // data is fully copied (usually with `memcpy`)
+#define SHALLOW 0                // data is only pointed to
 
 // readcsv.c
 #define COMMA ','

@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 
         // free list containing all the footpath segments data
         // note that it does not affect the data stored in the quadtree
-        free_list(NOT_HOLLOW, list);
+        free_list(DEEP, list);
 
         // query on the fly from `stdin`
         if (stage == 3) {
