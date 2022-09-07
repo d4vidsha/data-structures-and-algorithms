@@ -19,8 +19,16 @@ void partition(int *array, int length){
     /* Leftmost pivot */
     int pivot = array[0];
     /* Impelment partition here */
-    
-    
+    i = 0;
+    j = length - 1;
+    while (i != j) {
+        if (array[i] > pivot && pivot > array[j] && i < j) {
+            swap(i, j, array);
+        }
+        i++;
+        j--;
+    }
+    swap(0, i, array);
     
     
     /* ------------------------ */
