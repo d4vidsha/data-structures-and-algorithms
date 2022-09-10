@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 2
    quadtree.c :
-            = all related to quadtrees
+            = all related to creating and manipulating quadtrees
 ============================================================================= */
 #include <stdio.h>
 #include <stdlib.h>
@@ -459,93 +459,6 @@ void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node) {
     } else {
         fprintf(stderr, "ERROR: cannot attach datapoint to quadtree node "
                         "as the node is of an unknown colour");
-        exit(EXIT_FAILURE);
-    }
-}
-
-/*  Given a root node of a quadtree and a point (which should ideally lie
-    in the region of the root node), find the leaf node that contains this
-    point and return the datapoints associated with that leaf node.
-*/
-dpll_t *search_quadtree(qtnode_t *root, point2D_t *p) {
-    assert(root && p);
-
-    // ensure the search point is within the root node's rectangle
-    if (!in_rectangle(p, root->r)) {
-        fprintf(stderr, "ERROR: search point not in root node's rectangle\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // traverse down the quadtree until a leaf node is found
-    qtnode_t *curr = root;
-    int quadrant;
-    while (curr->colour == GREY) {
-        quadrant = determine_quadrant(p, curr->r);
-        curr = curr->quadrants[quadrant];
-        print_direction(quadrant);
-    }
-    printf("\n");
-
-    // if `WHITE`, it will return `NULL` as specified by 
-    // `create_blank_qtnode()` and if `BLACK`, it will return
-    // the linked list of datapoints
-    if (curr->colour == WHITE) {
-        return NULL;
-    } else if (curr->colour == BLACK) {
-        return curr->dpll;
-    } else {
-        fprintf(stderr, "ERROR: while traversing quadtree, searching ended\n"
-                        "on a leaf node with an unknown colour");
-        exit(EXIT_FAILURE);
-    }
-}
-
-/*  Given a root node of a quadtree and a rectangule range, find all the 
-    datapoints that lie within the rectangle range and return them in a 
-    datapoint linked list.
-*/
-dpll_t *range_search_quadtree(qtnode_t *root, rectangle2D_t *range) {
-    dpll_t *results = create_empty_dpll();
-    _range_search_quadtree(results, root, range);
-    return results;
-}
-
-/*  Given a root node of a quadtree and a `range` described by a rectangle,
-    find and return the datapoints in this range to `res`. This is a 
-    recursive helper function, hence the underscore at the start of the
-    function name.
-*/
-void _range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range) {
-    assert(res && root && range);
-
-    if (root->colour == WHITE) {
-        // do nothing
-        return;
-
-    } else if (root->colour == BLACK) {
-        // add datapoints from a `qtnode` to the result list
-        dpnode_t *curr = root->dpll->head;
-        while (curr) {
-            if (in_rectangle(curr->dp->p, range)) {
-                dpll_append(SHALLOW, res, curr->dp);
-            }
-            curr = curr->next;
-        }
-
-    } else if (root->colour == GREY) {
-        // scanning through child nodes
-        for (int i = 0; i < MAX_CHILD_QTNODES; i++) {
-            if (rectangle_overlap(root->quadrants[i]->r, range) 
-                    && root->quadrants[i]->colour != WHITE) {
-                // rectangle overlap
-                print_direction(i);
-                _range_search_quadtree(res, root->quadrants[i], range);
-            }
-        }
-
-    } else {
-        fprintf(stderr, "ERROR: while traversing quadtree, range searching "
-                        "ended\n on a leaf node with an unknown colour");
         exit(EXIT_FAILURE);
     }
 }

@@ -1,7 +1,7 @@
 /* =============================================================================
    Project: Assignment 2
    quadtree.h :
-            = all related to quadtrees
+            = all related to creating and manipulating quadtrees
 ============================================================================= */
 #ifndef _QUADTREE_H_
 #define _QUADTREE_H_
@@ -84,9 +84,6 @@ int determine_quadrant(point2D_t *p, rectangle2D_t *r);
 point2D_t *create_midpoint(rectangle2D_t *r);
 void add_point(qtnode_t *node, datapoint_t *dp);
 void add_datapoint_to_qtnode(datapoint_t *dp, qtnode_t *node);
-dpll_t *search_quadtree(qtnode_t *root, point2D_t *p);
-dpll_t *range_search_quadtree(qtnode_t *root, rectangle2D_t *range);
-void _range_search_quadtree(dpll_t *res, qtnode_t *root, rectangle2D_t *range);
 int is_valid_colour(int colour);
 int is_rectangle_limit(rectangle2D_t *r);
 int is_same_point(point2D_t *p1, point2D_t *p2);
