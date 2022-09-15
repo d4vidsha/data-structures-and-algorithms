@@ -5,7 +5,9 @@
 struct linkedList *mergeSort(struct linkedList *list){
     struct linkedList *sortedList = list;
 	/* FILL IN SETUP FOR Linked List BOTTOM-UP mergesort */
+    struct linkedList *queue;
     
+
     /* FILL IN loop */
 
 	return sortedList;
