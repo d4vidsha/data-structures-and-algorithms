@@ -1,8 +1,20 @@
-w8.4: w8.4.o mergeInt.o
-	gcc -Wall -o w8.4 w8.4.o mergeInt.o
+# define C compiler & flags
+CC = gcc
+CFLAGS = -Wall -g
+# define libraries to be linked (for example -lm)
+LDLIBS = 
 
-w8.4.o: w8.4.c mergeInt.h
-	gcc -Wall -o w8.4.o w8.4.c -g -c
-	
-mergeInt.o: mergeInt.c mergeInt.h
-	gcc -Wall -o mergeInt.o mergeInt.c -g -c
+# define sets of source files and object files
+SRC = w8.4.c mergeInt.c queue.c
+# OBJ is the same as SRC, just replace .c with .o
+OBJ = $(SRC:.c=.o)
+
+# define the executable names
+EXE1 = w8.4
+
+# the first target
+$(EXE1): $(OBJ) 
+	$(CC) $(CFLAGS) -o $(EXE1) $(OBJ) $(LDLIBS)
+
+clean:
+	rm -f $(OBJ) $(EXE1)
