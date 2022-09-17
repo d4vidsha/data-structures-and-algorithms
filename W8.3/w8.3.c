@@ -49,7 +49,7 @@ int main(int argc, char **argv){
         current = current->next;
     }
     printf("\n");
-    free_list(list);
+    // free_list(list);
 
     return 0;
 }

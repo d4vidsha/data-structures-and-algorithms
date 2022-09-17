@@ -28,7 +28,10 @@ struct linkedList *mergeSort(struct linkedList *list){
         enqueue(q, l3);
     }
 
-	struct linkedList *sortedList = dequeue(q);
+	struct linkedList *sortedList = NULL;
+    if (q->num == 1) {
+        sortedList = dequeue(q);
+    }
     free(q);
     return sortedList;
 }
@@ -40,35 +43,30 @@ struct linkedList *merge(struct linkedList *l1, struct linkedList *l2) {
     curr1 = l1;
     curr2 = l2;
 
-    // mergesort
+    // merge l1 and l2
     while (curr1 && curr2) {
-        assert(curr1 && curr2);
-        if (cmp(curr1->item, curr2->item) < 0) {
+        if (curr1->item < curr2->item) {
             merged = append(merged, curr1->item);
-            struct linkedList *prev = curr1;
             curr1 = curr1->next;
-            free(prev);
         } else {
             merged = append(merged, curr2->item);
-            struct linkedList *prev = curr2;
             curr2 = curr2->next;
-            free(prev);
         }
     }
 
-    // add the rest
-    if (curr1 != NULL) {
+    // append remaining elements
+    while (curr1) {
         merged = append(merged, curr1->item);
-        struct linkedList *prev = curr1;
         curr1 = curr1->next;
-        free(prev);
     }
-    if (curr2 != NULL) {
+    while (curr2) {
         merged = append(merged, curr2->item);
-        struct linkedList *prev = curr2;
         curr2 = curr2->next;
-        free(prev);
     }
+
+    // free l1 and l2
+    free_list(l1);
+    free_list(l2);
 
     return merged;
 }
