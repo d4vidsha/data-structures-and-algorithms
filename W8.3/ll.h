@@ -11,3 +11,5 @@ struct linkedList *prepend(struct linkedList *head, int item);
 
 /* Add a linked list item to the end of the list, traversing all items. */
 struct linkedList *append(struct linkedList *head, int item);
+
+void free_list(struct linkedList *list);

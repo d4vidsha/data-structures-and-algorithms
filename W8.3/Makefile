@@ -1,12 +1,20 @@
-w8.3: w8.3.o merge.o ll.o
-	gcc -Wall -o w8.3 w8.3.o merge.o ll.o
+# define C compiler & flags
+CC = gcc
+CFLAGS = -Wall -g
+# define libraries to be linked (for example -lm)
+LDLIBS = 
 
-w8.3.o: w8.3.c merge.h ll.h
-	gcc -Wall -o w8.3.o w8.3.c -g -c
-	
-merge.o: merge.c merge.h ll.h
-	gcc -Wall -o merge.o merge.c -g -c
+# define sets of source files and object files
+SRC = w8.3.c merge.c ll.c queue.c
+# OBJ is the same as SRC, just replace .c with .o
+OBJ = $(SRC:.c=.o)
 
-ll.o: ll.c ll.h
-	gcc -Wall -o ll.o ll.c -g -c
+# define the executable names
+EXE1 = w8.3
 
+# the first target
+$(EXE1): $(OBJ) 
+	$(CC) $(CFLAGS) -o $(EXE1) $(OBJ) $(LDLIBS)
+
+clean:
+	rm -f $(OBJ) $(EXE1)

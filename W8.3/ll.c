@@ -25,3 +25,13 @@ struct linkedList *append(struct linkedList *head, int item){
 	(*current)->item = item;
     return head;
 }
+
+void free_list(struct linkedList *list) {
+	struct linkedList *curr, *prev;
+	curr = list;
+	while (curr) {
+		prev = curr;
+		curr = curr->next;
+		free(prev);
+	}
+}
