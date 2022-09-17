@@ -1,5 +1,5 @@
-# COMP20003
-A subject from the University of Melbourne. This repository contains code relating to the workshops for this subject. The answers are not guaranteed to be the best solution, but they are the best I could come up with at the time. There are some good algorithms in here and are notably listed below.
+# COMP20003: Algorithms and Data Structures
+A subject from the University of Melbourne. This repository contains code relating to the workshops for this subject. The answers are not guaranteed to be the best solution, but they are the best I could come up with at the time. There are some good algorithms in here and are notably listed below. See the [subject outline](https://handbook.unimelb.edu.au/2022/subjects/comp20003) for more information on the subject.
 
 ---
 ### Folders
