@@ -65,7 +65,8 @@ int main()
     printf("new PQ: ");
     for( i = 0; i < PQsize; i++)
         printf(" %d", PQ[i]);
-
+    printf("\n");
+    
     return 0;
 
 }
