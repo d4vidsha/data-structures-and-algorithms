@@ -21,7 +21,12 @@ struct linkedList *mergeSort(struct linkedList *list){
 	*/
 	while(current){
 		next = current->next;
-		current->next = NULL;
+		struct linkedList *curr = current;
+		while (next && (curr->item <= next->item)) {
+            curr = curr->next;
+            next = curr->next;
+        }
+		curr->next = NULL;
 		queue = add(queue, current);
 		current = next;
 	}
