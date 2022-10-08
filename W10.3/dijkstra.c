@@ -25,8 +25,18 @@ struct dijkstraRes *dijkstra(struct digraph *graph, int source){
          - a function to get the neighbours of a given node (getAdjacent)
     */
     /* Initialise shortestPaths and prev. */
-        
+    res->shortestPaths = (int *) malloc(sizeof(int) * nodeCount);
+    res->prev = (int *) malloc(sizeof(int) * nodeCount);
+    for (i = 0; i < nodeCount; i++) {
+        res->shortestPaths[i] = NOPATH;
+        res->prev[i] = NOPATH;
+    }
+
     /* Initialise a seen array */
+    int *seen = (int *) malloc(sizeof(int) * nodeCount);
+    for (i = 0; i < nodeCount; i++) {
+        seen[i] = 0;
+    }
     
     /* Run Dijkstra's Algorithm. */
     struct pq *p = newPQ();
@@ -54,6 +64,21 @@ struct dijkstraRes *dijkstra(struct digraph *graph, int source){
             (seen)[current] = 1;
         }
         /* FILL IN - loop through adjacent vertices */
+        adjacent = getAdjacent(graph, current);
+        last = adjacent;
+        while (last != NULL) {
+            /* update shortestPaths and prev */
+            if ((res->shortestPaths)[last->destIndex] == NOPATH || 
+                (res->shortestPaths)[last->destIndex] > 
+                (res->shortestPaths)[current] + last->weight) {
+                (res->shortestPaths)[last->destIndex] = 
+                    (res->shortestPaths)[current] + last->weight;
+                (res->prev)[last->destIndex] = current;
+                enqueue(p, (void *) (size_t) last->destIndex, 
+                    (res->shortestPaths)[last->destIndex]);
+            }
+            last = last->next;
+        }
     }
     
     freePQ(p);
@@ -77,6 +102,13 @@ void constructPath(struct dijkstraRes *res, struct digraph *graph, int *path,
     if(!res || ! res->prev){
         path[0] = 1;
         path[3] = 1;
+    } else {
+        int current = destination;
+        while (current != res->sourceNode) {
+            path[current] = 1;
+            current = (res->prev)[current];
+        }
+        path[current] = 1;
     }
     if(res->prev[destination] == NOPATH){
         /* No path. */
