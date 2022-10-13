@@ -85,8 +85,8 @@ int game_dijkstra_search(const game_info_t* info,
 	
 	initialize_search( &max_nodes, info, init_state );
 
-	//Create Root node (uncomment code below)
-	//tree_node_t* root = node_create(NULL, info, init_state);
+	//Create Root node
+	tree_node_t* root = node_create(NULL, info, init_state);
 
 	//Create Priority Queue
 	heapq_t pq = heapq_create(max_nodes);
@@ -98,50 +98,60 @@ int game_dijkstra_search(const game_info_t* info,
 	double start = now();
 
 	//Enqueue root
-		
+    heapq_enqueue(&pq, root);
 
 	/**
 	 * FILL IN THE CODE BELOW TO PERFORM DIJKSTRA OVER THE POSSIBLE 
 	 * MOVES TO SOLVE FLOW GAME
 	 */
-	
+	tree_node_t *node, *child;
+    int nextColor;
 	
 	//While no solution found
+	while (result == SEARCH_IN_PROGRESS) {
 
 		//Remove node from Queue, in order to generate its successors
+        node = heapq_deque(&pq);
 
 		//Get next color to explore its 4 directions
-	        //(use game_next_move_color function in engine.h)
+        nextColor = game_next_move_color(info, &node->state);
 
-			//Check move in that direction is possible 
+        for (int i = 0; i < 4; i++) {
+			//Check move in that direction is possible            
 			//Within the rules of the game (see engine.h)
+            if (game_can_move(info, &node->state, nextColor, i)) {
 
 				//Create child node
+                child = node_create(node, info, &node->state);
 
 				//In no more space in memory, end search (more nodes in pq than max_nodes)
+                if (heapq_count(&pq) > max_nodes) {
+                    result = SEARCH_FULL;
+                    break;
+                }
 
 				//Update child state given the direction
+                game_make_move(info, &child->state, nextColor, i);
 				
-				//Remove node if new position creates a deadend (uncomment code below)
-				//if(g_options.node_check_deadends && game_check_deadends(info,&child->state)){
-				//	free(child);
-				//	continue;
-				//	
-				//}
+				//Remove node if new position creates a deadend
+				if(g_options.node_check_deadends && game_check_deadends(info,&child->state)){
+					free(child);
+					continue;
+				}
 				
-				//Check if game is solved (uncomment code below)
-				//if ( is_solved(child, info) ) {          
-				//	result = SEARCH_SUCCESS;
-				//	solution_node = child;
-				//	*final_state = solution_node->state;
-				//	break;     
-				//}
+				//Check if game is solved
+				if (is_solved(child, info)) {          
+					result = SEARCH_SUCCESS;
+					solution_node = child;
+					*final_state = solution_node->state;
+					break;     
+				}
 
 				//Add child to the queue
-				
-				
-
-
+                heapq_enqueue(&pq, child);
+            }
+        }
+	}
 
 	/**
 	 * END OF FILL IN CODE SECTION
@@ -152,7 +162,7 @@ int game_dijkstra_search(const game_info_t* info,
 	if (elapsed_out) { *elapsed_out = elapsed; }
 	if (nodes_out)   { *nodes_out = heapq_count(&pq); }
 
-	//Report soultion
+	//Report solution
 	if( result == SEARCH_SUCCESS
 	    && g_options.display_animate
 	    && !g_options.display_quiet )
