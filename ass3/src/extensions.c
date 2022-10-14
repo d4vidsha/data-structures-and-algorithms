@@ -109,15 +109,26 @@ void game_order_colors(game_info_t* info,
 int game_check_deadends(const game_info_t* info,
                         const game_state_t* state) {
     
-    //For each grid cell
-    for (size_t y=0; y<info->size; ++y) {
-        for (size_t x=0; x<info->size; ++x) {
-            //Check if cell is a deadend (only one free neighbor)
-            if (game_is_free(info, state, x, y) 
-             && game_num_free_coords(info, state, x, y) == 1) {
-                return 1;
-            }
+    int num_free = 0;
+    pos_t head, neighbor;
+    int x, y;
+
+    //Get the head position
+    head = state->pos[0];
+
+    //For each direct neighbor of the head position
+    for (int dir = DIR_LEFT; dir <= DIR_DOWN; dir++) {
+
+        //Check if the neighbor is free
+        neighbor = pos_offset_pos(info, head, dir);
+	    pos_get_coords(neighbor, &x, &y);
+        if (game_is_free(info, state, x, y)) {
+            num_free++;
         }
+    }
+
+    if (num_free == 1) {
+        return 1;
     }
 
 	return 0;
