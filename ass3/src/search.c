@@ -116,10 +116,10 @@ int game_dijkstra_search(const game_info_t* info,
 		//Get next color to explore its 4 directions
         nextColor = game_next_move_color(info, &node->state);
 
-        for (int i = DIR_LEFT; i <= DIR_DOWN; i++) {
+        for (int dir = DIR_LEFT; dir <= DIR_DOWN; dir++) {
 			//Check move in that direction is possible            
 			//Within the rules of the game (see engine.h)
-            if (game_can_move(info, &node->state, nextColor, i)) {
+            if (game_can_move(info, &node->state, nextColor, dir)) {
 
 				//Create child node
                 child = node_create(node, info, &node->state);
@@ -131,7 +131,7 @@ int game_dijkstra_search(const game_info_t* info,
                 }
 
 				//Update child state given the direction
-                game_make_move(info, &child->state, nextColor, i);
+                game_make_move(info, &child->state, nextColor, dir);
 				
 				//Remove node if new position creates a deadend
 				if(g_options.node_check_deadends && game_check_deadends(info, &child->state)){
