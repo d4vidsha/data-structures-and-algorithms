@@ -134,7 +134,7 @@ int game_dijkstra_search(const game_info_t* info,
                 game_make_move(info, &child->state, nextColor, i);
 				
 				//Remove node if new position creates a deadend
-				if(g_options.node_check_deadends && game_check_deadends(info,&child->state)){
+				if(g_options.node_check_deadends && game_check_deadends(info, &child->state)){
 					free(child);
 					continue;
 				}
