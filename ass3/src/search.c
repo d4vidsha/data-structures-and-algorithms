@@ -124,7 +124,7 @@ int game_dijkstra_search(const game_info_t* info,
 				//Create child node
                 child = node_create(node, info, &node->state);
 
-				//In no more space in memory, end search (more nodes in pq than max_nodes)
+				//If no more space in memory, end search (more nodes in pq than max_nodes)
                 if (heapq_count(&pq) > max_nodes) {
                     result = SEARCH_FULL;
                     break;
