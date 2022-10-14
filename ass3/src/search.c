@@ -143,6 +143,7 @@ int game_dijkstra_search(const game_info_t* info,
 				if (is_solved(child, info)) {          
 					result = SEARCH_SUCCESS;
 					solution_node = child;
+					free(child);
 					*final_state = solution_node->state;
 					break;     
 				}
@@ -151,6 +152,7 @@ int game_dijkstra_search(const game_info_t* info,
                 heapq_enqueue(&pq, child);
             }
         }
+		free(node);
 	}
 
 	/**
