@@ -108,13 +108,18 @@ void game_order_colors(game_info_t* info,
 
 int game_check_deadends(const game_info_t* info,
                         const game_state_t* state) {
+    
+    //For each grid cell
+    for (size_t y=0; y<info->size; ++y) {
+        for (size_t x=0; x<info->size; ++x) {
+            //Check if cell is a deadend (only one free neighbor)
+            if (game_is_free(info, state, x, y) 
+             && game_num_free_coords(info, state, x, y) == 1) {
+                return 1;
+            }
+        }
+    }
 
-
-	/**
-	 * FILL CODE TO DETECT DEAD-ENDS
-	 */
-	
 	return 0;
-
 }
                                          
