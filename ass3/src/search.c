@@ -127,6 +127,7 @@ int game_dijkstra_search(const game_info_t* info,
 				//If no more space in memory, end search (more nodes in pq than max_nodes)
                 if (heapq_count(&pq) > max_nodes) {
                     result = SEARCH_FULL;
+                    free(child);
                     break;
                 }
 
@@ -143,8 +144,8 @@ int game_dijkstra_search(const game_info_t* info,
 				if (is_solved(child, info)) {          
 					result = SEARCH_SUCCESS;
 					solution_node = child;
-					free(child);
 					*final_state = solution_node->state;
+					free(child);
 					break;     
 				}
 
