@@ -98,7 +98,44 @@ void game_order_colors(game_info_t* info,
 
 }
 
+//////////////////////////////////////////////////////////////////////
+// Check if the position is a dead end. This function is heavily 
+// influenced by the code in the original solver found here:
+// https://github.com/mzucker/flow_solver/blob/master/flow_solver.c
 
+int game_is_deadend(const game_info_t* info,
+                    const game_state_t* state,
+                    pos_t pos) {
+
+    assert(pos != INVALID_POS && !state->cells[pos]);
+
+    int x, y;
+    pos_get_coords(pos, &x, &y);
+  
+    int num_free = 0;
+
+    for (int dir = DIR_LEFT; dir <= DIR_DOWN; dir++) {
+        pos_t neighbor_pos = offset_pos(info, x, y, dir);
+        if (neighbor_pos != INVALID_POS) {
+            if (!state->cells[neighbor_pos]) {
+                ++num_free;
+            } else {
+                for (size_t color=0; color<info->num_colors; ++color) {
+                    if (state->completed & (1 << color)) {
+                        continue;
+                    }
+                    if (neighbor_pos == state->pos[color] ||
+                        neighbor_pos == info->goal_pos[color]) {
+                        ++num_free;
+                    }
+                }                                                             
+            }
+        }
+    }
+
+    return num_free <= 1;
+
+}
 
 //////////////////////////////////////////////////////////////////////
 // Check for dead-end regions of freespace where there is no way to
@@ -109,28 +146,37 @@ void game_order_colors(game_info_t* info,
 int game_check_deadends(const game_info_t* info,
                         const game_state_t* state) {
     
-    int num_free = 0;
-    pos_t head, neighbor;
+    pos_t head_pos, neighbor_pos1, neighbor_pos2;
     int x, y;
 
-    //Get the head position
-    head = state->pos[0];
+    //Get last head position
+    head_pos = state->pos[state->last_color];
 
     //For each direct neighbor of the head position
-    for (int dir = DIR_LEFT; dir <= DIR_DOWN; dir++) {
+    for (int dir=0; dir<4; ++dir) {
 
-        //Check if the neighbor is free
-        neighbor = pos_offset_pos(info, head, dir);
-	    pos_get_coords(neighbor, &x, &y);
+        //Check if the neighbor is free and if it is a deadend
+        neighbor_pos1 = pos_offset_pos(info, head_pos, dir);
+	    pos_get_coords(neighbor_pos1, &x, &y);
         if (game_is_free(info, state, x, y)) {
-            num_free++;
+            if (game_is_deadend(info, state, neighbor_pos1)) {
+                return 1;
+            }
         }
-    }
 
-    if (num_free == 1) {
-        return 1;
+        //For each direct neighbor of the neighbor
+        for (int dir=0; dir<4; ++dir) {
+
+            //Check if the neighbor's neighbor is free and if it is a deadend
+            neighbor_pos2 = pos_offset_pos(info, neighbor_pos1, dir);
+            pos_get_coords(neighbor_pos2, &x, &y);
+            if (game_is_free(info, state, x, y)) {
+                if (game_is_deadend(info, state, neighbor_pos2)) {
+                    return 1;
+                }
+            }
+        }
     }
 
 	return 0;
 }
-                                         
