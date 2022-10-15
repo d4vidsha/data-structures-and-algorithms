@@ -9,7 +9,7 @@
 // Check deadends to the given depth. If depth is 1, then check all
 // deadends that can be reached in one move. If depth is 2, then
 // check all deadends that can be reached in two moves, and so on.
-int SEARCH_DEPTH = 2;
+#define SEARCH_DEPTH 2
 
 //////////////////////////////////////////////////////////////////////
 // Place the game colors into a set order
