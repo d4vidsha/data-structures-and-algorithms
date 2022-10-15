@@ -121,7 +121,8 @@ int game_dijkstra_search(const game_info_t* info,
 		//Get next color to explore its 4 directions
         nextColor = game_next_move_color(info, &node->state);
 
-        for (int dir = DIR_LEFT; dir <= DIR_DOWN; dir++) {
+        //For each direction
+        for (int dir=0; dir<4; ++dir) {
 			//Check move in that direction is possible            
 			//Within the rules of the game (see engine.h)
             if (game_can_move(info, &node->state, nextColor, dir)) {
