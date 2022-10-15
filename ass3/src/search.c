@@ -110,6 +110,11 @@ int game_dijkstra_search(const game_info_t* info,
 	//While no solution found
 	while (result == SEARCH_IN_PROGRESS) {
 
+        if (heapq_empty(&pq)) {
+            result = SEARCH_UNREACHABLE;
+            break;
+        }
+
 		//Remove node from Queue, in order to generate its successors
         node = heapq_deque(&pq);
 
