@@ -99,6 +99,59 @@ void game_order_colors(game_info_t* info,
 }
 
 //////////////////////////////////////////////////////////////////////
+// Check for dead-end regions of freespace where there is no way to
+// put an active path into and out of it. Any freespace node which
+// has only one free neighbor represents such a dead end. For the
+// purposes of this check, cur and goal positions count as "free".
+
+int game_check_deadends(const game_info_t* info,
+                        const game_state_t* state) {
+    
+    //Get last head position
+    pos_t head_pos = state->pos[state->last_color];
+    return _game_check_deadends(info, state, head_pos, SEARCH_DEPTH);
+}
+
+//////////////////////////////////////////////////////////////////////
+// Recursive function for `game_check_deadends`. Checks if the
+// provided position has any neighbours with a deadend configuration.
+// If there is a deadend, then the function returns 1. Otherwise, it
+// returns 0. The `depth` parameter is used to limit the recursion
+// depth. For example, if `depth` is 1, then the function will only
+// check the neighbours of the provided position. If `depth` is 2, 
+// then the function will check the neighbours of the neighbours,
+// and so on.
+
+int _game_check_deadends(const game_info_t* info,
+                         const game_state_t* state,
+                         pos_t pos, int depth) {
+    
+    pos_t neighbor_pos;
+    int x, y;
+
+    //Stop checks if the maximum depth is reached
+    if (depth == 0) {
+        return 0;
+    }
+
+    //For each direct neighbor of the head position
+    for (int dir=0; dir<4; ++dir) {
+
+        //Check if the neighbor is free and if it is a deadend
+        neighbor_pos = pos_offset_pos(info, pos, dir);
+	    pos_get_coords(neighbor_pos, &x, &y);
+        if (game_is_free(info, state, x, y) &&
+            game_is_deadend(info, state, neighbor_pos)) {
+            return 1;
+        } else if (_game_check_deadends(info, state, neighbor_pos, depth-1)) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+//////////////////////////////////////////////////////////////////////
 // Check if the position is a dead end. This function is heavily 
 // influenced by the code in the original solver found here:
 // https://github.com/mzucker/flow_solver/blob/master/flow_solver.c
@@ -134,49 +187,4 @@ int game_is_deadend(const game_info_t* info,
     }
 
     return num_free <= 1;
-
-}
-
-//////////////////////////////////////////////////////////////////////
-// Check for dead-end regions of freespace where there is no way to
-// put an active path into and out of it. Any freespace node which
-// has only one free neighbor represents such a dead end. For the
-// purposes of this check, cur and goal positions count as "free".
-
-int game_check_deadends(const game_info_t* info,
-                        const game_state_t* state) {
-    
-    pos_t head_pos, neighbor_pos1, neighbor_pos2;
-    int x, y;
-
-    //Get last head position
-    head_pos = state->pos[state->last_color];
-
-    //For each direct neighbor of the head position
-    for (int dir=0; dir<4; ++dir) {
-
-        //Check if the neighbor is free and if it is a deadend
-        neighbor_pos1 = pos_offset_pos(info, head_pos, dir);
-	    pos_get_coords(neighbor_pos1, &x, &y);
-        if (game_is_free(info, state, x, y)) {
-            if (game_is_deadend(info, state, neighbor_pos1)) {
-                return 1;
-            }
-        }
-
-        //For each direct neighbor of the neighbor
-        for (int dir=0; dir<4; ++dir) {
-
-            //Check if the neighbor's neighbor is free and if it is a deadend
-            neighbor_pos2 = pos_offset_pos(info, neighbor_pos1, dir);
-            pos_get_coords(neighbor_pos2, &x, &y);
-            if (game_is_free(info, state, x, y)) {
-                if (game_is_deadend(info, state, neighbor_pos2)) {
-                    return 1;
-                }
-            }
-        }
-    }
-
-	return 0;
 }
