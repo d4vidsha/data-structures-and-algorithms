@@ -188,6 +188,4 @@ int game_dijkstra_search(const game_info_t* info,
 	heapq_destroy(&pq);
 
 	return result;
-
-  
 }
