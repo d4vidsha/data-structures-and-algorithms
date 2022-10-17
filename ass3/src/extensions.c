@@ -152,36 +152,57 @@ int _game_check_deadends(const game_info_t* info,
 }
 
 //////////////////////////////////////////////////////////////////////
-// Check if the position is a dead end. This function is heavily 
-// influenced by the code in the original solver found here:
-// https://github.com/mzucker/flow_solver/blob/master/flow_solver.c
+// Check if the position specified is a deadend by checking whether
+// the position is surrounded by at most 1 free cell. 
+//
+// A cell is considered free if it is on the board (i.e. not a wall)
+// and is either:
+// - empty
+// - a goal position
+// - a current/head position
+//
+// Sources:
+// - Understanding completedness of pipes:
+//     https://edstem.org/au/courses/9173/discussion/1069871
+// - Understanding the conditions of a free cell:
+//     https://edstem.org/au/courses/9173/discussion/1063187
+// - This function takes inspiration from:
+//     https://github.com/mzucker/flow_solver/blob/master/flow_solver.c
 
 int game_is_deadend(const game_info_t* info,
                     const game_state_t* state,
                     pos_t pos) {
-
-    assert(pos != INVALID_POS && !state->cells[pos]);
-
-    int x, y;
-    pos_get_coords(pos, &x, &y);
   
     int num_free = 0;
 
-    for (int dir = DIR_LEFT; dir <= DIR_DOWN; dir++) {
-        pos_t neighbor_pos = offset_pos(info, x, y, dir);
-        if (neighbor_pos != INVALID_POS) {
-            if (!state->cells[neighbor_pos]) {
-                ++num_free;
-            } else {
-                for (size_t color=0; color<info->num_colors; ++color) {
-                    if (state->completed & (1 << color)) {
-                        continue;
-                    }
-                    if (neighbor_pos == state->pos[color] ||
-                        neighbor_pos == info->goal_pos[color]) {
-                        ++num_free;
-                    }
-                }                                                             
+    //For each neighbor of the given position
+    for (int dir=0; dir<4; ++dir) {
+        pos_t neighbor_pos = pos_offset_pos(info, pos, dir);
+
+        //If this neighbor is not on the board, go to next neighbor
+        if (neighbor_pos == INVALID_POS) {
+            continue;
+        }
+        
+        //If the neighbor is on the board and empty, increment the counter
+        if (state->cells[neighbor_pos] == 0) {
+            ++num_free;
+        } else {
+            //Otherwise, check if surrounded by any complete path segments
+            for (size_t color=0; color<info->num_colors; ++color) {
+                
+                //If completed, go to next path segment
+                if (state->completed & (1 << color)) {
+                    continue;
+                }
+
+                //Since this path segment is incomplete, check if neighbor
+                //is the head of path segment or is the goal position. If
+                //so, then increment the counter
+                if (neighbor_pos == state->pos[color] ||
+                    neighbor_pos == info->goal_pos[color]) {
+                    ++num_free;
+                }
             }
         }
     }
