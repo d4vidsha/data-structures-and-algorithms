@@ -1,3 +1,7 @@
+''' Tool to get filenames of the puzzles folder. This file
+    should be run from the parent folder of the puzzles folder.
+'''
+
 from os.path import join, dirname, realpath
 import os
 
