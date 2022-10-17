@@ -1,5 +1,5 @@
 #!/bin/bash
-# remember to `chmod +x testing.sh`
+# remember to `chmod +x testing.sh``
 # this script is used to test all the puzzles at once
 
 # 1. compile the program with `Makefile`
