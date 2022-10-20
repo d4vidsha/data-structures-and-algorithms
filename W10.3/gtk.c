@@ -34,7 +34,7 @@ gfloat f (gfloat x)
 }
 
 igraph_t graph;
-igraph_vector_t edges;
+igraph_vector_int_t edges;
 // Edges in shortest path 0 excluded, 1 included.
 igraph_vector_t shortest_path;
 igraph_matrix_t res;
@@ -85,7 +85,7 @@ void setupGTKgraph(int nodeCount, int edgeCount, int *sources, int *destinations
     /*****************************************/
     /*            igraph stuff               */
     /*****************************************/
-    igraph_vector_init(&edges, 2*edgeCount);
+    igraph_vector_int_init(&edges, 2*edgeCount);
     /* Edges source -> destination */
     for(i = 0; i < edgeCount; i++){
         VECTOR(edges)[i * 2] = sources[i]; 
@@ -108,31 +108,31 @@ void setupGTKgraph(int nodeCount, int edgeCount, int *sources, int *destinations
         for(k = 0; k < LAYOUTDIMENSIONS; k++){
             if(j == 0){
                 if(k == 0){
-                    minx = igraph_matrix_e(&res, j, k);
-                    maxx = igraph_matrix_e(&res, j, k);
+                    minx = igraph_matrix_get(&res, j, k);
+                    maxx = igraph_matrix_get(&res, j, k);
                 } else {
-                    miny = igraph_matrix_e(&res, j, k);
-                    maxy = igraph_matrix_e(&res, j, k);
+                    miny = igraph_matrix_get(&res, j, k);
+                    maxy = igraph_matrix_get(&res, j, k);
                 }
             } else {
                 if(k == 0){
-                    if(igraph_matrix_e(&res, j, k) < minx){
-                        minx = igraph_matrix_e(&res, j, k);
+                    if(igraph_matrix_get(&res, j, k) < minx){
+                        minx = igraph_matrix_get(&res, j, k);
                     }
-                    if(igraph_matrix_e(&res, j, k) > maxx){
-                        maxx = igraph_matrix_e(&res, j, k);
+                    if(igraph_matrix_get(&res, j, k) > maxx){
+                        maxx = igraph_matrix_get(&res, j, k);
                     }
                 } else {
-                    if(igraph_matrix_e(&res, j, k) < miny){
-                        miny = igraph_matrix_e(&res, j, k);
+                    if(igraph_matrix_get(&res, j, k) < miny){
+                        miny = igraph_matrix_get(&res, j, k);
                     }
-                    if(igraph_matrix_e(&res, j, k) > maxy){
-                        maxy = igraph_matrix_e(&res, j, k);
+                    if(igraph_matrix_get(&res, j, k) > maxy){
+                        maxy = igraph_matrix_get(&res, j, k);
                     }
                 }
             }
             
-            // printf("%f ", igraph_matrix_e(&res, j, k));
+            // printf("%f ", igraph_matrix_get(&res, j, k));
         }
         // printf("\n");
     }
@@ -149,11 +149,11 @@ void setupGTKgraph(int nodeCount, int edgeCount, int *sources, int *destinations
         for(k = 0; k < LAYOUTDIMENSIONS; k++){
             
             if(k == 0){
-                igraph_matrix_set(&res, j, k, (igraph_matrix_e(&res, j, k) - minx) / (maxx - minx) * 2 - 1);
+                igraph_matrix_set(&res, j, k, (igraph_matrix_get(&res, j, k) - minx) / (maxx - minx) * 2 - 1);
             } else {
-                igraph_matrix_set(&res, j, k, (igraph_matrix_e(&res, j, k) - miny) / (maxy - miny) * 2 - 1);
+                igraph_matrix_set(&res, j, k, (igraph_matrix_get(&res, j, k) - miny) / (maxy - miny) * 2 - 1);
             }
-            // printf("%f ", igraph_matrix_e(&res, j, k));
+            // printf("%f ", igraph_matrix_get(&res, j, k));
         }
         // printf("\n");
     }
@@ -206,12 +206,12 @@ void update_destination(){
     double temp_dx, temp_dy;
     for(i = 0; i < gtkNodeCount; i++){
         if (i == 0){
-            temp_dx = igraph_matrix_e(&res, closest_v, 0) - pointer_x;
-            temp_dy = igraph_matrix_e(&res, closest_v, 1) - pointer_y;
+            temp_dx = igraph_matrix_get(&res, closest_v, 0) - pointer_x;
+            temp_dy = igraph_matrix_get(&res, closest_v, 1) - pointer_y;
             closest_d2 = temp_dx * temp_dx + temp_dy * temp_dy;
         } else {
-            temp_dx = igraph_matrix_e(&res, i, 0) - pointer_x;
-            temp_dy = igraph_matrix_e(&res, i, 1) - pointer_y;
+            temp_dx = igraph_matrix_get(&res, i, 0) - pointer_x;
+            temp_dy = igraph_matrix_get(&res, i, 1) - pointer_y;
             d2 = temp_dx * temp_dx + temp_dy * temp_dy;
             if(d2 < closest_d2){
                 closest_d2 = d2;
@@ -277,8 +277,8 @@ on_draw (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     double x, y;
     int j;
     for(j = 0; j < gtkNodeCount; j++){
-        x = igraph_matrix_e(&res, j, 0);
-        y = igraph_matrix_e(&res, j, 1);
+        x = igraph_matrix_get(&res, j, 0);
+        y = igraph_matrix_get(&res, j, 1);
         cairo_move_to (cr, x, y);
         cairo_new_sub_path(cr);
         // Draw selected source in yellow.
@@ -331,16 +331,16 @@ on_draw (GtkWidget *widget, cairo_t *cr, gpointer user_data)
         }
         while(edges_left) {
             igraph_edge(&graph, IGRAPH_EIT_GET(eit), &from, &to);
-            x_from = igraph_matrix_e(&res, from, 0);
-            y_from = igraph_matrix_e(&res, from, 1);
-            x_to = igraph_matrix_e(&res, to, 0);
-            y_to = igraph_matrix_e(&res, to, 1);
+            x_from = igraph_matrix_get(&res, from, 0);
+            y_from = igraph_matrix_get(&res, from, 1);
+            x_to = igraph_matrix_get(&res, to, 0);
+            y_to = igraph_matrix_get(&res, to, 1);
             // printf("%f %f (%d) -> %f %f (%d)\n", 
-            //        igraph_matrix_e(&res, from, 0),
-            //        igraph_matrix_e(&res, from, 1),
+            //        igraph_matrix_get(&res, from, 0),
+            //        igraph_matrix_get(&res, from, 1),
             //        from,
-            //        igraph_matrix_e(&res, to, 0),
-            //        igraph_matrix_e(&res, to, 1),
+            //        igraph_matrix_get(&res, to, 0),
+            //        igraph_matrix_get(&res, to, 1),
             //        to
             //       );
             // Draw edges
