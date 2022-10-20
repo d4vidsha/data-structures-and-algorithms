@@ -5,11 +5,50 @@
 
 void fw(int **adjMatrix, int ***pathMatrix, int size){
     /* FILL IN */
+	int i,j,k;
+	
+	*pathMatrix = newMatrix(size);
+	for(i = 0; i < size; i++){
+		for(j = 0; j < size; j++){
+			(*pathMatrix)[i][j] = NOPATH;
+		}
+	}
+	for(i = 0; i < size; i++){
+		for(j = 0; j < size; j++){
+			if(adjMatrix[i][j] != NOPATH){
+				(*pathMatrix)[i][j] = j;
+			}
+		}
+	}
+	
+	
+	for(i = 0; i < size; i++){
+		for(j = 0; j < size; j++){
+			for(k = 0; k < size; k++){
+				if(adjMatrix[j][i] + adjMatrix[i][k] < adjMatrix[j][k]){
+					/* Update weight to be weight between path detouring by i.*/
+					adjMatrix[j][k] = adjMatrix[j][i] + adjMatrix[i][k];
+					/* Take the next path to get to i. */
+					(*pathMatrix)[j][k] = (*pathMatrix)[j][i];
+				}
+			}
+		}
+	}
 }
 
 void printPath(int **pathMatrix, int src, int dest){
     /* FILL IN */
-    printf("(Not yet handled)");
+	if(pathMatrix[src][dest] == NOPATH){
+		printf("∞");
+	} else {
+		printf("%d -> ",src);
+		src = pathMatrix[src][dest];
+		while(src != dest){
+			printf("%d -> ",src);
+			src = pathMatrix[src][dest];
+		}
+		printf("%d",dest);
+	}
 }
 
 /*
